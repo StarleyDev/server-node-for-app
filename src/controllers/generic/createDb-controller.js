@@ -11,7 +11,7 @@ exports.post = async (req, res, next) => {
         let sqlRecebida = '';
         let chunks = [];
 
-        req.on('data', async function (data) {
+        await req.on('data', async function (data) {
             chunks.push(data);
         }).on('end', async function () {
 

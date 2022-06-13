@@ -2,36 +2,102 @@
 /**
  * @author Starley Cazorla
  */
+ 'use sctict'
 
-'use sctict'
-
-var express = require('express');
-var app = express()
-// Documentação do swagger
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-
-// ? Index de rotas
-const index = require('./routes/index-route') // Index API
-const executeDb = require('./routes/executeDb-route') // Para uso de executar SQL
-const createDb = require('./routes/createDb-route') // Para uso de criação de banco de dados local
-const insertDb = require('./routes/insertDb-route') // Para uso de inserção de dados
-
-var app = express();
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header('Access-Control-Allow-Headers', "*");
-  next();
-});
-
-// * Rotas abertas
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/', index);
-// ! Rotas fechadas ( token )
-app.use('/api/executeDb', executeDb);
-app.use('/api/createDb', createDb);
-app.use('/api/insertDb', insertDb);
-
-module.exports = app;
+ const app = require('../app')
+ const http = require('http');
+ // const https = require('https');
+ const fs = require('fs');
+ const debug = require('debug')('balta:server');
+ 
+ // Instancia de api
+ const port = nomalizePort(process.env.PORT || '1255'); // Chava a função para validar a porta
+ app.set('port', port);
+ 
+ globalPort = port;
+ 
+ const server = http.createServer(app);
+ 
+ // Chamando metodos
+ server.listen(port);
+ server.on('error', onError);
+ server.on('listening', onListening);
+ 
+ console.warn(`\n
+ # *******************************************************
+ # *                                                     *
+ # *             SERVER NODEJS FOR SQLITE DB             *
+ # *                                                     *
+ # *      Version: 1.0.0 - Data Update: 21/05/2022       *
+ # *                   Licença: GPL v3                   *
+ # *                                                     *
+ # * Autor: Starley Cazorla                              *  
+ # * Link: https://github.com/StarleyDev/node-for-sqlite *
+ # *                                                     *
+ # *******************************************************
+ # *             API Rodando na porta:  ${port}             *
+ # *******************************************************
+ `)
+ 
+ /**
+  * Normaliando porta de conexão
+  * @param {*} val 
+  */
+ function nomalizePort(val) {
+     const port = parseInt(val, 10);
+ 
+     if (isNaN(port)) {
+         return val;
+     }
+ 
+     if (port >= 0) {
+         return port;
+     }
+ 
+     return false;
+ }
+ 
+ /**
+  * Erro de conexao
+  * @param {*} error 
+  */
+ function onError(error) {
+     // if (error.syscall !== 'listem') {
+     //     console.log(error)
+     // }
+ 
+     const bind = typeof port === 'string' ?
+         'Pipe ' + port :
+         'Port ' + port;
+ 
+     switch (error.code) {
+         case 'EACCES':
+             console.error(bind + ' requer privilegios elevados!');
+             process.exit(1);
+             break;
+ 
+         case 'EADDRINUSE':
+             console.error(bind + ' já está em uso!');
+             process.env.PORT = process.env.PORT+2
+             process.exit(1);
+             break;
+ 
+         default:
+             throw error;
+     }
+ }
+ 
+ /**
+  * Função para ficar escutando a porta
+  */
+ function onListening() {
+     const addr = server.address();
+     const bind = typeof addr === 'string'
+         ? 'pipe ' + addr
+         : 'port ' + addr.port;
+     debug('Listening on ', + bind);
+ }
+ 
+ 
+ 
+ 

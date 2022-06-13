@@ -11,7 +11,7 @@ exports.post = async (req, res, next) => {
         let dbForUse = '';
         let chunks = [];
 
-        req.on('data', async function (data) {
+        await req.on('data', async function (data) {
             chunks.push(data);
         }).on('end', async function () {
 
@@ -26,8 +26,9 @@ exports.post = async (req, res, next) => {
             let isArray = Array.isArray(sqlRecebida); // Verifica se é array;
             if (sqlRecebida.length > 1 && isArray) {
                 console.log('------------------ START INSERT MULTIPLOS ------------------')
+
                 for (const item of sqlRecebida) {
-                    dbInUse.exec(item, async function (err) {
+                    await dbInUse.exec(item, async function (err) {
                         // console.log("🚀 ~ item", item)
                         if (err) {
                             console.log('MULTIPLOS ERROR -->', err);
@@ -38,11 +39,12 @@ exports.post = async (req, res, next) => {
                         break;
                     }
                 }
+
                 console.log('------------------ END INSERT MULTIPLOS ---> ' + sqlRecebida.length + ' ------------------')
                 res.send({ insertId: 0 });
             } else if (sqlRecebida[0] && isArray) {
                 console.log('------------------ START INSERT UNICO[0] ------------------')
-                dbInUse.exec(sqlRecebida[0], async function (err) {
+                await dbInUse.exec(sqlRecebida[0], async function (err) {
                     if (null == err) {
                         // row inserted successfully
                         console.log(this.lastID);
@@ -56,7 +58,7 @@ exports.post = async (req, res, next) => {
                 console.log('------------------ END INSERT UNICO[0] ---> ' + sqlRecebida.length + ' ------------------')
             } else {
                 console.log('------------------ START INSERT UNICO ------------------')
-                dbInUse.run(sqlRecebida, async function (err) {
+                await dbInUse.run(sqlRecebida, async function (err) {
                     if (null == err) {
                         // row inserted successfully
                         console.log(this.lastID);
@@ -71,6 +73,7 @@ exports.post = async (req, res, next) => {
             }
 
         });
+
     } catch (error) {
         res.send({ message: `Não conseguimos realizar a consulta!!! ${error}`, retorno: false });
     }
