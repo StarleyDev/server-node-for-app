@@ -2,6 +2,7 @@ var sqlite3 = require('sqlite3').verbose()
 var md5 = require('md5')
 
 let dbInUse;
+exports.dbInUse = dbInUse;
 let lastDbInUse = '';
 
 function checkDbInUse(nomeDb) {
@@ -20,7 +21,6 @@ function checkDbInUse(nomeDb) {
   } else {
     return dbInUse;
   }
-
 }
 
 module.exports = checkDbInUse;

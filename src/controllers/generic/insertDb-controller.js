@@ -3,7 +3,8 @@
  * @author Starley Cazorla
  */
 'use sctict'
-const checkDbInUse = require("./database.js");
+const checkDbInUse = require("../db/database.js");
+const insertMultiplos = require("../db/db-controller/insertMultiplos.js");
 
 exports.post = async (req, res, next) => {
     try {
@@ -27,24 +28,17 @@ exports.post = async (req, res, next) => {
             if (sqlRecebida.length > 1 && isArray) {
                 console.log('------------------ START INSERT MULTIPLOS ------------------')
 
-                for (const item of sqlRecebida) {
-                    await dbInUse.exec(item, async function (err) {
-                        // console.log("🚀 ~ item", item)
-                        if (err) {
-                            console.log('MULTIPLOS ERROR -->', err);
-                            existeError = true;
-                        }
-                    });
-                    if (existeError) {
-                        break;
-                    }
-                }
+                await insertMultiplos(sqlRecebida, dbInUse).finally(() => {
+                    res.send({ insertId: sqlRecebida.length });
+                }).catch(error => {
+                    res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
+                });
 
-                console.log('------------------ END INSERT MULTIPLOS ---> ' + sqlRecebida.length + ' ------------------')
-                res.send({ insertId: 0 });
+                console.log('------------------ END INSERT MULTIPLOS ------------------')
+
             } else if (sqlRecebida[0] && isArray) {
                 console.log('------------------ START INSERT UNICO[0] ------------------')
-                await dbInUse.exec(sqlRecebida[0], async function (err) {
+                await dbInUse.run(sqlRecebida[0], async function (err) {
                     if (null == err) {
                         // row inserted successfully
                         console.log(this.lastID);

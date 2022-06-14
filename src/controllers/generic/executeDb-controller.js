@@ -4,7 +4,7 @@
  */
  'use sctict'
 
- const checkDbInUse = require("./database.js");
+ const checkDbInUse = require("../db/database.js");
  
  exports.post = async (req, res, next) => {
      try {
