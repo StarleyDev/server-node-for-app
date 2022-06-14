@@ -11,3 +11,4 @@
 /plugins
 /www
 /*.db
+/src/bin/views/*

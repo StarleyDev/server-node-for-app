@@ -12,7 +12,7 @@
  const swaggerDocument = require('./swagger.json');
  
  // ? Index de rotas
- const index = require('./routes/index-route') // Index API
+//  const index = require('./routes/index-route') // Index API
  const executeDb = require('./routes/executeDb-route') // Para uso de executar SQL
  const createDb = require('./routes/createDb-route') // Para uso de criação de banco de dados local
  const insertDb = require('./routes/insertDb-route') // Para uso de inserção de dados
@@ -28,7 +28,7 @@
  
  // * Rotas abertas
  app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
- app.use('/', index);
+//  app.use('/', index);
  // ! Rotas fechadas ( token )
  app.use('/api/executeDb', executeDb);
  app.use('/api/createDb', createDb);
