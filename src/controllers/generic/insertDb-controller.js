@@ -5,6 +5,7 @@
 'use sctict'
 const checkDbInUse = require("../db/database.js");
 const insertMultiplos = require("../db/db-controller/insertMultiplos.js");
+const insertUnique = require("../db/db-controller/insertUnique.js");
 
 exports.post = async (req, res, next) => {
     try {
@@ -26,7 +27,7 @@ exports.post = async (req, res, next) => {
 
             let isArray = Array.isArray(sqlRecebida); // Verifica se é array;
             if (sqlRecebida.length > 1 && isArray) {
-                console.log('------------------ START INSERT MULTIPLOS ------------------')
+                console.log('# * START INSERT MULTIPLOS # *')
 
                 await insertMultiplos(sqlRecebida, dbInUse).finally(() => {
                     res.send({ insertId: sqlRecebida.length });
@@ -34,38 +35,29 @@ exports.post = async (req, res, next) => {
                     res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
                 });
 
-                console.log('------------------ END INSERT MULTIPLOS ------------------')
+                console.log('# * END INSERT MULTIPLOS # *\n')
 
             } else if (sqlRecebida[0] && isArray) {
-                console.log('------------------ START INSERT UNICO[0] ------------------')
-                await dbInUse.run(sqlRecebida[0], async function (err) {
-                    if (null == err) {
-                        // row inserted successfully
-                        console.log(this.lastID);
-                        res.send({ insertId: this.lastID });
-                    } else {
-                        //Oops something went wrong
-                        console.log('UNICO[0] ERROR -->', err);
-                        res.send({ message: `Não conseguimos realizar a consulta!!! ${err}`, retorno: false });
-                    }
-                });
-                console.log('------------------ END INSERT UNICO[0] ---> ' + sqlRecebida.length + ' ------------------')
-            } else {
-                console.log('------------------ START INSERT UNICO ------------------')
-                await dbInUse.run(sqlRecebida, async function (err) {
-                    if (null == err) {
-                        // row inserted successfully
-                        console.log(this.lastID);
-                        res.send({ insertId: this.lastID });
-                    } else {
-                        //Oops something went wrong
-                        console.log('UNICO ERROR -->', err);
-                        res.send({ message: `Não conseguimos realizar a consulta!!! ${err}`, retorno: false });
-                    }
-                });
-                console.log('------------------ END INSERT UNICO ------------------')
-            }
+                console.log('# * START INSERT UNICO[0] # *')
 
+                await insertUnique(sqlRecebida[0], dbInUse).then(data => {
+                    res.send(data);
+                }).catch(error => {
+                    res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
+                });
+
+                console.log('# * END INSERT UNICO[0] # *\n')
+            } else {
+                console.log('# * START INSERT UNICO # *')
+
+                await insertUnique(sqlRecebida, dbInUse).then(data => {
+                    res.send(data);
+                }).catch(error => {
+                    res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
+                });
+
+                console.log('# * END INSERT UNICO # *\n')
+            }
         });
 
     } catch (error) {
