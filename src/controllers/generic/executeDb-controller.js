@@ -25,6 +25,7 @@ exports.post = async (req, res, next) => {
             let dbInUse = checkDbInUse(dbForUse);
             console.log('# * START SQL QUERIE # *')
             await executeSqlQuerie(sqlRecebida, dbInUse).then(data => {
+                console.log("SUCCESS!")
                 res.send(data);
             }).catch(err => {
                 res.status(400).json({ "error": err.message });
