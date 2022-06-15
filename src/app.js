@@ -16,7 +16,8 @@
  const executeDb = require('./routes/executeDb-route') // Para uso de executar SQL
  const createDb = require('./routes/createDb-route') // Para uso de criação de banco de dados local
  const insertDb = require('./routes/insertDb-route') // Para uso de inserção de dados
- 
+ const updateApp = require('./routes/updateApp-route') // Para uso de inserção de dados
+
  var app = express();
  
  app.use(function(req, res, next) {
@@ -33,5 +34,6 @@
  app.use('/api/executeDb', executeDb);
  app.use('/api/createDb', createDb);
  app.use('/api/insertDb', insertDb);
+ app.use('/api/updateApp', updateApp);
  
  module.exports = app;

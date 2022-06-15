@@ -24,19 +24,19 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 console.warn(`\n
- # *******************************************************
- # *                                                     *
- # *             SERVER NODEJS FOR SQLITE DB             *
- # *                                                     *
- # *      Version: 1.0.0 - Data Update: 21/05/2022       *
- # *                   Licença: GPL v3                   *
- # *                                                     *
- # * Autor: Starley Cazorla                              *  
- # * Link: https://github.com/StarleyDev/node-for-sqlite *
- # *                                                     *
- # *******************************************************
- # *             API Rodando na porta:  ${port}             *
- # *******************************************************
+ # ******************************************************* #
+ # *                                                     * #
+ # *                    SERVER NODEJS                    * #
+ # *                                                     * #
+ # *      Version: 1.0.0 - Data Update: 21/05/2022       * #
+ # *                   Licença: GPL v3                   * #
+ # *                                                     * #
+ # * Autor: Starley Cazorla                              * #
+ # * Link: https://github.com/StarleyDev/node-for-sqlite * #
+ # *                                                     * #
+ # ******************************************************* #
+ # *             API Rodando na porta:  ${port}             * #
+ # ******************************************************* #
  `);
 
  /** Projeto em angular  */
