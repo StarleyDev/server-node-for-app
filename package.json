@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./src/bin/server.js",
     "nodemon": "nodemon ./src/bin/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pkg ."
   },
   "author": "Starley Cazorla",
   "license": "ISC",
@@ -15,6 +15,10 @@
     "express": "^4.18.1",
     "md5": "^2.3.0",
     "sqlite3": "^5.0.8",
+    "firebase": "^9.8.3",
+    "crypto-js": "^4.1.1",
+    "helmet": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
     "http": "0.0.1-security",
     "swagger-ui-express": "^4.4.0"
   },
