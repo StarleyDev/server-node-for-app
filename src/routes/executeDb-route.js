@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/generic/executeDb-controller');
+const controller = require('../controllers/db/db-controller/executeDb-controller');
 
 router.get('/', controller.get)
 router.post('/', controller.post);
