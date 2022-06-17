@@ -12,3 +12,4 @@
 /www
 /*.db
 /src/bin/www/*
+/arquivos*

@@ -7,12 +7,10 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/download/updateApp-controller');
+const controller = require('../controllers/download/arquivoImg-controller');
 
 router.get('/', controller.get)
 router.post('/', controller.post);
-router.put('/:id', controller.put);
-// router.delete('/:id',verifyJWT, controller.delete);
 
 
 module.exports = router;

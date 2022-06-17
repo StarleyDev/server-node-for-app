@@ -17,6 +17,7 @@
  const createDb = require('./routes/createDb-route') // Para uso de criação de banco de dados local
  const insertDb = require('./routes/insertDb-route') // Para uso de inserção de dados
  const updateApp = require('./routes/updateApp-route') // Para uso de inserção de dados
+ const arquivoImg = require('./routes/arquivoImg-route') // Para uso de imagens
 
  var app = express();
  
@@ -35,5 +36,6 @@
  app.use('/api/createDb', createDb);
  app.use('/api/insertDb', insertDb);
  app.use('/api/updateApp', updateApp);
+ app.use('/api/arquivoImg', arquivoImg);
  
  module.exports = app;
