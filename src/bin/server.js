@@ -6,9 +6,12 @@
 
 const app = require('../app')
 const http = require('http');
+const express = require('express');
+const path = require('path');
 // const https = require('https');
-const fs = require('fs');
 const debug = require('debug')('balta:server');
+const { checkFile } = require('./../util/folders.util');
+const { downloadFile, exctratFile } = require('../util/download.util');
 
 // Instancia de api
 const port = nomalizePort(process.env.PORT || '1255'); // Chava a função para validar a porta
@@ -39,11 +42,21 @@ console.warn(`\n
  # ******************************************************* #
  `);
 
- /** Projeto em angular  */
-const express = require('express');
-const path = require('path');
+/** Projeto em angular  */
+let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
+if (!existeArtvendas) {
+    downloadFile().finally(() => {
+        exctratFile().finally(() => {
+            console.log('ARQUIVO EXTRAIDO!');
+            console.log('\nAPLICAÇÃO PRONTA PARA USO!\n');
+        });
+    });
+} else {
+    console.log('APLICAÇÃO PRONTA PARA USO!');
+}
+
 app.use('/', express.static(getDir() + '/www'));
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.sendFile(getDir() + '/www/index.html');
 });
 
@@ -55,7 +68,6 @@ function getDir() {
         return path.join(require.main ? require.main.path : process.cwd());
     }
 }
-
 
 /**
  * Normaliando porta de conexão
