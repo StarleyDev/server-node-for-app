@@ -4,7 +4,8 @@
  */
 'use sctict'
 
-const { salvaImagens, getPathImg } = require('../../util/folders.util');
+const { salvaImagens, checkFile } = require('../../util/folders.util');
+var path = require('path');
 
 exports.post = async (req, res, next) => {
     let nomePasta, nomeArquivo, arquivo, vendedorLogado, isPrincipal;
@@ -20,19 +21,12 @@ exports.post = async (req, res, next) => {
         arquivo = JSON.parse(data).arquivo;
         isPrincipal = JSON.parse(data).isPrincipal
         vendedorLogado = JSON.parse(data).vendedorLogado
-
-        if (arquivo != null) {
-            // console.log('Aquivo Recebido ---> ', nomeArquivo)
-            await salvaImagens(`arquivos_${vendedorLogado}/${nomePasta}/`, nomeArquivo, arquivo, isPrincipal).then(() => {
-                res.send();
-            }).catch(error => {
-                res.status(400).send('Não foi possível realizar o download do arquivo!')
-            });
-        } else {
-            let paths = process.cwd() + `/arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}.png`;
-            // console.log("🚀 ~ file: arquivoImg-controller.js ~ line 33 ~ paths", paths);
-            res.send({ caminhoImg: paths });
-        }
+        // console.log('Aquivo Recebido ---> ', nomeArquivo)
+        await salvaImagens(`arquivos_${vendedorLogado}/${nomePasta}/`, nomeArquivo, arquivo, isPrincipal).then(() => {
+            res.send();
+        }).catch(error => {
+            res.status(400).send('Não foi possível realizar o download do arquivo!')
+        });
 
     });
 
@@ -41,5 +35,15 @@ exports.post = async (req, res, next) => {
 exports.put = (req, res, next) => {
 };
 
+/** Retorna imagem encontrada ou imagem padrao quando nao encontra */
 exports.get = (req, res, next) => {
+    // console.log('Requisição de imagem ---> ', req.query['img'])
+    let imgEncontrada = checkFile(req.query['img']);
+    if (imgEncontrada) {
+        res.sendFile(path.resolve(req.query['img']));
+    } else {
+        res.sendFile('/src/assets/produtoSemImg.jpg', { root: '.' });
+    }
+
 };
+
