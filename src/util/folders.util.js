@@ -70,19 +70,19 @@ function salvaImagens(dir, nomeArquivo, data, isPrincipal) {
 
     try {
       let nomeOriginal = nomeArquivo;
-      console.log("🚀 ~ file: folders.util.js ~ line 27 ~ returnnewPromise ~ nomeOriginal", nomeOriginal)
+      // console.log("🚀 ~ file: folders.util.js ~ line 27 ~ returnnewPromise ~ nomeOriginal", nomeOriginal)
       let arquivoEncontrado = true;
       let count = 2
 
       while (arquivoEncontrado) {
         if (isPrincipal && count === 2) {
-          console.log("🚀 ~ file: folders.util.js ~ line 33 ~ returnnewPromise ~ isPrincipal", isPrincipal)
+          // console.log("🚀 ~ file: folders.util.js ~ line 33 ~ returnnewPromise ~ isPrincipal", isPrincipal)
           nomeArquivo = nomeOriginal + '-1';
         } else {
           nomeArquivo = nomeOriginal + '-' + count;
         }
         arquivoEncontrado = checkFile(dir + nomeArquivo + '.png') //.then(async (res) => {
-        console.log("🚀 ~ file: folders.util.js ~ line 39 ~ arquivoEncontrado=checkFile ~ dir + nomeArquivo", dir + nomeArquivo)
+        // console.log("🚀 ~ file: folders.util.js ~ line 39 ~ arquivoEncontrado=checkFile ~ dir + nomeArquivo", dir + nomeArquivo)
         if (arquivoEncontrado) {
           count += 1;
         }
@@ -96,7 +96,7 @@ function salvaImagens(dir, nomeArquivo, data, isPrincipal) {
             console.log('error', err);
             reject(err);
           } else {
-            console.log('result', result);
+            // console.log('result', result);
             resolve(result);
           }
 
