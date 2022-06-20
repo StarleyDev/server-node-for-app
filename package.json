@@ -12,14 +12,15 @@
   "author": "Starley Cazorla",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1",
-    "md5": "^2.3.0",
-    "sqlite3": "^5.0.8",
-    "firebase": "^9.8.3",
     "crypto-js": "^4.1.1",
+    "express": "^4.18.1",
+    "firebase": "^9.8.3",
     "helmet": "^5.1.0",
-    "jsonwebtoken": "^8.5.1",
     "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "node-unzip-2": "^0.2.8",
+    "sqlite3": "^5.0.8",
     "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
