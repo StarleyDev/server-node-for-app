@@ -18,44 +18,14 @@ function deletarPasta(path) {
   fs.rmdirSync(path, { recursive: true });
 }
 
-function getPathImg(dir, nomeArquivo) {
-  let caminho = dir + nomeArquivo + '.png';
-
-  //passsing directoryPath and callback function
-  // fs.readdirSync(process.cwd() + dir, function (err, files) {
-  //     //handling error
-  //     if (err) {
-  //         return console.log('Unable to scan directory: ' + err);
-  //     } 
-  //     //listing all files using forEach
-  //     files.forEach(function (file) {
-  //         // Do whatever you want to do with the file
-  //         console.log(file); 
-  //     });
-  // });
-
-
-  // fs.readFileSync(, function (err, data) {
-  //   if (err) {
-  //     console.log(err);
-  //     return false;
-  //   }
-  //   else {
-      // console.log(data.toString());
-      return process.cwd() + caminho;
-    // }
-  // });
-}
-
 // Using a function to set default app path
 function getDir() {
   if (process.pkg) {
-      return path.resolve(process.execPath + "/..");
+    return path.resolve(process.execPath + "/..");
   } else {
-      return path.join(require.main ? require.main.path : process.cwd());
+    return path.join(require.main ? require.main.path : process.cwd());
   }
 }
-
 
 /**
  * Salva a imagem em pasta local
@@ -178,4 +148,13 @@ function checkFile(path) {
   return retorno;
 }
 
-module.exports = { criarPasta, deletarPasta, salvaImagens, checkFile, getPathImg }
+// Using a function to set default app path
+function getDir() {
+  if (process.pkg) {
+    return path.resolve(process.execPath + "/..");
+  } else {
+    return path.join(require.main ? require.main.path : process.cwd());
+  }
+}
+
+module.exports = { criarPasta, deletarPasta, salvaImagens, checkFile, getDir }

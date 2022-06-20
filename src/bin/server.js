@@ -10,7 +10,7 @@ const express = require('express');
 const path = require('path');
 // const https = require('https');
 const debug = require('debug')('balta:server');
-const { checkFile } = require('./../util/folders.util');
+const { checkFile , getDir} = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('../util/download.util');
 
 // Instancia de api
@@ -60,14 +60,7 @@ app.get('/', function (req, res) {
     res.sendFile(getDir() + '/www/index.html');
 });
 
-// Using a function to set default app path
-function getDir() {
-    if (process.pkg) {
-        return path.resolve(process.execPath + "/..");
-    } else {
-        return path.join(require.main ? require.main.path : process.cwd());
-    }
-}
+
 
 /**
  * Normaliando porta de conexão

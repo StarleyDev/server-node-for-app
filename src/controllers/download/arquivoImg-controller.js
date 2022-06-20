@@ -42,7 +42,7 @@ exports.get = (req, res, next) => {
     if (imgEncontrada) {
         res.sendFile(path.resolve(req.query['img']));
     } else {
-        res.sendFile('/src/assets/produtoSemImg.jpg', { root: '.' });
+        res.sendFile(path.resolve('src/assets/produtoSemImg.jpg'));
     }
 
 };

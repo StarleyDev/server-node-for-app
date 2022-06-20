@@ -19,7 +19,7 @@ exports.post = async (req, res, next) => {
 
             let data = Buffer.concat(chunks);
             sqlRecebida = JSON.parse(data).todo;
-            console.log('Sql Recebida /createDb ---> ', sqlRecebida)
+            // console.log('Sql Recebida /createDb ---> ', sqlRecebida)
             const DBSOURCE = sqlRecebida;
 
             var mySubString = sqlRecebida.substring(
