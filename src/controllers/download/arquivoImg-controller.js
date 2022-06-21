@@ -4,7 +4,7 @@
  */
 'use sctict'
 
-const { salvaImagens, checkFile } = require('../../util/folders.util');
+const { salvaImagens, checkFile, getDir } = require('../../util/folders.util');
 var path = require('path');
 
 exports.post = async (req, res, next) => {
