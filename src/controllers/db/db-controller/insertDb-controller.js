@@ -3,9 +3,9 @@
  * @author Starley Cazorla
  */
 'use sctict'
-const checkDbInUse = require("../database.js");
-const insertMultiplos = require("../service/insertMultiplos.js");
-const insertUnique = require("../service/insertUnique");
+const checkDbInUse = require("../../../config/database-config.js");
+const insertMultiplos = require("../services/insertMultiplos.js");
+const insertUnique = require("../services/insertUnique");
 
 exports.post = async (req, res, next) => {
     try {

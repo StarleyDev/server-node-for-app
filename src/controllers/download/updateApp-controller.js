@@ -4,22 +4,16 @@
  */
 'use sctict'
 
-const { downloadFile, exctratFile } = require('../../util/download.util');
+const { downloadFile, exctratFile } = require('./services/download.service');
 const { deletarPasta } = require('../../util/folders.util');
 
-
-exports.post = async (req, res, next) => {
-};
-
-exports.put = (req, res, next) => {
-
-};
+const APP_CONFIG_DEFAULT = require('./../../config/app-config.js');
 
 exports.get = (req, res, next) => {
     console.log('\n# * --- INICIO DE ATUALIZAÇÃO --- * #');
     deletarPasta('www');
-    downloadFile().finally(() => {
-        exctratFile().finally(() => {
+    downloadFile(APP_CONFIG_DEFAULT.urlDownloadArtvendas, APP_CONFIG_DEFAULT.txtDownloadArtvendas).finally(() => {
+        exctratFile(APP_CONFIG_DEFAULT.txtDownloadArtvendas).finally(() => {
             console.log('# * ARQUIVO EXTRAIDO! * #');
             console.log('# * --- FIM DE ATUALIZAÇÃO --- * #');
             console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');

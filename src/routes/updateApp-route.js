@@ -1,4 +1,4 @@
-// Configuração Rotas de SQL Insert
+// Para download de atualização
 /**
  * @author Starley Cazorla
  */
@@ -10,9 +10,5 @@ const router = express.Router();
 const controller = require('../controllers/download/updateApp-controller');
 
 router.get('/', controller.get)
-router.post('/', controller.post);
-router.put('/:id', controller.put);
-// router.delete('/:id',verifyJWT, controller.delete);
-
 
 module.exports = router;
