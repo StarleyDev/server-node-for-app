@@ -47,20 +47,17 @@ let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
 if (!existeArtvendas) {
     downloadFile().finally(() => {
         exctratFile().finally(() => {
-            console.log('ARQUIVO EXTRAIDO!');
-            console.log('\nAPLICAÇÃO PRONTA PARA USO!\n');
+            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
         });
     });
 } else {
-    console.log('APLICAÇÃO PRONTA PARA USO!');
+    console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
 }
 
 app.use('/', express.static(getDir() + '/www'));
 app.get('/', function (req, res) {
     res.sendFile(getDir() + '/www/index.html');
 });
-
-
 
 /**
  * Normaliando porta de conexão

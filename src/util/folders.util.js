@@ -15,7 +15,8 @@ function criarPasta(nomePasta) {
 }
 
 function deletarPasta(path) {
-  fs.rmdirSync(path, { recursive: true });
+  console.log(`# * PASTA - ${path} - DELETADA * #`);
+  fs.rmSync(path, { recursive: true });
 }
 
 // Using a function to set default app path

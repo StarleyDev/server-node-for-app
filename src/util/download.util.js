@@ -5,7 +5,7 @@ const unzip = require('node-unzip-2');
 
 async function downloadFile() {
   return new Promise((resolve, reject) => {
-    console.log('DOWNLOAD EM ANDAMENTO - AGUARDE!!!')
+    console.log('# * DOWNLOAD EM ANDAMENTO - AGUARDE! * #')
     try {
 
       const file = fs.createWriteStream("Artvendas2.0.zip");
@@ -14,8 +14,8 @@ async function downloadFile() {
         // after download completed close filestream
         file.on("finish", async () => {
           file.close();
-          console.log("DOWNLOAD CONCLUIDO");
-          resolve('Extração concluida!!!');
+          console.log("# * DOWNLOAD CONCLUIDO! * #");
+          resolve('');
         });
       });
 
@@ -27,7 +27,7 @@ async function downloadFile() {
 }
 
 async function exctratFile() {
-  console.log('EXTRAINDO ARQUIVO!!!')
+  console.log('# * EXTRAINDO ARQUIVO! * #');
   return fs.createReadStream('Artvendas2.0.zip').pipe(unzip.Extract({ path: '.' }));
 }
 

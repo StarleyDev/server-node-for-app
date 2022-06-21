@@ -8,11 +8,6 @@ function executeSqlQuerie(sqlRecebida, dbInUse) {
       } else {
 
         if (rows.length > 0) {
-          let arrys = [];
-          for (const itens of rows) {
-            arrys.push(itens);
-          }
-          
           resolve(rows)
         } else {
           resolve([])
