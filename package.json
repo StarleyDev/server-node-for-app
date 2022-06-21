@@ -1,7 +1,7 @@
 {
-  "name": "NodeForSqliteWithAngularApp",
-  "version": "1.0.0",
-  "description": "Conexao nodejs com sqlite",
+  "name": "ServidorNodeForAngular",
+  "version": "2.0.0",
+  "description": "Servidor NodeJs para aplicações angular com banco de dados sqlite",
   "main": "./src/bin/server.js",
   "bin": "./src/bin/server.js",
   "scripts": {
@@ -10,14 +10,11 @@
     "build": "pkg ."
   },
   "author": "Starley Cazorla",
-  "license": "ISC",
+  "license": "GPLv3",
   "dependencies": {
-    "crypto-js": "^4.1.1",
     "express": "^4.18.1",
-    "firebase": "^9.8.3",
     "helmet": "^5.1.0",
     "http": "0.0.1-security",
-    "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "node-unzip-2": "^0.2.8",
     "sqlite3": "^5.0.8",

@@ -7,10 +7,8 @@
 const app = require('../app')
 const http = require('http');
 const express = require('express');
-const path = require('path');
-// const https = require('https');
 const debug = require('debug')('balta:server');
-const { checkFile , getDir} = require('./../util/folders.util');
+const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('../util/download.util');
 
 // Instancia de api
@@ -31,8 +29,8 @@ console.warn(`\n
  # *                                                     * #
  # *                    SERVER NODEJS                    * #
  # *                                                     * #
- # *      Version: 1.0.0 - Data Update: 21/05/2022       * #
- # *                   Licença: GPL v3                   * #
+ # *      Version: 2.0.0 - Data Update: 21/06/2022       * #
+ # *                   Licença: GPLv3                    * #
  # *                                                     * #
  # * Autor: Starley Cazorla                              * #
  # * Link: https://github.com/StarleyDev/node-for-sqlite * #
@@ -48,10 +46,12 @@ if (!existeArtvendas) {
     downloadFile().finally(() => {
         exctratFile().finally(() => {
             console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+            // abrirNavegador();
         });
     });
 } else {
     console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+    // abrirNavegador();
 }
 
 app.use('/', express.static(getDir() + '/www'));
@@ -119,4 +119,21 @@ function onListening() {
 }
 
 
+// function abrirNavegador() {
+//     const readline = require('readline');
+//     const rl = readline.createInterface({
+//         input: process.stdin,
+//         output: process.stdout
+//     });
+
+//     rl.question('# * DESEJA ABRIR O NAVEGADOR? (s/n) * #', function (name) {
+//         if (name === 'S' || name === 's') {
+//             console.log('# * ABRINDO * #');
+//             open(`http://localhost:${port}`);
+//         } else {
+//             console.log('# * CONTINUAR SEM NAVEGADOR * #');
+//             rl.close();
+//         }
+//     });
+// }
 
