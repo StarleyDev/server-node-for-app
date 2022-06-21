@@ -9,7 +9,9 @@ const http = require('http');
 const express = require('express');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
-const { downloadFile, exctratFile } = require('../util/download.util');
+const { downloadFile, exctratFile } = require('../controllers/download/services/download.service');
+
+const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 
 // Instancia de api
 const port = nomalizePort(process.env.PORT || '1255'); // Chava a função para validar a porta
@@ -43,9 +45,11 @@ console.warn(`\n
 /** Projeto em angular  */
 let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
 if (!existeArtvendas) {
-    downloadFile().finally(() => {
-        exctratFile().finally(() => {
-            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+    downloadFile(APP_CONFIG_DEFAULT.urlDownloadArtvendas, APP_CONFIG_DEFAULT.txtDownloadArtvendas).finally(() => {
+        exctratFile(APP_CONFIG_DEFAULT.txtDownloadArtvendas).then(result => {
+            if(result){
+                console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+            }
             // abrirNavegador();
         });
     });
