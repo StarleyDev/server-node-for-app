@@ -4,7 +4,7 @@
  */
 'use sctict'
 const checkDbInUse = require("../../config/database-config");
-const { insertMultiplos, insertUnico } = require("../../services/database/insert-service");
+const { insertMultiplos, insertUnico } = require("../../services/database/database-service");
 
 exports.post = async (req, res, next) => {
     try {

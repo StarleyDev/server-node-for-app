@@ -5,7 +5,7 @@
 'use sctict'
 
 const checkDbInUse = require("../../config/database-config");
-const executeSqlQuerie = require('../../services/database/execute-service');
+const { executeSqlQuerie } = require('../../services/database/database-service');
 
 exports.post = async (req, res, next) => {
     try {

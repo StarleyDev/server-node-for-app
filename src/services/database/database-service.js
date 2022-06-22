@@ -68,6 +68,31 @@ function insertUnico(sqlRecebida, dbInUse) {
   });
 }
 
-module.exports = { insertMultiplos, insertUnico };
+/**
+ * Executa consultas via SQL generico
+ * @param {*} sqlRecebida 
+ * @param {*} dbInUse 
+ * @returns 
+ */
+function executeSqlQuerie(sqlRecebida, dbInUse) {
+  return new Promise((resolve, reject) => {
+
+    dbInUse.all(sqlRecebida, (err, rows) => {
+      if (err) {
+        reject({ "error": err.message })
+      } else {
+
+        if (rows.length > 0) {
+          resolve(rows)
+        } else {
+          resolve([])
+        }
+      }
+    });
+  });
+}
+
+
+module.exports = { insertMultiplos, insertUnico, executeSqlQuerie };
 
 
