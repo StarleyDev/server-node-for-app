@@ -9,7 +9,7 @@ const http = require('http');
 const express = require('express');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
-const { downloadFile, exctratFile } = require('../controllers/download/services/download.service');
+const { downloadFile, exctratFile } = require('./../services/download/download.service');
 
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 

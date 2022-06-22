@@ -4,7 +4,7 @@
  */
 'use sctict'
 
-const { downloadFile, exctratFile } = require('./services/download.service');
+const { downloadFile, exctratFile } = require('../../services/download/download.service');
 const { deletarPasta } = require('../../util/folders.util');
 
 const APP_CONFIG_DEFAULT = require('./../../config/app-config.js');
