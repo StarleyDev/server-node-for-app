@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/download/arquivoImg-controller');
+const controller = require('../controllers/download-controller/arquivoImg-controller');
 
 router.get('/getImg', controller.get)
 router.post('/', controller.post);
