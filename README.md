@@ -1,4 +1,4 @@
-# NodeJs for SQLite database
+# Server NodeJs for Angular with SQLite database
 
 This backend makes queries via using method API POST.
 
