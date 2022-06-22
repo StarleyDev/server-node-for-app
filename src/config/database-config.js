@@ -6,7 +6,7 @@ let lastDbInUse = '';
 
 function checkDbInUse(nomeDb) {
 
-  if (lastDbInUse != mySubString) {
+  if (lastDbInUse != nomeDb) {
 
     var mySubString = nomeDb.substring(
       nomeDb.indexOf("") + 0,
