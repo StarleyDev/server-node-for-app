@@ -12,12 +12,9 @@
  const swaggerDocument = require('./swagger.json');
  
  // ? Index de rotas
-//  const index = require('./routes/index-route') // Index API
- const executeDb = require('./routes/executeDb-route') // Para uso de executar SQL
- const createDb = require('./routes/createDb-route') // Para uso de criação de banco de dados local
- const insertDb = require('./routes/insertDb-route') // Para uso de inserção de dados
- const updateApp = require('./routes/updateApp-route') // Para uso de inserção de dados
- const arquivoImg = require('./routes/arquivoImg-route') // Para uso de imagens
+ const executeDb = require('./routes/executeDb-route') // Para uso de executar em banco de dados
+ const updateApp = require('./routes/updateApp-route') // Para uso de atualizao de aplicação
+ const arquivos = require('./routes/arquivos-route') // Para uso de gerenciamento de arquivos
 
  var app = express();
  
@@ -30,12 +27,10 @@
  
  // * Rotas abertas
  app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-//  app.use('/', index);
- // ! Rotas fechadas ( token )
+
+ // ! Rotas fechadas
  app.use('/api/executeDb', executeDb);
- app.use('/api/createDb', createDb);
- app.use('/api/insertDb', insertDb);
  app.use('/api/updateApp', updateApp);
- app.use('/api/arquivoImg', arquivoImg);
+ app.use('/api/arquivos', arquivos);
  
  module.exports = app;

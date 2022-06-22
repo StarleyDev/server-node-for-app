@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/download-controller/updateApp-controller');
+const controller = require('../controllers/arquivo-controller/updateApp-controller');
 
 router.get('/', controller.get)
 
