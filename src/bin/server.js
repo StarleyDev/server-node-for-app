@@ -35,7 +35,7 @@ console.warn(`\n
  # *                   Licença: GPLv3                    * #
  # *                                                     * #
  # * Autor: Starley Cazorla                              * #
- # * Link: https://github.com/StarleyDev/node-for-sqlite * #
+ # * https://github.com/StarleyDev/server-node-for-app   * #
  # *                                                     * #
  # ******************************************************* #
  # *             API Rodando na porta:  ${port}             * #
