@@ -9,14 +9,14 @@ const express = require('express');
 const router = express.Router();
 
 /** Criação de banco de dados */
-const createDb = require('../controllers/db-controller/createDb-controller');
+const createController = require('../controllers/db-controller/create-controller');
 /** Execução de consultas SQL em geral */
-const executeDb = require('../controllers/db-controller/executeDb-controller');
+const executeController = require('../controllers/db-controller/execute-controller');
 /** Execução de inserts */
-const insertDb = require('../controllers/db-controller/insertDb-controller');
+const insertController = require('../controllers/db-controller/insert-controller');
 
-router.post('/create', createDb.post);
-router.post('/execute', executeDb.post);
-router.post('/insert', insertDb.post);
+router.post('/create', createController.post);
+router.post('/execute', executeController.post);
+router.post('/insert', insertController.post);
 
 module.exports = router;

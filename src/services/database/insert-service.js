@@ -1,5 +1,11 @@
 var dbForUse;
 
+/**
+ * Inserção de batch
+ * @param {*} sqlRecebida 
+ * @param {*} dbInUse 
+ * @returns 
+ */
 function insertMultiplos(sqlRecebida, dbInUse) {
   return new Promise((resolve, reject) => {
     dbForUse = dbInUse;
@@ -38,7 +44,30 @@ sqlite3.Database.prototype.runBatchAsync = function (statements, db) {
     .then(() => results.slice(2));
 };
 
+/**
+ * Inserção unica de reguistros
+ * @param {*} sqlRecebida 
+ * @param {*} dbInUse 
+ * @returns 
+ */
+function insertUnico(sqlRecebida, dbInUse) {
+  return new Promise((resolve, reject) => {
 
-module.exports = insertMultiplos;
+    dbInUse.run(sqlRecebida, async function (err) {
+      if (null == err) {
+        // row inserted successfully
+        console.log(this.lastID);
+        resolve({ insertId: this.lastID });
+      } else {
+        //Oops something went wrong
+        console.log('UNICO ERROR -->', err);
+        reject({ message: `Não conseguimos realizar a consulta!!! ${err}`, retorno: false })
+      }
+    });
+
+  });
+}
+
+module.exports = { insertMultiplos, insertUnico };
 
 

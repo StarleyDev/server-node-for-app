@@ -1,11 +1,10 @@
-// Configuração Controller Generico
+// Excução de inserts
 /**
  * @author Starley Cazorla
  */
 'use sctict'
-const checkDbInUse = require("./../../config/database-config");
-const insertMultiplos = require("../../services/database/insertMultiplos-service");
-const insertUnique = require("../../services/database/insertUnique-service");
+const checkDbInUse = require("../../config/database-config");
+const { insertMultiplos, insertUnico } = require("../../services/database/insert-service");
 
 exports.post = async (req, res, next) => {
     try {
@@ -40,7 +39,7 @@ exports.post = async (req, res, next) => {
             } else if (sqlRecebida[0] && isArray) {
                 console.log('# * START INSERT UNICO[0] # *')
 
-                await insertUnique(sqlRecebida[0], dbInUse).then(data => {
+                await insertUnico(sqlRecebida[0], dbInUse).then(data => {
                     res.send(data);
                 }).catch(error => {
                     res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
@@ -50,7 +49,7 @@ exports.post = async (req, res, next) => {
             } else {
                 console.log('# * START INSERT UNICO # *')
 
-                await insertUnique(sqlRecebida, dbInUse).then(data => {
+                await insertUnico(sqlRecebida, dbInUse).then(data => {
                     res.send(data);
                 }).catch(error => {
                     res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
@@ -63,16 +62,4 @@ exports.post = async (req, res, next) => {
     } catch (error) {
         res.send({ message: `Não conseguimos realizar a consulta!!! ${error}`, retorno: false });
     }
-};
-
-exports.put = (req, res, next) => {
-    const id = req.params.id;
-    res.status(201).send({
-        id: id,
-        item: req.body
-    });
-};
-
-exports.get = (req, res, next) => {
-    console.log('Sql Criptograda ---> ', req)
 };

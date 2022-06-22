@@ -1,6 +1,6 @@
 var sqlite3 = require('sqlite3').verbose();
 
-const externoUtil = require('./../../util/folders.util');
+const externoUtil = require('../../util/folders.util');
 
 // Configuração Controller Generico
 /**
