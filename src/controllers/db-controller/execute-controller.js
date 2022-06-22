@@ -23,15 +23,15 @@ exports.post = async (req, res, next) => {
             // console.log('Sql Recebida /executeDb ---> ', sqlRecebida)
 
             let dbInUse = checkDbInUse(dbForUse);
-            console.log('# * START SQL QUERIE # *')
+            // console.log('# * START SQL QUERIE # *')
             await executeSqlQuerie(sqlRecebida, dbInUse).then(data => {
-                console.log("SUCCESS!")
+                // console.log("SUCCESS!")
                 res.send(data);
             }).catch(err => {
                 res.status(400).json({ "error": err.message });
             });
 
-            console.log('# * END SQL QUERIE # *\n')
+            // console.log('# * END SQL QUERIE # *\n')
         });
     } catch (error) {
         res.send({ message: `Não conseguimos realizar a consulta!!! ${error}`, retorno: false });

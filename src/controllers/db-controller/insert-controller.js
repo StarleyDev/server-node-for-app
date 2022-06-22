@@ -26,7 +26,7 @@ exports.post = async (req, res, next) => {
 
             let isArray = Array.isArray(sqlRecebida); // Verifica se é array;
             if (sqlRecebida.length > 1 && isArray) {
-                console.log('# * START INSERT MULTIPLOS # *')
+                // console.log('# * START INSERT MULTIPLOS # *')
 
                 await insertMultiplos(sqlRecebida, dbInUse).finally(() => {
                     res.send({ insertId: sqlRecebida.length });
@@ -34,10 +34,10 @@ exports.post = async (req, res, next) => {
                     res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
                 });
 
-                console.log('# * END INSERT MULTIPLOS # *\n')
+                // console.log('# * END INSERT MULTIPLOS # *\n')
 
             } else if (sqlRecebida[0] && isArray) {
-                console.log('# * START INSERT UNICO[0] # *')
+                // console.log('# * START INSERT UNICO[0] # *')
 
                 await insertUnico(sqlRecebida[0], dbInUse).then(data => {
                     res.send(data);
@@ -45,9 +45,9 @@ exports.post = async (req, res, next) => {
                     res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
                 });
 
-                console.log('# * END INSERT UNICO[0] # *\n')
+                // console.log('# * END INSERT UNICO[0] # *\n')
             } else {
-                console.log('# * START INSERT UNICO # *')
+                // console.log('# * START INSERT UNICO # *')
 
                 await insertUnico(sqlRecebida, dbInUse).then(data => {
                     res.send(data);
@@ -55,7 +55,7 @@ exports.post = async (req, res, next) => {
                     res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
                 });
 
-                console.log('# * END INSERT UNICO # *\n')
+                // console.log('# * END INSERT UNICO # *\n')
             }
         });
 

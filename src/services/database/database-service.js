@@ -10,7 +10,7 @@ function insertMultiplos(sqlRecebida, dbInUse) {
   return new Promise((resolve, reject) => {
     dbForUse = dbInUse;
     dbInUse.runBatchAsync(sqlRecebida, dbInUse).then(() => {
-      console.log("SUCCESS!");
+      // console.log("SUCCESS!");
       resolve('Inserido');
     }).catch(err => {
       console.error("BATCH FAILED: " + err);
@@ -56,7 +56,7 @@ function insertUnico(sqlRecebida, dbInUse) {
     dbInUse.run(sqlRecebida, async function (err) {
       if (null == err) {
         // row inserted successfully
-        console.log(this.lastID);
+        // console.log(this.lastID);
         resolve({ insertId: this.lastID });
       } else {
         //Oops something went wrong
