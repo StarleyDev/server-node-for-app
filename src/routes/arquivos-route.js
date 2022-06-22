@@ -7,10 +7,15 @@
 
 const express = require('express');
 const router = express.Router();
-const arquivoImgController = require('../controllers/arquivo-controller/arquivoImg-controller');
 
+/** Arquivos de imagem */
+const arquivoImgController = require('../controllers/arquivo-controller/arquivoImg-controller');
 router.get('/getImg', arquivoImgController.get)
 router.post('/saveImg', arquivoImgController.post);
 
+/** Arquivos gerais */
+const arquivoGeralController = require('../controllers/arquivo-controller/arquivoGeral-controller');
+router.get('/getFile', arquivoGeralController.get)
+router.post('/saveFile', arquivoGeralController.post);
 
 module.exports = router;

@@ -84,34 +84,29 @@ function salvaImagens(dir, nomeArquivo, data, isPrincipal) {
   });
 }
 
+/**
+ * Salva arquivos localmente
+ * @param {*} caminho 
+ * @param {*} buffer 
+ * @param {*} tipoOperacao 
+ * @returns 
+ */
 function salvarArquivo(caminho, buffer, tipoOperacao) {
   return new Promise((resolve, reject) => {
     try {
-      if (tipoOperacao === 'csv') {
-        fs.writeFile(caminho, buffer, 'utf8', function (err, result) {
-          if (err) {
-            console.log('error', err);
-          } else {
-            console.log('result', result);
-          }
+      fs.writeFile(caminho, buffer, tipoOperacao, function (err, result) {
+        if (err) {
+          console.log('error', err);
+          reject(err);
+        } else {
+          // console.log('result', result);
+          resolve(result);
+        }
 
-        });
-      } else {
-        fs.writeFile(caminho, buffer, 'binary', function (err, result) {
-          if (err) {
-            console.log('error', err);
-          } else {
-            console.log('result', result);
-          }
-
-        });
-      }
+      });
     } catch (err) {
       reject(err);
       console.log(err);
-    } finally {
-      console.log("file written successfully");
-      resolve();
     }
   });
 }
@@ -158,4 +153,4 @@ function getDir() {
   }
 }
 
-module.exports = { criarPasta, deletarPasta, salvaImagens, checkFile, getDir }
+module.exports = { criarPasta, deletarPasta, salvaImagens, checkFile, getDir, salvarArquivo }
