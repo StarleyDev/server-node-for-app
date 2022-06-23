@@ -59,9 +59,15 @@ function insertUnico(sqlRecebida, dbInUse) {
         // console.log(this.lastID);
         resolve({ insertId: this.lastID });
       } else {
-        //Oops something went wrong
-        console.log('UNICO ERROR -->', err);
-        reject({ message: `Não conseguimos realizar a consulta!!! ${err}`, retorno: false })
+
+        /** Em caso de alter table se existe coluna duplicada ira retornorar informando que o campo ja existe! */
+        let erros = String(err);
+        if (erros.match('duplicate')) {
+          resolve({ message: 'Coluna já existe!' });
+        } else {
+          console.log('UNICO ERROR -->', err);
+          reject({ message: `Não conseguimos realizar a inserção!!! ${err}`, retorno: false })
+        }
       }
     });
 
@@ -81,17 +87,11 @@ function executeSqlQuerie(sqlRecebida, dbInUse) {
       if (err) {
         reject({ "error": err.message })
       } else {
-
-        if (rows.length > 0) {
-          resolve(rows)
-        } else {
-          resolve([])
-        }
+        resolve(rows)
       }
     });
   });
 }
-
 
 module.exports = { insertMultiplos, insertUnico, executeSqlQuerie };
 

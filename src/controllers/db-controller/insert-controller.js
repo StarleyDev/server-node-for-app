@@ -6,7 +6,7 @@
 const checkDbInUse = require("../../config/database-config");
 const { insertMultiplos, insertUnico } = require("../../services/database/database-service");
 
-exports.post = async (req, res, next) => {
+exports.post = async (req, res) => {
     try {
         let sqlRecebida = '';
         let dbForUse = '';
@@ -21,7 +21,6 @@ exports.post = async (req, res, next) => {
             dbForUse = JSON.parse(data).dbForUse;
             // console.log("🚀 ~ dbForUse", dbForUse)
             // console.log("🚀 ~ file: insertDb-controller.js ~ line 21 ~ sqlRecebida", sqlRecebida)
-            let existeError = false;
             let dbInUse = checkDbInUse(dbForUse);
 
             let isArray = Array.isArray(sqlRecebida); // Verifica se é array;

@@ -40,7 +40,7 @@ exports.post = async (req, res, next) => {
                     res.status(400).json({ "error": err.message });
                     throw err
                 } else {
-                    console.log('Connected to the SQLite --->', DBSOURCE);
+                    console.log('# * Connected to: ', DBSOURCE, ' * #');
                     res.send({ sucesso: 'Base criada/conectada com suceso!' });
                 }
             });

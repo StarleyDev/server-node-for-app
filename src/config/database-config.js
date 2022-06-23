@@ -4,6 +4,11 @@ let dbInUse;
 exports.dbInUse = dbInUse;
 let lastDbInUse = '';
 
+/**
+ * Verifica o banco de dados que esta sendo requisitado
+ * @param {*} nomeDb 
+ * @returns 
+ */
 function checkDbInUse(nomeDb) {
 
   if (lastDbInUse != nomeDb) {
@@ -19,7 +24,7 @@ function checkDbInUse(nomeDb) {
         console.error(err.message)
         throw err
       } else {
-        console.log('Connected to:', nomeDb);
+        console.log('# * Connected to: ', nomeDb, ' * #');
         lastDbInUse = nomeDb;
       }
     });

@@ -31,7 +31,7 @@ console.warn(`\n
  # *                                                     * #
  # *                    SERVER NODEJS                    * #
  # *                                                     * #
- # *      Version: 2.0.0 - Data Update: 21/06/2022       * #
+ # *      Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}       * #
  # *                   Licença: GPLv3                    * #
  # *                                                     * #
  # * Autor: Starley Cazorla                              * #
