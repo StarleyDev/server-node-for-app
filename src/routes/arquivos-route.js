@@ -17,5 +17,6 @@ router.post('/saveImg', arquivoImgController.post);
 const arquivoGeralController = require('../controllers/arquivo-controller/arquivoGeral-controller');
 router.get('/getFile', arquivoGeralController.get)
 router.post('/saveFile', arquivoGeralController.post);
+router.post('/saveByUrl', arquivoGeralController.saveByUrl);
 
 module.exports = router;

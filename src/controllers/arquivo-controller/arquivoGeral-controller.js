@@ -5,6 +5,7 @@
 'use sctict'
 
 const { salvarArquivo, checkFile, getDir } = require('../../util/folders.util');
+const { downloadFile } = require('./../../services/download/download.service');
 var path = require('path');
 
 exports.post = async (req, res, next) => {
@@ -24,8 +25,9 @@ exports.post = async (req, res, next) => {
 
         /** Convertendo arquivo em buffer */
         var buf = Buffer.from(arquivo, 'utf8');
-
+        console.log('# * SALVANDO ARQUIVO - AGUARDE! * #')
         await salvarArquivo(`arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}`, buf, tipoOperacao).finally(() => {
+            console.log("# * ARQUIVO SALVO COM SUCESSO! * #");
             res.status(201).send('Download arquivo!')
         }).catch(error => {
             res.status(400).send('Não foi possível realizar o download do arquivo!')
@@ -35,7 +37,25 @@ exports.post = async (req, res, next) => {
 
 };
 
-exports.put = (req, res, next) => {
+exports.saveByUrl = async (req, res, next) => {
+
+    let urlArquivo, nomeArquivo;
+    let chunks = [];
+
+    await req.on('data', async function (data) {
+        chunks.push(data);
+    }).on('end', async function () {
+
+        let data = Buffer.concat(chunks);
+        urlArquivo = JSON.parse(data).urlArquivo;
+        nomeArquivo = JSON.parse(data).nomeArquivo;
+
+        downloadFile(urlArquivo, `arquivos_${nomeArquivo}`).finally(() => {
+            res.send({ statusAtualizacao: 'Atualizado!' });
+        }).catch(() => {
+            res.status(400).send('Não foi possível realizar o download do arquivo!')
+        });
+    });
 };
 
 /** Retorna imagem encontrada ou imagem padrao quando nao encontra */
