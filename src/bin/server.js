@@ -54,8 +54,8 @@ switch (env) {
         // Setup production config
         let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
         if (!existeArtvendas) {
-            downloadFile(APP_CONFIG_DEFAULT.urlDownloadArtvendas, APP_CONFIG_DEFAULT.txtDownloadArtvendas).finally(() => {
-                exctratFile(APP_CONFIG_DEFAULT.txtDownloadArtvendas).then(result => {
+            downloadFile(APP_CONFIG_DEFAULT.urlDownloadAngularProject, APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
+                exctratFile(APP_CONFIG_DEFAULT.txtDownloadAngularProject).then(result => {
                     if (result) {
                         console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
                     }
