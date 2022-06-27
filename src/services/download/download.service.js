@@ -27,7 +27,7 @@ async function downloadFile(url, fileFolder) {
       });
 
     } catch (error) {
-      reject('Não foi possível encontrar o Artvendas para Download!')
+      reject('Não foi possível encontrar o Arquivo para Download!')
     }
 
   });
