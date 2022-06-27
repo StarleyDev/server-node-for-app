@@ -16,7 +16,6 @@
     "helmet": "^5.1.0",
     "http": "0.0.1-security",
     "node-unzip-2": "^0.2.8",
-    "open": "^8.4.0",
     "sqlite3": "^5.0.8",
     "swagger-ui-express": "^4.4.0"
   },

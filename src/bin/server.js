@@ -10,7 +10,6 @@ const express = require('express');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
-const open = require('open');
 
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 
@@ -60,12 +59,10 @@ switch (env) {
                     if (result) {
                         console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
                     }
-                    open(`http://localhost:${port}`);
                 });
             });
         } else {
             console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
-            open(`http://localhost:${port}`);
         }
         break;
 }
