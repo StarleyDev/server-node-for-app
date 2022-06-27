@@ -43,7 +43,7 @@ console.warn(`\n
  `);
 
 /** Projeto em angular  */
-var env = process.argv[2] || 'dev';
+var env = process.argv[2] || 'prod';
 switch (env) {
     case 'dev':
         // Setup development config
