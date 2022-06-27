@@ -52,8 +52,8 @@ switch (env) {
         break;
     case 'prod':
         // Setup production config
-        let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
-        if (!existeArtvendas) {
+        let existeProjeto = checkFile(process.cwd() + '/www/index.html');
+        if (!existeProjeto) {
             downloadFile(APP_CONFIG_DEFAULT.urlDownloadAngularProject, APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
                 exctratFile(APP_CONFIG_DEFAULT.txtDownloadAngularProject).then(result => {
                     if (result) {

@@ -10,7 +10,7 @@
 /platforms
 /plugins
 /www
-/*.db
 /src/bin/www/*
 /arquivos*
 Artvendas2.0.zip
+/src/config/app-config.js
