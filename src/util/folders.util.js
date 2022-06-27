@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 function criarPasta(nomePasta) {
+  console.log(`# * PASTA - ${nomePasta} - CRIADA * #`);
   if (!fs.existsSync(nomePasta)) {
     //Efetua a criação do diretório
     fs.mkdirSync(nomePasta, { recursive: true });

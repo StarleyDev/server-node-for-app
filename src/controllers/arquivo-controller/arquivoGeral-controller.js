@@ -4,7 +4,7 @@
  */
 'use sctict'
 
-const { salvarArquivo, checkFile, getDir } = require('../../util/folders.util');
+const { salvarArquivo, checkFile, criarPasta, deletarPasta } = require('../../util/folders.util');
 const { downloadFile } = require('./../../services/download/download.service');
 var path = require('path');
 
@@ -67,6 +67,36 @@ exports.get = (req, res, next) => {
     } else {
         res.status(400).send('Não foi possível localizar o arquivo!');
     }
+
+};
+
+/** Cria ou apaga pastas */
+exports.updateFolder = async (req, res, next) => {
+    let caminhoPasta, tipoOperacao;
+    let chunks = [];
+
+    await req.on('data', async function (data) {
+        chunks.push(data);
+    }).on('end', async function () {
+
+        let data = Buffer.concat(chunks);
+        caminhoPasta = JSON.parse(data).caminhoPasta;
+        tipoOperacao = JSON.parse(data).tipoOperacao;
+
+        try {
+            if (tipoOperacao === 'criarPasta') {
+                criarPasta(`arquivos_${caminhoPasta}`);
+                res.send({ status: 'Pasta criada!' });
+            }
+            if (tipoOperacao === 'deletarPasta') {
+                deletarPasta(`arquivos_${caminhoPasta}`);
+                res.send({ status: 'Pasta apagada!' });
+            }
+
+        } catch (error) {
+            res.status(400).send('Não foi possível realizar o download do arquivo!')
+        }
+    });
 
 };
 

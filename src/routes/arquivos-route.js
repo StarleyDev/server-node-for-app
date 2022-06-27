@@ -18,5 +18,6 @@ const arquivoGeralController = require('../controllers/arquivo-controller/arquiv
 router.get('/getFile', arquivoGeralController.get)
 router.post('/saveFile', arquivoGeralController.post);
 router.post('/saveByUrl', arquivoGeralController.saveByUrl);
+router.post('/updateFolder', arquivoGeralController.updateFolder);
 
 module.exports = router;
