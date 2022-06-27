@@ -10,6 +10,7 @@ const express = require('express');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
+const open = require('open');
 
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 
@@ -43,20 +44,32 @@ console.warn(`\n
  `);
 
 /** Projeto em angular  */
-let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
-if (!existeArtvendas) {
-    downloadFile(APP_CONFIG_DEFAULT.urlDownloadArtvendas, APP_CONFIG_DEFAULT.txtDownloadArtvendas).finally(() => {
-        exctratFile(APP_CONFIG_DEFAULT.txtDownloadArtvendas).then(result => {
-            if(result){
-                console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
-            }
-            // abrirNavegador();
-        });
-    });
-} else {
-    console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
-    // abrirNavegador();
+var env = process.argv[2] || 'dev';
+switch (env) {
+    case 'dev':
+        // Setup development config
+        console.log('\n# * DEVELOPER MODE * #\n');
+        console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+        break;
+    case 'prod':
+        // Setup production config
+        let existeArtvendas = checkFile(process.cwd() + '/www/index.html');
+        if (!existeArtvendas) {
+            downloadFile(APP_CONFIG_DEFAULT.urlDownloadArtvendas, APP_CONFIG_DEFAULT.txtDownloadArtvendas).finally(() => {
+                exctratFile(APP_CONFIG_DEFAULT.txtDownloadArtvendas).then(result => {
+                    if (result) {
+                        console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+                    }
+                    open(`http://localhost:${port}`);
+                });
+            });
+        } else {
+            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+            open(`http://localhost:${port}`);
+        }
+        break;
 }
+
 
 app.use('/', express.static(getDir() + '/www'));
 app.get('/', function (req, res) {
@@ -122,22 +135,4 @@ function onListening() {
     debug('Listening on ', + bind);
 }
 
-
-// function abrirNavegador() {
-//     const readline = require('readline');
-//     const rl = readline.createInterface({
-//         input: process.stdin,
-//         output: process.stdout
-//     });
-
-//     rl.question('# * DESEJA ABRIR O NAVEGADOR? (s/n) * #', function (name) {
-//         if (name === 'S' || name === 's') {
-//             console.log('# * ABRINDO * #');
-//             open(`http://localhost:${port}`);
-//         } else {
-//             console.log('# * CONTINUAR SEM NAVEGADOR * #');
-//             rl.close();
-//         }
-//     });
-// }
 
