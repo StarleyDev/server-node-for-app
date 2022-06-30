@@ -10,6 +10,7 @@ const express = require('express');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
+const checkUpdateServer = require('./../services/download/update-server.service');
 
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 
@@ -49,24 +50,28 @@ switch (env) {
         // Setup development config
         console.log('\n# * DEVELOPER MODE * #\n');
         console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+
         break;
     case 'prod':
-        // Setup production config
-        let existeProjeto = checkFile(process.cwd() + '/www/index.html');
-        if (!existeProjeto) {
-            downloadFile(APP_CONFIG_DEFAULT.urlDownloadAngularProject, APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
-                exctratFile(APP_CONFIG_DEFAULT.txtDownloadAngularProject).then(result => {
-                    if (result) {
-                        console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
-                    }
+
+        checkUpdateServer().finally(() => {
+            // Setup production config
+            let existeProjeto = checkFile(process.cwd() + '/www/index.html');
+            if (!existeProjeto) {
+                downloadFile(APP_CONFIG_DEFAULT.urlDownloadAngularProject, APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
+                    exctratFile(APP_CONFIG_DEFAULT.txtDownloadAngularProject).then(result => {
+                        if (result) {
+                            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+                        }
+                    });
                 });
-            });
-        } else {
-            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
-        }
+            } else {
+                console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+            }
+        });
+
         break;
 }
-
 
 app.use('/', express.static(getDir() + '/www'));
 app.get('/', function (req, res) {
