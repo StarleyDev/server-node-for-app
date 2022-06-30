@@ -27,10 +27,10 @@ exports.post = async (req, res) => {
             if (sqlRecebida.length > 1 && isArray) {
                 // console.log('# * START INSERT MULTIPLOS # *')
 
-                await insertMultiplos(sqlRecebida, dbInUse).finally(() => {
+                await insertMultiplos(sqlRecebida, dbInUse).then(() => {
                     res.send({ insertId: sqlRecebida.length });
                 }).catch(error => {
-                    res.send({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
+                    res.status(400).send({ message: `${error}`, retorno: false });
                 });
 
                 // console.log('# * END INSERT MULTIPLOS # *\n')

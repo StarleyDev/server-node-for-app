@@ -47,7 +47,7 @@ exports.post = async (req, res, next) => {
 
         });
     } catch (error) {
-        res.send({ message: `Não conseguimos realizar a consulta!!! ${error}`, retorno: false });
+        res.status(400).send({ message: `${error}`, retorno: false });
     }
 };
 

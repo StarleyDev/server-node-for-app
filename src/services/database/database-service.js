@@ -14,7 +14,7 @@ function insertMultiplos(sqlRecebida, dbInUse) {
       resolve('Inserido');
     }).catch(err => {
       console.error("BATCH FAILED: " + err);
-      resolve(err);
+      reject(err);
     });
 
   });

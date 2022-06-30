@@ -27,8 +27,8 @@ exports.post = async (req, res, next) => {
             await executeSqlQuerie(sqlRecebida, dbInUse).then(data => {
                 // console.log("SUCCESS!")
                 res.send(data);
-            }).catch(err => {
-                res.status(400).json({ "error": err.message });
+            }).catch(error => {
+                res.status(400).send({ message: `${error}`, retorno: false });
             });
 
             // console.log('# * END SQL QUERIE # *\n')
