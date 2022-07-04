@@ -21,9 +21,7 @@ exports.post = async (req, res, next) => {
 
         /** Se não tiver a chave secreta corespondente não ira retornar o token */
         if (chaveSecreta === enviroment.SECRET) {
-            console.log('vendedorLogado ---> ', vendedorLogado)
             getToken(vendedorLogado).then(retorno => {
-                console.log("🚀 ~ file: authToken-controller.js ~ line 21 ~ getToken ~ retorno", retorno)
                 res.send([{ token: retorno }]);
             }).catch(error => {
                 res.send({ message: `Não pegar o token! ${error}`, retorno: false });
@@ -33,6 +31,5 @@ exports.post = async (req, res, next) => {
         }
 
     });
-
 
 };
