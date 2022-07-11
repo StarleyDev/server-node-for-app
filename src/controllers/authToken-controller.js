@@ -5,7 +5,7 @@
 'use sctict'
 
 const { getToken } = require('../services/jwt-service.js');
-const enviroment = require('./../config/enviroment.js');
+const environment = require('./../config/environment.js');
 
 exports.post = async (req, res, next) => {
     let vendedorLogado;
@@ -20,7 +20,7 @@ exports.post = async (req, res, next) => {
         chaveSecreta = JSON.parse(data).chaveSecreta;
 
         /** Se não tiver a chave secreta corespondente não ira retornar o token */
-        if (chaveSecreta === enviroment.SECRET) {
+        if (chaveSecreta === environment.SECRET) {
             getToken(vendedorLogado).then(retorno => {
                 res.send([{ token: retorno }]);
             }).catch(error => {

@@ -4,14 +4,19 @@
  */
 'use sctict'
 
-const app = require('../app')
+const app = require('../app');
 const http = require('http');
 const express = require('express');
+var fs = require('fs');
+var util = require('util');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
-
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
+
+/** Data */
+let dataHoje = new Date();
+let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
 // Instancia de api
 const port = nomalizePort(process.env.PORT || '1255'); // Chava a função para validar a porta
@@ -42,6 +47,17 @@ console.warn(`\n
  # ******************************************************* #
  `);
 
+/** Logs */
+var logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
+// Or 'w' to truncate the file every time the process starts.
+var logStdout = process.stdout;
+
+console.log = function () {
+    logFile.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
+    logStdout.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
+}
+console.error = console.log;
+
 /** Projeto em angular  */
 var env = process.argv[2] || 'prod';
 switch (env) {
@@ -66,7 +82,6 @@ switch (env) {
         }
         break;
 }
-
 
 app.use('/', express.static(getDir() + '/www'));
 app.get('/', function (req, res) {

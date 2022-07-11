@@ -1,6 +1,6 @@
 // Para uso de atutenticação com JWT
 var jwt = require('jsonwebtoken');
-const environment = require('./../config/enviroment');
+const environment = require('./../config/environment');
 
 function verifyJWT(req, res, next) {
 
