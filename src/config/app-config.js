@@ -9,7 +9,7 @@
  * Coloque o link no campo URL
  * e nome do arquivo no  TXT deve ser exatamente igual para que o servidor possa descompactar o arquivo
  */
-const environment = require('./enviroment')
+const environment = require('./environment')
 
 let configServer = {
   urlDownloadAngularProject: environment.urlDownloadAngularProject,
@@ -18,7 +18,7 @@ let configServer = {
 
 let APP_CONFIG_DEFAULT = configServer;
 
-APP_CONFIG_DEFAULT['versionServer'] = '2.0.3';
-APP_CONFIG_DEFAULT['dataRelease'] = '01/07/2022';
+APP_CONFIG_DEFAULT['versionServer'] = '2.0.4';
+APP_CONFIG_DEFAULT['dataRelease'] = '11/07/2022';
 
 module.exports = APP_CONFIG_DEFAULT;
