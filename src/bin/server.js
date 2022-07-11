@@ -5,7 +5,7 @@
 'use sctict'
 
 const app = require('../app');
-const http = require('http');
+const http = require('https');
 const express = require('express');
 var fs = require('fs');
 var util = require('util');
@@ -24,7 +24,13 @@ app.set('port', port);
 
 globalPort = port;
 
-const server = http.createServer(app);
+/** Config certificados */
+const options = {
+    key: fs.readFileSync('src/config/cert/key.pem'),
+    cert: fs.readFileSync('src/config/cert/cert.pem')
+};
+
+const server = http.createServer(options, app);
 
 // Chamando metodos
 server.listen(port);
@@ -44,6 +50,7 @@ console.warn(`\n
  # *                                                     * #
  # ******************************************************* #
  # *             API Rodando na porta:  ${port}             * #
+ # *                   SERVER IN HTTPS                    * #
  # ******************************************************* #
  `);
 
