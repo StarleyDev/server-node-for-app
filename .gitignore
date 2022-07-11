@@ -15,3 +15,5 @@
 Artvendas2.0.zip
 /src/config/*
 *logServer.txt
+*.pem
+

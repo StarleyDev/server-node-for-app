@@ -5,7 +5,8 @@
 'use sctict'
 
 const app = require('../app');
-const http = require('https');
+const http = require('http');
+const https = require('https');
 const express = require('express');
 var fs = require('fs');
 var util = require('util');
@@ -18,24 +19,23 @@ const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 let dataHoje = new Date();
 let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-// Instancia de api
-const port = nomalizePort(process.env.PORT || '1255'); // Chava a função para validar a porta
-app.set('port', port);
-
-globalPort = port;
-
-/** Config certificados */
-const options = {
-    key: fs.readFileSync('src/config/cert/key.pem'),
-    cert: fs.readFileSync('src/config/cert/cert.pem')
-};
-
-const server = http.createServer(options, app);
-
-// Chamando metodos
+/** Conexões HTTP */
+const server = http.createServer(app);
+const port = nomalizePort(process.env.PORT || '1255'); // porta http
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/** Conexões HTTPs */
+const options = {
+    key: fs.readFileSync(__dirname + '/cert/key.pem'),
+    cert: fs.readFileSync(__dirname + '/cert/cert.pem')
+};
+const serverHttps = https.createServer(options, app);
+const portHttps = nomalizePort(process.env.PORT || '1256'); // porta https
+serverHttps.listen(portHttps);
+serverHttps.on('error', onErrorHttps);
+serverHttps.on('listening', onListeningHttps);
 
 console.warn(`\n
  # ******************************************************* #
@@ -49,21 +49,20 @@ console.warn(`\n
  # * https://github.com/StarleyDev/server-node-for-app   * #
  # *                                                     * #
  # ******************************************************* #
- # *             API Rodando na porta:  ${port}             * #
- # *                   SERVER IN HTTPS                    * #
+ # *         API Rodando na porta: http: ${port}            * #
+ # *         API Rodando na porta: https: ${portHttps}           * #
  # ******************************************************* #
  `);
 
 /** Logs */
 var logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
-// Or 'w' to truncate the file every time the process starts.
 var logStdout = process.stdout;
-
 console.log = function () {
     logFile.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
     logStdout.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
 }
 console.error = console.log;
+/** Fim Log */
 
 /** Projeto em angular  */
 var env = process.argv[2] || 'prod';
@@ -118,10 +117,6 @@ function nomalizePort(val) {
  * @param {*} error 
  */
 function onError(error) {
-    // if (error.syscall !== 'listem') {
-    //     console.log(error)
-    // }
-
     const bind = typeof port === 'string' ?
         'Pipe ' + port :
         'Port ' + port;
@@ -144,14 +139,54 @@ function onError(error) {
 }
 
 /**
- * Função para ficar escutando a porta
+ * Função para ficar escutando a porta http
  */
 function onListening() {
+    /** Http */
     const addr = server.address();
     const bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ', + bind);
+}
+
+
+/**
+ * Erro de conexao
+ * @param {*} error 
+ */
+function onErrorHttps(error) {
+    const bind = typeof port === 'string' ?
+        'Pipe ' + port :
+        'Port ' + port;
+
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requer privilegios elevados!');
+            process.exit(1);
+            break;
+
+        case 'EADDRINUSE':
+            console.error(bind + ' já está em uso!');
+            process.env.PORT = process.env.PORT + 2
+            process.exit(1);
+            break;
+
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Função para ficar escutando a porta https
+ */
+function onListeningHttps() {
+    const addr = serverHttps.address();
+    const bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ', + bind);
+
 }
 
 
