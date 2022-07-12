@@ -70,6 +70,27 @@ exports.get = (req, res, next) => {
 
 };
 
+/** Retonar verificando se o arquivo existe */
+exports.checkFileInFolder = async (req, res, next) => {
+    let nomeArquivo;
+    let chunks = [];
+
+    await req.on('data', async function (data) {
+        chunks.push(data);
+    }).on('end', async function () {
+
+        let data = Buffer.concat(chunks);
+        nomeArquivo = JSON.parse(data).nomeArquivo;
+
+        let arquivoEncontrado = checkFile(`arquivos_${nomeArquivo}`);
+        if (arquivoEncontrado) {
+            res.send(true);
+        } else {
+            res.send(false);
+        }
+    });
+};
+
 /** Cria ou apaga pastas */
 exports.updateFolder = async (req, res, next) => {
     let caminhoPasta, tipoOperacao;
