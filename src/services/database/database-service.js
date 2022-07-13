@@ -13,7 +13,8 @@ function insertMultiplos(sqlRecebida, dbInUse) {
       // console.log("SUCCESS!");
       resolve('Inserido');
     }).catch(err => {
-      console.error("BATCH FAILED: " + err);
+      console.error("\n # * BATCH FAILED: " + err,
+        "\n # * SQL Recebida: " + sqlRecebida);
       reject(err);
     });
 
@@ -65,7 +66,8 @@ function insertUnico(sqlRecebida, dbInUse) {
         if (erros.match('duplicate')) {
           resolve({ message: 'Coluna já existe!' });
         } else {
-          console.log('UNICO ERROR -->', err);
+          console.error("\n # * UNICO FAILED: " + err,
+            "\n # * SQL Recebida: " + sqlRecebida);
           reject({ message: `Não conseguimos realizar a inserção!!! ${err}`, retorno: false })
         }
       }
@@ -85,6 +87,8 @@ function executeSqlQuerie(sqlRecebida, dbInUse) {
 
     dbInUse.all(sqlRecebida, (err, rows) => {
       if (err) {
+        console.error("\n # * EXECUTE QUERIE FAILED: " + err,
+          "\n # * SQL Recebida: " + sqlRecebida);
         reject({ "error": err.message })
       } else {
         resolve(rows)

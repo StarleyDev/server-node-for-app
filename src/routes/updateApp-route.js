@@ -8,7 +8,8 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/arquivo-controller/updateApp-controller');
+const { verifyJWT } = require('./../services/jwt-service');
 
-router.get('/', controller.get)
+router.get('/', verifyJWT, controller.get)
 
 module.exports = router;
