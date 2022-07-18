@@ -21,7 +21,7 @@ let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLoca
 
 /** Conexões HTTP */
 const server = http.createServer(app);
-const port = nomalizePort(process.env.PORT || '1255'); // porta http
+const port = nomalizePort(checkDefaultPort()); // porta http
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -32,7 +32,7 @@ const options = {
     cert: fs.readFileSync(__dirname + '/cert/cert.pem')
 };
 const serverHttps = https.createServer(options, app);
-const portHttps = nomalizePort(process.env.PORT || '1256'); // porta https
+const portHttps = nomalizePort(checkDefaultPort() + 1); // porta https
 serverHttps.listen(portHttps);
 serverHttps.on('error', onErrorHttps);
 serverHttps.on('listening', onListeningHttps);
@@ -189,4 +189,20 @@ function onListeningHttps() {
 
 }
 
+/**
+ * Cria arquivo de configuração de porta
+ * @returns 
+ */
+function checkDefaultPort() {
+    let existFileConfig = checkFile(getDir() + '/serverPortConfig.json');
+    if (!existFileConfig) {
+        let config = fs.createWriteStream(getDir() + `/serverPortConfig.json`, { flags: 'w' });
+        config.write(`{ "serverPortDefault": 1255 }`);
+        return 1255;
+    } else {
+        let rawdata = fs.readFileSync(getDir() + '/serverPortConfig.json');
+        let ports = JSON.parse(rawdata);
+        return ports.serverPortDefault;
+    }
+}
 
