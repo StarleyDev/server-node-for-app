@@ -17,6 +17,7 @@ router.post('/saveImg', verifyJWT, arquivoImgController.post);
 /** Arquivos gerais */
 const arquivoGeralController = require('../controllers/arquivo-controller/arquivoGeral-controller');
 router.get('/getFile', arquivoGeralController.get);
+router.post('/getListDir', verifyJWT, arquivoGeralController.getListDir);
 router.post('/checkFile', verifyJWT, arquivoGeralController.checkFileInFolder);
 router.post('/saveFile', verifyJWT, arquivoGeralController.post);
 router.post('/saveByUrl', verifyJWT, arquivoGeralController.saveByUrl);

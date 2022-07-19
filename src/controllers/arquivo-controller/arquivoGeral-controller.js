@@ -7,6 +7,7 @@
 const { salvarArquivo, checkFile, criarPasta, deletarPasta } = require('../../util/folders.util');
 const { downloadFile } = require('./../../services/download/download.service');
 var path = require('path');
+const fs = require('fs');
 
 exports.post = async (req, res, next) => {
     let nomePasta, nomeArquivo, arquivo, vendedorLogado, tipoOperacao;
@@ -58,16 +59,54 @@ exports.saveByUrl = async (req, res, next) => {
     });
 };
 
-/** Retorna imagem encontrada ou imagem padrao quando nao encontra */
+/** Retorna arquivo encontrado */
 exports.get = (req, res, next) => {
-    // console.log('Requisição de arquivo ---> ', req.query['path'])
     let arquivoEncontrado = checkFile(req.query['path']);
+
+    var mySubString = req.query['path'].substring(
+        req.query['path'].lastIndexOf("/" + 1)
+    );
+
     if (arquivoEncontrado) {
+        res.set({
+            "Content-Disposition": `attachment; filename=${mySubString}`
+        });
         res.sendFile(path.resolve(req.query['path']));
     } else {
         res.status(400).send('Não foi possível localizar o arquivo!');
     }
+};
 
+/** Retorna a lista de diretorios e arquivos disponiveis no servidor */
+exports.getListDir = async (req, res, next) => {
+
+    let nomePasta, arquivos
+    let chunks = [];
+
+    await req.on('data', async function (data) {
+        chunks.push(data);
+    }).on('end', async function () {
+
+        let data = Buffer.concat(chunks);
+        nomePasta = JSON.parse(data).nomePasta;
+
+        try {
+            arquivos = fs.readdirSync(`.${nomePasta}`, { withFileTypes: true })
+                .filter(item => item)
+                .map(item => item.name)
+
+            res.send({ arquivos: arquivos, lastPath: nomePasta });
+        } catch (error) {
+            let caminho = nomePasta.substring(1);
+            let arquivoEncontrado = checkFile(caminho);
+            if (arquivoEncontrado) {
+                res.send({ downloadFile: caminho });
+            } else {
+                res.send({ downloadFile: null });
+            }
+        }
+
+    });
 };
 
 /** Retonar verificando se o arquivo existe */
@@ -120,4 +159,3 @@ exports.updateFolder = async (req, res, next) => {
     });
 
 };
-
