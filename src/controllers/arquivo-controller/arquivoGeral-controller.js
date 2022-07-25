@@ -6,6 +6,7 @@
 
 const { salvarArquivo, checkFile, criarPasta, deletarPasta } = require('../../util/folders.util');
 const { downloadFile } = require('./../../services/download/download.service');
+const { restartDb } = require('./../../config/database-config');
 var path = require('path');
 const fs = require('fs');
 
@@ -52,6 +53,15 @@ exports.saveByUrl = async (req, res, next) => {
         nomeArquivo = JSON.parse(data).nomeArquivo;
 
         downloadFile(urlArquivo, `arquivos_${nomeArquivo}`).finally(() => {
+
+            /** Ao restaruar um banco de dados ele ira reniciar a conexao */
+            if (nomeArquivo.match('database')) {
+                var mySubString = nomeArquivo.substring(
+                    nomeArquivo.lastIndexOf("/" + 1)
+                );
+                restartDb(mySubString.replace('/', ''));
+            }
+
             res.send({ statusAtualizacao: 'Atualizado!' });
         }).catch(() => {
             res.status(400).send('Não foi possível realizar o download do arquivo!')

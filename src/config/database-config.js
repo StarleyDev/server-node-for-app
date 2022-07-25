@@ -1,8 +1,8 @@
 var sqlite3 = require('sqlite3').verbose()
 
 let dbInUse;
+let lastDbInUse;
 exports.dbInUse = dbInUse;
-let lastDbInUse = '';
 
 /**
  * Verifica o banco de dados que esta sendo requisitado
@@ -33,4 +33,9 @@ function checkDbInUse(nomeDb) {
   }
 }
 
-module.exports = checkDbInUse;
+function restartDb(nomeDb) {
+  lastDbInUse = '';
+  checkDbInUse(nomeDb);
+}
+
+module.exports = { checkDbInUse, restartDb };
