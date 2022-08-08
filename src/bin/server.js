@@ -14,35 +14,39 @@ const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
-
+const environment = require('../config/environment')
 /** Data */
 let dataHoje = new Date();
 let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
+/** Check portas da aplicação */
+const port = nomalizePort(checkDefaultPort()); // porta http
+const portHttps = nomalizePort(checkDefaultPort() + 1); // porta https
+
 /** Conexões HTTP */
 const server = http.createServer(app);
-const port = nomalizePort(checkDefaultPort()); // porta http
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
 /** Conexões HTTPs */
-const options = {
-    key: fs.readFileSync(__dirname + '/cert/key.pem'),
-    cert: fs.readFileSync(__dirname + '/cert/cert.pem')
-};
-const serverHttps = https.createServer(options, app);
-const portHttps = nomalizePort(checkDefaultPort() + 1); // porta https
-serverHttps.listen(portHttps);
-serverHttps.on('error', onErrorHttps);
-serverHttps.on('listening', onListeningHttps);
+if (environment.usaHttps) {
+    const options = {
+        key: fs.readFileSync(__dirname + '/cert/key.pem'),
+        cert: fs.readFileSync(__dirname + '/cert/cert.pem')
+    };
+    const serverHttps = https.createServer(options, app);
+    serverHttps.listen(portHttps);
+    serverHttps.on('error', onErrorHttps);
+    serverHttps.on('listening', onListeningHttps);
+}
 
 console.warn(`\n
  # ******************************************************* #
  # *                                                     * #
  # *                    SERVER NODEJS                    * #
  # *                                                     * #
- # *      Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}       * #
+ # *      Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}      * #
  # *                   Licença: GPLv3                    * #
  # *                                                     * #
  # * Autor: Starley Cazorla                              * #
