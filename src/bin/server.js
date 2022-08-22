@@ -22,12 +22,13 @@ let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLoca
 /** Check portas da aplicação */
 const port = nomalizePort(checkDefaultPort()); // porta http
 const portHttps = nomalizePort(checkDefaultPort() + 1); // porta https
+let serverHttps, serverHttp;
 
 /** Conexões HTTP */
-const server = http.createServer(app);
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+serverHttp = http.createServer(app);
+serverHttp.listen(port);
+serverHttp.on('error', onError);
+serverHttp.on('listening', onListening);
 
 /** Conexões HTTPs */
 if (environment.usaHttps) {
@@ -35,7 +36,8 @@ if (environment.usaHttps) {
         key: fs.readFileSync(__dirname + '/cert/key.pem'),
         cert: fs.readFileSync(__dirname + '/cert/cert.pem')
     };
-    const serverHttps = https.createServer(options, app);
+
+    serverHttps = https.createServer(options, app);
     serverHttps.listen(portHttps);
     serverHttps.on('error', onErrorHttps);
     serverHttps.on('listening', onListeningHttps);
@@ -147,7 +149,7 @@ function onError(error) {
  */
 function onListening() {
     /** Http */
-    const addr = server.address();
+    const addr = serverHttp.address();
     const bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
