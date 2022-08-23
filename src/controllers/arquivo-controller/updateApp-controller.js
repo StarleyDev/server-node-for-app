@@ -11,8 +11,8 @@ const APP_CONFIG_DEFAULT = require('./../../config/app-config.js');
 
 exports.get = (req, res, next) => {
     console.log('\n# * --- INICIO DE ATUALIZAÇÃO --- * #');
-    deletarPasta('www');
     downloadFile(APP_CONFIG_DEFAULT.urlDownloadAngularProject, APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
+        deletarPasta('www');
         exctratFile(APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
             console.log('# * ARQUIVO EXTRAIDO! * #');
             console.log('# * --- FIM DE ATUALIZAÇÃO --- * #');
