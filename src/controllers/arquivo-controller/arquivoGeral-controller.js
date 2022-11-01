@@ -7,7 +7,7 @@
 const { salvarArquivo, checkFile, criarPasta, deletarPasta } = require('../../util/folders.util');
 const { downloadFile } = require('./../../services/download/download.service');
 const { restartDb } = require('./../../config/database-config');
-var path = require('path');
+let path = require('path');
 const fs = require('fs');
 
 exports.post = async (req, res, next) => {
@@ -18,22 +18,29 @@ exports.post = async (req, res, next) => {
         chunks.push(data);
     }).on('end', async function () {
 
-        let data = Buffer.concat(chunks);
-        nomePasta = JSON.parse(data).nomePasta;
-        nomeArquivo = JSON.parse(data).nomeArquivo;
-        arquivo = JSON.parse(data).arquivo;
-        tipoOperacao = JSON.parse(data).tipoOperacao
-        vendedorLogado = JSON.parse(data).vendedorLogado
+        try {
 
-        /** Convertendo arquivo em buffer */
-        var buf = Buffer.from(arquivo, 'utf8');
-        console.log('# * SALVANDO ARQUIVO - AGUARDE! * #')
-        await salvarArquivo(`arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}`, buf, tipoOperacao).finally(() => {
-            console.log("# * ARQUIVO SALVO COM SUCESSO! * #");
-            res.status(201).send('Download arquivo!')
-        }).catch(error => {
+            let data = Buffer.concat(chunks);
+            nomePasta = JSON.parse(data).nomePasta;
+            nomeArquivo = JSON.parse(data).nomeArquivo;
+            arquivo = JSON.parse(data).arquivo;
+            tipoOperacao = JSON.parse(data).tipoOperacao
+            vendedorLogado = JSON.parse(data).vendedorLogado
+
+            /** Convertendo arquivo em buffer */
+            let buf = Buffer.from(arquivo, 'utf8');
+            console.log('# * SALVANDO ARQUIVO - AGUARDE! * #')
+            await salvarArquivo(`arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}`, buf, tipoOperacao).finally(() => {
+                console.log("# * ARQUIVO SALVO COM SUCESSO! * #");
+                res.status(201).send('Download arquivo!')
+            }).catch(error => {
+                res.status(400).send('Não foi possível realizar o download do arquivo!')
+            });
+
+        } catch (error) {
+            console.log("🚀 ~ file: arquivoGeral-controller.js ~ line 41 ~ error", error)
             res.status(400).send('Não foi possível realizar o download do arquivo!')
-        });
+        }
 
     });
 
@@ -56,7 +63,7 @@ exports.saveByUrl = async (req, res, next) => {
 
             /** Ao restaruar um banco de dados ele ira reniciar a conexao */
             if (nomeArquivo.match('database')) {
-                var mySubString = nomeArquivo.substring(
+                let mySubString = nomeArquivo.substring(
                     nomeArquivo.lastIndexOf("/" + 1)
                 );
                 restartDb(mySubString.replace('/', ''));
@@ -73,7 +80,7 @@ exports.saveByUrl = async (req, res, next) => {
 exports.get = (req, res, next) => {
     let arquivoEncontrado = checkFile(req.query['path']);
 
-    var mySubString = req.query['path'].substring(
+    let mySubString = req.query['path'].substring(
         req.query['path'].lastIndexOf("/" + 1)
     );
 
