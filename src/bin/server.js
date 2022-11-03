@@ -8,13 +8,13 @@ const app = require('../app');
 const http = require('http');
 const https = require('https');
 const express = require('express');
-var fs = require('fs');
-var util = require('util');
+const fs = require('fs');
+const util = require('util');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
-const environment = require('../config/environment')
+const environment = require('../config/environment');
 /** Data */
 let dataHoje = new Date();
 let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -43,6 +43,7 @@ if (environment.usaHttps) {
     serverHttps.on('listening', onListeningHttps);
 }
 
+console.clear();
 console.warn(`\n
  # ******************************************************* #
  # *                                                     * #
@@ -61,8 +62,8 @@ console.warn(`\n
  `);
 
 /** Logs */
-var logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
-var logStdout = process.stdout;
+let logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
+let logStdout = process.stdout;
 console.log = function () {
     logFile.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
     logStdout.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
@@ -71,7 +72,7 @@ console.error = console.log;
 /** Fim Log */
 
 /** Projeto em angular  */
-var env = process.argv[2] || 'prod';
+let env = process.argv[2] || 'prod';
 switch (env) {
     case 'dev':
         // Setup development config
@@ -200,15 +201,21 @@ function onListeningHttps() {
  * @returns 
  */
 function checkDefaultPort() {
-    let existFileConfig = checkFile(getDir() + '/serverPortConfig.json');
+    let existFileConfig = checkFile(getDir() + '/serverConfig.json');
     if (!existFileConfig) {
-        let config = fs.createWriteStream(getDir() + `/serverPortConfig.json`, { flags: 'w' });
-        config.write(`{ "serverPortDefault": 1255 }`);
+        let config = fs.createWriteStream(getDir() + `/serverConfig.json`, { flags: 'w' });
+        config.write(`{ "serverPortDefault": 1255,
+        "configDatabase": {
+          "user": "sa",
+          "password": "sa@minhaSenha123",
+          "server": "starley.ddns.net",
+          "database": "artnew",
+          "port": 1401
+        } }`);
         return 1255;
     } else {
-        let rawdata = fs.readFileSync(getDir() + '/serverPortConfig.json');
-        let ports = JSON.parse(rawdata);
-        return ports.serverPortDefault;
+        let rawdata = fs.readFileSync(getDir() + '/serverConfig.json');
+        let config = JSON.parse(rawdata);
+        return config.serverPortDefault;
     }
 }
-

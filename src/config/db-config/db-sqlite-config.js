@@ -1,4 +1,4 @@
-var sqlite3 = require('sqlite3').verbose()
+const sqlite3 = require('sqlite3').verbose()
 
 let dbInUse;
 let lastDbInUse;
@@ -13,12 +13,12 @@ function checkDbInUse(nomeDb) {
 
   if (lastDbInUse != nomeDb) {
 
-    var mySubString = nomeDb.substring(
+    let userId = nomeDb.substring(
       nomeDb.indexOf("") + 0,
       nomeDb.lastIndexOf("_nxsinter")
     );
 
-    return dbInUse = new sqlite3.Database(`arquivos_${mySubString}/database/${nomeDb}`, (err) => {
+    return dbInUse = new sqlite3.Database(`arquivos_${userId}/database/${nomeDb}`, (err) => {
       if (err) {
         // Cannot open database
         console.error(err.message)

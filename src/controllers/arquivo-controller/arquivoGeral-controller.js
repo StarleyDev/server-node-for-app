@@ -6,7 +6,7 @@
 
 const { salvarArquivo, checkFile, criarPasta, deletarPasta } = require('../../util/folders.util');
 const { downloadFile } = require('./../../services/download/download.service');
-const { restartDb } = require('./../../config/database-config');
+const { restartDb } = require('../../config/db-config/db-sqlite-config');
 let path = require('path');
 const fs = require('fs');
 
@@ -63,10 +63,10 @@ exports.saveByUrl = async (req, res, next) => {
 
             /** Ao restaruar um banco de dados ele ira reniciar a conexao */
             if (nomeArquivo.match('database')) {
-                let mySubString = nomeArquivo.substring(
+                let userId = nomeArquivo.substring(
                     nomeArquivo.lastIndexOf("/" + 1)
                 );
-                restartDb(mySubString.replace('/', ''));
+                restartDb(userId.replace('/', ''));
             }
 
             res.send({ statusAtualizacao: 'Atualizado!' });
@@ -80,13 +80,13 @@ exports.saveByUrl = async (req, res, next) => {
 exports.get = (req, res, next) => {
     let arquivoEncontrado = checkFile(req.query['path']);
 
-    let mySubString = req.query['path'].substring(
+    let userId = req.query['path'].substring(
         req.query['path'].lastIndexOf("/" + 1)
     );
 
     if (arquivoEncontrado) {
         res.set({
-            "Content-Disposition": `attachment; filename=${mySubString}`
+            "Content-Disposition": `attachment; filename=${userId}`
         });
         res.sendFile(path.resolve(req.query['path']));
     } else {

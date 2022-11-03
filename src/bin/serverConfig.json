@@ -1,0 +1,8 @@
+{ "serverPortDefault": 1255,
+        "configDatabase": {
+          "user": "sa",
+          "password": "sa@minhaSenha123",
+          "server": "starley.ddns.net",
+          "database": "artnew",
+          "port": 1401
+        } }

@@ -3,14 +3,15 @@
  * @author Starley Cazorla
  */
 'use sctict'
+const { executeInstanceService } = require("../../services/database/db-instace.service");
 
-const { checkDbInUse } = require("../../config/database-config");
-const { executeSqlQuerie } = require('../../services/database/database-service');
+const isSqlServer = false;
 
 exports.post = async (req, res, next) => {
     try {
         let sqlRecebida = '';
         let dbForUse = '';
+        let instanceDb = '';
         let chunks = [];
 
         await req.on('data', async function (data) {
@@ -20,18 +21,15 @@ exports.post = async (req, res, next) => {
             let data = Buffer.concat(chunks);
             sqlRecebida = JSON.parse(data).todo;
             dbForUse = JSON.parse(data).dbForUse;
+            instanceDb = JSON.parse(data).instanceDb;
             // console.log('Sql Recebida /executeDb ---> ', sqlRecebida)
 
-            let dbInUse = checkDbInUse(dbForUse);
-            // console.log('# * START SQL QUERIE # *')
-            await executeSqlQuerie(sqlRecebida, dbInUse).then(data => {
-                // console.log("SUCCESS!")
+            await executeInstanceService(instanceDb, sqlRecebida, dbForUse).then(data => {
                 res.send(data);
             }).catch(error => {
                 res.status(400).send({ message: `${error}`, retorno: false });
             });
 
-            // console.log('# * END SQL QUERIE # *\n')
         });
     } catch (error) {
         res.send({ message: `Não conseguimos realizar a consulta!!! ${error}`, retorno: false });

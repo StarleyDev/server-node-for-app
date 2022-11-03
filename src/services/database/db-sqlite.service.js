@@ -1,4 +1,4 @@
-var dbForUse;
+let dbForUse;
 
 /**
  * Inserção de batch
@@ -10,7 +10,6 @@ function insertMultiplos(sqlRecebida, dbInUse) {
   return new Promise((resolve, reject) => {
     dbForUse = dbInUse;
     dbInUse.runBatchAsync(sqlRecebida, dbInUse).then(() => {
-      // console.log("SUCCESS!");
       resolve('Inserido');
     }).catch(err => {
       console.error("\n # * BATCH FAILED: " + err,
@@ -34,8 +33,8 @@ sqlite3.Database.prototype.runAsync = function (sql, ...params) {
 
 /** Execução de bacth */
 sqlite3.Database.prototype.runBatchAsync = function (statements, db) {
-  var results = [];
-  var batch = ['BEGIN', ...statements, 'COMMIT'];
+  let results = [];
+  let batch = ['BEGIN', ...statements, 'COMMIT'];
   return batch.reduce((chain, statement) => chain.then(result => {
     results.push(result);
     return db.runAsync(...[].concat(statement));
@@ -82,12 +81,12 @@ function insertUnico(sqlRecebida, dbInUse) {
  * @param {*} dbInUse 
  * @returns 
  */
-function executeSqlQuerie(sqlRecebida, dbInUse) {
+function executeSQLiteQuery(sqlRecebida, dbInUse) {
   return new Promise((resolve, reject) => {
 
     dbInUse.all(sqlRecebida, (err, rows) => {
       if (err) {
-        console.error("\n # * EXECUTE QUERIE FAILED: " + err,
+        console.error("\n # * EXECUTE QUERY FAILED: " + err,
           "\n # * SQL Recebida: " + sqlRecebida);
         reject({ "error": err.message })
       } else {
@@ -97,6 +96,6 @@ function executeSqlQuerie(sqlRecebida, dbInUse) {
   });
 }
 
-module.exports = { insertMultiplos, insertUnico, executeSqlQuerie };
+module.exports = { insertMultiplos, insertUnico, executeSQLiteQuery };
 
 
