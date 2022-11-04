@@ -5,11 +5,11 @@
  * @author Starley Cazorla
  */
 
-var sqlite3 = require('sqlite3').verbose();
+let sqlite3 = require('sqlite3').verbose();
 const { startMySqlServer } = require("../../config/db-config/db-mssql-config");
 const { checkDbInUse } = require("../../config/db-config/db-sqlite-config");
 const { executeSQLiteQuery } = require('../../services/database/db-sqlite.service');
-const { executeMssqlQuery } = require('../../services/database/db-mssql.service');
+const { executeMssqlQuery, insertMssqlQuery } = require('../../services/database/db-mssql.service');
 const { insertMultiplos, insertUnico } = require("../../services/database/db-sqlite.service");
 
 /**
@@ -111,6 +111,9 @@ async function insertInstanceService(instanceDb, sqlRecebida, dbForUse) {
           });
         }
         break
+        default:
+          resolve(null);
+          break
     }
   });
 }

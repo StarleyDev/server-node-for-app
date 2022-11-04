@@ -21,7 +21,7 @@ exports.post = async (req, res, next) => {
             instanceDb = JSON.parse(data).instanceDb;
             const DBSOURCE = sqlRecebida;
 
-            var userId = sqlRecebida.substring(
+            let userId = sqlRecebida.substring(
                 sqlRecebida.indexOf("") + 0,
                 sqlRecebida.lastIndexOf("_nxsinter")
             );

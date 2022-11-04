@@ -18,21 +18,28 @@ function getConfigServer() {
  * @returns 
  */
 function startMySqlServer() {
-  return new Promise((resolve, reject) => {
-    try {
-      return poolPromise = new sql.ConnectionPool(getConfigServer()).connect().then(pool => {
-        console.log('\n ### Conectado ao SqlServer ### \n');
-        resolve('Ok');
-        return pool;
-      }).catch(err => {
-        reject(err);
-      });
-    } catch (error) {
-      console.log("🚀 Não foi possível inicializar o banco de dados!", error);
-      reject(error);
-    }
+  return new Promise((resolve) => {
+    // try {
+    //   return poolPromise = new sql.ConnectionPool(getConfigServer()).connect().then(pool => {
+    //     console.log('\n ### Conectado ao SqlServer ### \n');
+    resolve('Ok');
+    // return pool;
+    //   }).catch(err => {
+    //     reject(err);
+    //   });
+    // } catch (error) {
+    //   console.log("🚀 Não foi possível inicializar o banco de dados!", error);
+    //   reject(error);
+    // }
   });
 }
 
+const poolPromise = new sql.ConnectionPool(getConfigServer()).connect().then(pool => {
+  console.log('\n ### Conectado ao SqlServer ###');
+  return pool;
+}).catch(() => {
+  console.log("\n###  Não há servidor SQL Server disponível! ### ");
+});
 
-module.exports = { startMySqlServer };
+
+module.exports = { startMySqlServer, poolPromise };

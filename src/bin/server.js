@@ -33,8 +33,9 @@ serverHttp.on('listening', onListening);
 /** Conexões HTTPs */
 if (environment.usaHttps) {
     const options = {
-        key: fs.readFileSync(__dirname + '/cert/key.pem'),
-        cert: fs.readFileSync(__dirname + '/cert/cert.pem')
+        key: fs.readFileSync(__dirname + '/CertificadoSSL/server.enc.key'),
+        cert: fs.readFileSync(__dirname + '/CertificadoSSL/server.csr'),
+        passphrase: environment.pwsSecuritySsl
     };
 
     serverHttps = https.createServer(options, app);
