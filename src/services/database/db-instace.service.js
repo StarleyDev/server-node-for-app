@@ -11,7 +11,6 @@ const { checkDbInUse } = require("../../config/db-config/db-sqlite-config");
 const { executeSQLiteQuery } = require('../../services/database/db-sqlite.service');
 const { executeMssqlQuery, insertMssqlQuery } = require('../../services/database/db-mssql.service');
 const { insertMultiplos, insertUnico } = require("../../services/database/db-sqlite.service");
-
 /**
  * Verifica e inializa o banco de dados
  * @author Starley Cazorla
@@ -87,9 +86,10 @@ async function insertInstanceService(instanceDb, sqlRecebida, dbForUse) {
   return new Promise(async (resolve, reject) => {
     switch (instanceDb) {
       case 'sqlServer':
-        await executeMssqlQuery(sqlRecebida).then(data => {
-          resolve(data);
+        await insertMssqlQuery(sqlRecebida).then(data => {
+          resolve({ insertId: data[0].lastID });
         }).catch(error => {
+          console.log("🚀 ~ Erro insert --> ", error)
           reject(error);
         });
         break
@@ -111,9 +111,9 @@ async function insertInstanceService(instanceDb, sqlRecebida, dbForUse) {
           });
         }
         break
-        default:
-          resolve(null);
-          break
+      default:
+        resolve(null);
+        break
     }
   });
 }

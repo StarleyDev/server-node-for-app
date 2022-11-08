@@ -6,7 +6,7 @@ const { poolPromise } = require('../../config/db-config/db-mssql-config');
  * @returns 
  */
 async function executeMssqlQuery(sqlRecebida) {
-  console.log("🚀 ~ file: db-mssql.service.js ~ line 9 ~ executeMssqlQuery ~ sqlRecebida", sqlRecebida)
+  // console.log("🚀🚀 - QUERY - 🚀🚀", sqlRecebida)
   return new Promise(async (resolve, reject) => {
     try {
       const pool = await poolPromise;
@@ -14,11 +14,11 @@ async function executeMssqlQuery(sqlRecebida) {
       if (result) {
         resolve(result.recordset)
       } else {
-        reject({ "error": 'Não foi possivel fazer a sua consulta!' });
+        reject({ "error": 'Não foi possivel fazer o insert!' });
       }
     } catch (error) {
       console.log("🚀 ~ file: db-mssql.service.js ~ line 20 ~ returnnewPromise ~ error", error)
-      reject({ "error": 'Não foi possivel fazer a sua consulta!' });
+      reject({ "error": 'Não foi possivel fazer o insert!' });
     }
 
   });
@@ -29,18 +29,20 @@ async function executeMssqlQuery(sqlRecebida) {
  * @param {*} sqlRecebida 
  * @returns 
  */
- async function insertMssqlQuery(sqlRecebida) {
+async function insertMssqlQuery(sqlRecebida) {
+  // console.log("🚀🚀 - INSERT - 🚀🚀", sqlRecebida)
   return new Promise(async (resolve, reject) => {
     try {
       const pool = await poolPromise;
-      const result = await pool.request().input(sqlRecebida);
+      const result = await pool.request().query(sqlRecebida + ' SELECT @@IDENTITY AS lastID');
       if (result) {
         resolve(result.recordset)
       } else {
-        reject({ "error": 'Não foi possivel fazer a sua consulta!' });
+        reject({ "error": 'Não foi possivel fazer o insert!' });
       }
     } catch (error) {
-      reject({ "error": 'Não foi possivel fazer a sua consulta!' });
+      console.log("🚀 ~ Error insert -->", error.info.message)
+      reject({ "error": 'Não foi possivel fazer o insert!' });
     }
 
   });
