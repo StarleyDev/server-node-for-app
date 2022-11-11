@@ -207,12 +207,19 @@ function checkDefaultPort() {
         let config = fs.createWriteStream(getDir() + `/serverConfig.json`, { flags: 'w' });
         config.write(`{ "serverPortDefault": 1255,
         "configDatabase": {
-          "user": "sa",
-          "password": "sa@minhaSenha123",
-          "server": "starley.ddns.net",
-          "database": "artnew",
-          "port": 1401
-        } }`);
+            "user": "yourUser",
+            "password": "yousrPass",
+            "server": "yourIp",
+            "database": "yourDb",
+            "port": 1433,
+            "options": {
+                "trustedConnection": false,
+                "encrypt": false,
+                "enableArithAbort": false,
+                "trustServerCertificate": false
+            }
+        }
+    }`);
         return 1255;
     } else {
         let rawdata = fs.readFileSync(getDir() + '/serverConfig.json');

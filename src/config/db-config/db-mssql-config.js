@@ -1,28 +1,20 @@
 const sql = require('mssql');
 const fs = require('fs');
 const { checkFile, getDir } = require('./../../util/folders.util');
+const configDefaultDatabase = require('../../config/environment');
 
 /**
- * Cria ou recupera dados de conexao
+ * Verifica se existe configuração, caso não ira buscar uma padrao de testes
  * @returns 
  */
 function getConfigServer() {
   let existFileConfig = checkFile(getDir() + '/serverConfig.json');
-  if (!existFileConfig) {
-    let config = fs.createWriteStream(getDir() + `/serverConfig.json`, { flags: 'w' });
-    config.write(`{ "serverPortDefault": 1255,
-        "configDatabase": {
-          "user": "sa",
-          "password": "sa@minhaSenha123",
-          "server": "seuIp",
-          "database": "seuBanco",
-          "port": 1401
-        } }`);
-    return 1255;
-  } else {
+  if (existFileConfig) {
     let rawdata = fs.readFileSync(getDir() + '/serverConfig.json');
     let config = JSON.parse(rawdata);
     return config.configDatabase;
+  } else {
+    return configDefaultDatabase;
   }
 }
 
