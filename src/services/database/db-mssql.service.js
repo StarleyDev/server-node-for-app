@@ -41,7 +41,7 @@ async function insertMssqlQuery(sqlRecebida) {
         reject({ "error": 'Não foi possivel fazer o insert!' });
       }
     } catch (error) {
-      console.log("🚀 ~ Error insert -->", error.info.message)
+      console.log("### Error insert -->", error);
       reject({ "error": 'Não foi possivel fazer o insert!' });
     }
 
