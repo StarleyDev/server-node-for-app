@@ -1,10 +1,10 @@
 // Para uso de atutenticação com JWT
-var jwt = require('jsonwebtoken');
-const environment = require('./../config/environment');
+let jwt = require('jsonwebtoken');
+const { environment } = require('./../config/environment');
 
 function verifyJWT(req, res, next) {
 
-  var token = req.headers['x-access-token'];
+  let token = req.headers['x-access-token'];
 
   if (!token)
     return res.status(401).json({ auth: false, message: 'Nenhum token adicionado.' });
@@ -20,7 +20,7 @@ function verifyJWT(req, res, next) {
 }
 
 async function getToken(vendedorId) {
-  var token = jwt.sign({ vendedorId }, environment.SECRET, {
+  let token = jwt.sign({ vendedorId }, environment.SECRET, {
     expiresIn: 30000 // expires in 50min
   });
   return token;

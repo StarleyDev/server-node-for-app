@@ -5,11 +5,12 @@
 'use sctict'
 
 const { getToken } = require('../services/jwt-service.js');
-const environment = require('./../config/environment.js');
+const { environment } = require('./../config/environment.js');
 
 exports.post = async (req, res, next) => {
     let vendedorLogado;
     let chunks = [];
+    let chaveSecreta;
 
     await req.on('data', async function (data) {
         chunks.push(data);

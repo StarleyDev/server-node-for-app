@@ -14,7 +14,7 @@ const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
-const environment = require('../config/environment');
+const { environment } = require('../config/environment');
 /** Data */
 let dataHoje = new Date();
 let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });

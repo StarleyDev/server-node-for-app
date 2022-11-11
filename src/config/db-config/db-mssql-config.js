@@ -1,7 +1,7 @@
 const sql = require('mssql');
 const fs = require('fs');
 const { checkFile, getDir } = require('./../../util/folders.util');
-const configDefaultDatabase = require('../../config/environment');
+const { configDefaultDatabase } = require('../../config/environment');
 
 /**
  * Verifica se existe configuração, caso não ira buscar uma padrao de testes

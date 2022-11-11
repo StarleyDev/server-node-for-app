@@ -9,7 +9,7 @@
  * Coloque o link no campo URL
  * e nome do arquivo no  TXT deve ser exatamente igual para que o servidor possa descompactar o arquivo
  */
-const environment = require('./environment')
+const { environment } = require('./environment')
 
 let configServer = {
   urlDownloadAngularProject: environment.urlDownloadAngularProject,

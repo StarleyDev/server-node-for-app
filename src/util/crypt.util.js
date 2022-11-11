@@ -1,5 +1,5 @@
 let CryptoJS = require("crypto-js");
-const environment = require('./../config/environment.js');
+const { environment } = require('./../config/environment.js');
 
 /**
  * Descriptografar dados
