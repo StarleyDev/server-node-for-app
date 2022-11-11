@@ -53,7 +53,7 @@ console.warn(`\n
  # *      Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}      * #
  # *                   Licença: GPLv3                    * #
  # *                                                     * #
- # * Autor: Starley Cazorla                              * #
+ # * Author: Starley Cazorla                             * #
  # * https://github.com/StarleyDev/server-node-for-app   * #
  # *                                                     * #
  # ******************************************************* #

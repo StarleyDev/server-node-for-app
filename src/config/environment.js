@@ -1,5 +1,6 @@
 const environment = {
   "urlDownloadAngularProject": "https://www.starley.dev/download.zip",
+  "urlDownloadAngularProjectBeta": "https://www.starley.dev/downloadBeta.zip",
   "txtDownloadAngularProject": "www.zip",
   "serverConfig": "https://starley.dev",
   "SECRET": "rit4lin4+dev-distr5c40",
