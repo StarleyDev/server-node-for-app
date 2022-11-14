@@ -22,5 +22,6 @@ router.post('/checkFile', verifyJWT, arquivoGeralController.checkFileInFolder);
 router.post('/saveFile', verifyJWT, arquivoGeralController.post);
 router.post('/saveByUrl', verifyJWT, arquivoGeralController.saveByUrl);
 router.post('/updateFolder', verifyJWT, arquivoGeralController.updateFolder);
+router.post('/deleteFile', verifyJWT, arquivoGeralController.deleteFile);
 
 module.exports = router;

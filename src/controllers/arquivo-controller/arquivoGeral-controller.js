@@ -4,7 +4,7 @@
  */
 'use sctict'
 
-const { salvarArquivo, checkFile, criarPasta, deletarPasta } = require('../../util/folders.util');
+const { saveFile, checkFile, createFolder, deleteFolder, deleteFile } = require('../../util/folders.util');
 const { downloadFile } = require('./../../services/download/download.service');
 const { restartDb } = require('../../config/db-config/db-sqlite-config');
 let path = require('path');
@@ -30,7 +30,7 @@ exports.post = async (req, res, next) => {
             /** Convertendo arquivo em buffer */
             let buf = Buffer.from(arquivo, 'utf8');
             console.log('# * SALVANDO ARQUIVO - AGUARDE! * #')
-            await salvarArquivo(`arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}`, buf, tipoOperacao).finally(() => {
+            await saveFile(`arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}`, buf, tipoOperacao).finally(() => {
                 console.log("# * ARQUIVO SALVO COM SUCESSO! * #");
                 res.status(201).send('Download arquivo!')
             }).catch(error => {
@@ -162,16 +162,38 @@ exports.updateFolder = async (req, res, next) => {
 
         try {
             if (tipoOperacao === 'criarPasta') {
-                criarPasta(`arquivos_${caminhoPasta}`);
+                createFolder(`arquivos_${caminhoPasta}`);
                 res.send({ status: 'Pasta criada!' });
             }
             if (tipoOperacao === 'deletarPasta') {
-                deletarPasta(`arquivos_${caminhoPasta}`);
+                deleteFolder(`arquivos_${caminhoPasta}`);
                 res.send({ status: 'Pasta apagada!' });
             }
 
         } catch (error) {
-            res.status(400).send('Não foi possível realizar o download do arquivo!')
+            res.status(400).send('Erro ao atualizar pasta!')
+        }
+    });
+
+};
+
+/** Metodo para apagar arquivo */
+exports.deleteFile = async (req, res, next) => {
+    let filePath;
+    let chunks = [];
+
+    await req.on('data', async function (data) {
+        chunks.push(data);
+    }).on('end', async function () {
+
+        let data = Buffer.concat(chunks);
+        filePath = JSON.parse(data).filePath;
+
+        try {
+            deleteFile(filePath);
+            res.send({ status: 'Arquivo apagado!' });
+        } catch (error) {
+            res.status(400).send('Não excluir o arquivo! --> ', filePath);
         }
     });
 

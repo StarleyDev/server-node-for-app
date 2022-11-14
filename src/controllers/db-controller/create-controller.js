@@ -27,11 +27,11 @@ exports.post = async (req, res, next) => {
             );
 
             /** Criando pastas locais */
-            externoUtil.criarPasta(`arquivos_${userId}/imgAws`);
-            externoUtil.criarPasta(`arquivos_${userId}/database`);
-            externoUtil.criarPasta(`arquivos_${userId}/backup`);
-            externoUtil.criarPasta(`arquivos_${userId}/relatorios`);
-            externoUtil.criarPasta(`arquivos_${userId}/download`);
+            externoUtil.createFolder(`arquivos_${userId}/imgAws`);
+            externoUtil.createFolder(`arquivos_${userId}/database`);
+            externoUtil.createFolder(`arquivos_${userId}/backup`);
+            externoUtil.createFolder(`arquivos_${userId}/relatorios`);
+            externoUtil.createFolder(`arquivos_${userId}/download`);
 
             await selectInstanceForStart(instanceDb, userId, DBSOURCE).then(data => {
                 console.log('# * Connected server: ', data, ' * #');

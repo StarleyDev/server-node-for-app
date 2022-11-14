@@ -11,9 +11,9 @@ const unzip = require('node-unzip-2');
  */
 async function downloadFile(url, fileFolder) {
   return new Promise((resolve, reject) => {
-    console.log('# * DOWNLOAD EM ANDAMENTO - AGUARDE! * #')
+    console.log('# * INICIANDO DOWNLOAD - AGUARDE! * #')
     try {
-
+      
       const file = fs.createWriteStream(fileFolder);
       http.get(url, function (response) {
         response.pipe(file);
@@ -22,12 +22,13 @@ async function downloadFile(url, fileFolder) {
         file.on("finish", async () => {
           file.close();
           console.log("# * DOWNLOAD CONCLUIDO! * #");
-          resolve('Download concluido!!!');
+          resolve(true);
         });
       });
 
     } catch (error) {
-      reject('Não foi possível encontrar o Arquivo para Download!')
+      console.log('# * OPS! ERRO AO FAZER DOWNLOAD * #')
+      reject(false)
     }
 
   });
