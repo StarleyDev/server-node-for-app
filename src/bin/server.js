@@ -8,13 +8,13 @@ const app = require('../app');
 const http = require('http');
 const https = require('https');
 const express = require('express');
-var fs = require('fs');
-var util = require('util');
+const fs = require('fs');
+const util = require('util');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
-const environment = require('../config/environment')
+const { environment } = require('../config/environment');
 /** Data */
 let dataHoje = new Date();
 let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -33,8 +33,9 @@ serverHttp.on('listening', onListening);
 /** Conexões HTTPs */
 if (environment.usaHttps) {
     const options = {
-        key: fs.readFileSync(__dirname + '/cert/key.pem'),
-        cert: fs.readFileSync(__dirname + '/cert/cert.pem')
+        key: fs.readFileSync(__dirname + '/CertificadoSSL/server.enc.key'),
+        cert: fs.readFileSync(__dirname + '/CertificadoSSL/server.csr'),
+        passphrase: environment.pwsSecuritySsl
     };
 
     serverHttps = https.createServer(options, app);
@@ -43,6 +44,7 @@ if (environment.usaHttps) {
     serverHttps.on('listening', onListeningHttps);
 }
 
+console.clear();
 console.warn(`\n
  # ******************************************************* #
  # *                                                     * #
@@ -51,7 +53,7 @@ console.warn(`\n
  # *      Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}      * #
  # *                   Licença: GPLv3                    * #
  # *                                                     * #
- # * Autor: Starley Cazorla                              * #
+ # * Author: Starley Cazorla                             * #
  # * https://github.com/StarleyDev/server-node-for-app   * #
  # *                                                     * #
  # ******************************************************* #
@@ -61,8 +63,8 @@ console.warn(`\n
  `);
 
 /** Logs */
-var logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
-var logStdout = process.stdout;
+let logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
+let logStdout = process.stdout;
 console.log = function () {
     logFile.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
     logStdout.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
@@ -71,7 +73,7 @@ console.error = console.log;
 /** Fim Log */
 
 /** Projeto em angular  */
-var env = process.argv[2] || 'prod';
+let env = process.argv[2] || 'prod';
 switch (env) {
     case 'dev':
         // Setup development config
@@ -200,15 +202,28 @@ function onListeningHttps() {
  * @returns 
  */
 function checkDefaultPort() {
-    let existFileConfig = checkFile(getDir() + '/serverPortConfig.json');
+    let existFileConfig = checkFile(getDir() + '/serverConfig.json');
     if (!existFileConfig) {
-        let config = fs.createWriteStream(getDir() + `/serverPortConfig.json`, { flags: 'w' });
-        config.write(`{ "serverPortDefault": 1255 }`);
+        let config = fs.createWriteStream(getDir() + `/serverConfig.json`, { flags: 'w' });
+        config.write(`{ "serverPortDefault": 1255,
+        "configDatabase": {
+            "user": "yourUser",
+            "password": "yousrPass",
+            "server": "yourIp",
+            "database": "yourDb",
+            "port": 1433,
+            "options": {
+                "trustedConnection": false,
+                "encrypt": false,
+                "enableArithAbort": false,
+                "trustServerCertificate": false
+            }
+        }
+    }`);
         return 1255;
     } else {
-        let rawdata = fs.readFileSync(getDir() + '/serverPortConfig.json');
-        let ports = JSON.parse(rawdata);
-        return ports.serverPortDefault;
+        let rawdata = fs.readFileSync(getDir() + '/serverConfig.json');
+        let config = JSON.parse(rawdata);
+        return config.serverPortDefault;
     }
 }
-

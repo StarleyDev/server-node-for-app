@@ -1,0 +1,16 @@
+{
+  "serverPortDefault": 1255,
+  "configDatabase": {
+    "user": "sa",
+    "password": "sa@minhaSenha123",
+    "server": "localhost",
+    "database": "artnew",
+    "port": 1401,
+    "options": {
+      "trustedConnection": true,
+      "encrypt": true,
+      "enableArithAbort": true,
+      "trustServerCertificate": true
+    }
+  }
+}

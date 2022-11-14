@@ -8,10 +8,11 @@
   "bin": "./src/bin/server.js",
   "scripts": {
     "start": "node ./src/bin/server.js prod",
-    "nodemon": "nodemon ./src/bin/server.js dev",
+    "nodemon": "nodemon ./src/bin/server.js dev node",
     "build": "pkg ."
   },
   "dependencies": {
+    "crypto-js": "^4.1.1",
     "express": "^4.18.2",
     "helmet": "^6.0.0",
     "http": "0.0.1-security",
@@ -19,11 +20,11 @@
     "mssql": "^9.0.1",
     "node-unzip-2": "^0.2.8",
     "sqlite3": "^5.1.2",
-    "swagger-ui-express": "^4.5.0"
+    "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
-    "webpack": "^5.74.0",
+    "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0"
   },
   "pkg": {

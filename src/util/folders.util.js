@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function criarPasta(nomePasta) {
+function createFolder(nomePasta) {
   if (!fs.existsSync(nomePasta)) {
     console.log(`# * PASTA - ${nomePasta} - CRIADA * #`);
     //Efetua a criação do diretório
@@ -15,9 +15,14 @@ function criarPasta(nomePasta) {
   }
 }
 
-function deletarPasta(path) {
+async function deleteFolder(path) {
   console.log(`# * PASTA - ${path} - DELETADA * #`);
   fs.rmSync(path, { recursive: true });
+}
+
+async function deleteFile(filePath) {
+  console.log(`# * ARQUIVO - ${filePath} - DELETADO * #`);
+  fs.unlinkSync(filePath, { recursive: true });
 }
 
 // Using a function to set default app path
@@ -88,7 +93,7 @@ function salvaImagens(dir, nomeArquivo, data, isPrincipal) {
  * @param {*} tipoOperacao 
  * @returns 
  */
-function salvarArquivo(caminho, buffer, tipoOperacao) {
+function saveFile(caminho, buffer, tipoOperacao) {
   return new Promise((resolve, reject) => {
     try {
       fs.writeFile(caminho, buffer, tipoOperacao, function (err, result) {
@@ -131,4 +136,4 @@ function checkFile(path) {
 }
 
 
-module.exports = { criarPasta, deletarPasta, salvaImagens, checkFile, getDir, salvarArquivo }
+module.exports = { createFolder, deleteFolder, deleteFile, salvaImagens, checkFile, getDir, saveFile }

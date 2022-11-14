@@ -1,7 +1,6 @@
-var sqlite3 = require('sqlite3').verbose();
 
 const externoUtil = require('../../util/folders.util');
-
+const { selectInstanceForStart } = require("../../services/database/db-instace.service");
 // Configuração Controller Generico
 /**
  * @author Starley Cazorla
@@ -10,6 +9,7 @@ const externoUtil = require('../../util/folders.util');
 exports.post = async (req, res, next) => {
     try {
         let sqlRecebida = '';
+        let instanceDb = '';
         let chunks = [];
 
         await req.on('data', async function (data) {
@@ -18,31 +18,27 @@ exports.post = async (req, res, next) => {
 
             let data = Buffer.concat(chunks);
             sqlRecebida = JSON.parse(data).todo;
-            // console.log('Sql Recebida /createDb ---> ', sqlRecebida)
+            instanceDb = JSON.parse(data).instanceDb;
             const DBSOURCE = sqlRecebida;
 
-            var mySubString = sqlRecebida.substring(
+            let userId = sqlRecebida.substring(
                 sqlRecebida.indexOf("") + 0,
                 sqlRecebida.lastIndexOf("_nxsinter")
             );
 
             /** Criando pastas locais */
-            externoUtil.criarPasta(`arquivos_${mySubString}/imgAws`);
-            externoUtil.criarPasta(`arquivos_${mySubString}/database`);
-            externoUtil.criarPasta(`arquivos_${mySubString}/backup`);
-            externoUtil.criarPasta(`arquivos_${mySubString}/relatorios`);
-            externoUtil.criarPasta(`arquivos_${mySubString}/download`);
+            externoUtil.createFolder(`arquivos_${userId}/imgAws`);
+            externoUtil.createFolder(`arquivos_${userId}/database`);
+            externoUtil.createFolder(`arquivos_${userId}/backup`);
+            externoUtil.createFolder(`arquivos_${userId}/relatorios`);
+            externoUtil.createFolder(`arquivos_${userId}/download`);
 
-            new sqlite3.Database(`arquivos_${mySubString}/database/${DBSOURCE}`, (err) => {
-                if (err) {
-                    // Cannot open database
-                    console.error(err.message)
-                    res.status(400).json({ "error": err.message });
-                    throw err
-                } else {
-                    console.log('# * Connected to: ', DBSOURCE, ' * #');
-                    res.send({ sucesso: 'Base criada/conectada com suceso!' });
-                }
+            await selectInstanceForStart(instanceDb, userId, DBSOURCE).then(data => {
+                console.log('# * Connected server: ', data, ' * #');
+                res.send({ sucesso: 'Base criada/conectada com suceso!' });
+            }).catch(err => {
+                console.error(err.message)
+                res.status(400).json({ "error": err.message });
             });
 
         });
