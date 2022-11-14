@@ -44,24 +44,6 @@ if (environment.usaHttps) {
     serverHttps.on('listening', onListeningHttps);
 }
 
-console.clear();
-console.warn(`\n
- # ******************************************************* #
- # *                                                     * #
- # *                    SERVER NODEJS                    * #
- # *                                                     * #
- # *      Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}      * #
- # *                   Licença: GPLv3                    * #
- # *                                                     * #
- # * Author: Starley Cazorla                             * #
- # * https://github.com/StarleyDev/server-node-for-app   * #
- # *                                                     * #
- # ******************************************************* #
- # *         API Rodando na porta: http: ${port}            * #
- # *         API Rodando na porta: https: ${portHttps}           * #
- # ******************************************************* #
- `);
-
 /** Logs */
 let logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
 let logStdout = process.stdout;
@@ -72,13 +54,31 @@ console.log = function () {
 console.error = console.log;
 /** Fim Log */
 
+console.clear();
+console.log(`\n
+ # ******************************************************* #
+ # *                                                     * #
+ # *        🚧 🚧 🚧    SERVER NODEJS    🚧 🚧 🚧        * #
+ # *                                                     * #
+ # *   🚀 Version: ${APP_CONFIG_DEFAULT.versionServer} - Data Update: ${APP_CONFIG_DEFAULT.dataRelease}  🚀   * #
+ # *                   Licença: GPLv3                    * #
+ # *                                                     * #
+ # * Author: 👾 Starley Cazorla 👾                       * #
+ # * https://github.com/StarleyDev/server-node-for-app   * #
+ # *                                                     * #
+ # ******************************************************* #
+ # *        API Rodando na porta: 🔓 http: ${port}          * #
+ # *        API Rodando na porta: 🔐 https: ${portHttps}         * #
+ # ******************************************************* #
+ `);
+
 /** Projeto em angular  */
 let env = process.argv[2] || 'prod';
 switch (env) {
     case 'dev':
         // Setup development config
-        console.log('\n# * DEVELOPER MODE * #\n');
-        console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+        console.log('\n# * 🤖 DEVELOPER MODE 🤖 * #\n');
+        console.log('\n# * ✅ APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
         break;
     case 'prod':
         // Setup production config
@@ -92,7 +92,7 @@ switch (env) {
                 });
             });
         } else {
-            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+            console.log('\n# * ✅ APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
         }
         break;
 }

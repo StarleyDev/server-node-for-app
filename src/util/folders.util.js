@@ -9,19 +9,19 @@ const path = require('path');
 
 function createFolder(nomePasta) {
   if (!fs.existsSync(nomePasta)) {
-    console.log(`# * PASTA - ${nomePasta} - CRIADA * #`);
+    console.log(`# * 🗂 PASTA - ${nomePasta} - CRIADA * #`);
     //Efetua a criação do diretório
     fs.mkdirSync(nomePasta, { recursive: true });
   }
 }
 
 async function deleteFolder(path) {
-  console.log(`# * PASTA - ${path} - DELETADA * #`);
+  console.log(`# * 🗑 PASTA - ${path} - DELETADA * #`);
   fs.rmSync(path, { recursive: true });
 }
 
 async function deleteFile(filePath) {
-  console.log(`# * ARQUIVO - ${filePath} - DELETADO * #`);
+  console.log(`# * 🗑 ARQUIVO - ${filePath} - DELETADO * #`);
   fs.unlinkSync(filePath, { recursive: true });
 }
 

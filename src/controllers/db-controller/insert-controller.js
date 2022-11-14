@@ -22,7 +22,7 @@ exports.post = async (req, res) => {
             dbForUse = JSON.parse(data).dbForUse;
             instanceDb = JSON.parse(data).instanceDb;
 
-            await insertInstanceService(instanceDb, sqlRecebida, dbForUse).then(data => {
+            await insertInstanceService(instanceDb === undefined ? 'sqlite' : instanceDb, sqlRecebida, dbForUse).then(data => {
                 res.send(data);
             }).catch(error => {
                 res.status(400).send({ message: `${error}`, retorno: false });

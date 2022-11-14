@@ -1,11 +1,13 @@
 
-const externoUtil = require('../../util/folders.util');
-const { selectInstanceForStart } = require("../../services/database/db-instace.service");
-// Configuração Controller Generico
 /**
+ * Configuração Controller Generico
  * @author Starley Cazorla
  */
+
 'use sctict'
+const externoUtil = require('../../util/folders.util');
+const { selectInstanceForStart } = require("../../services/database/db-instace.service");
+
 exports.post = async (req, res, next) => {
     try {
         let sqlRecebida = '';
@@ -20,7 +22,6 @@ exports.post = async (req, res, next) => {
             sqlRecebida = JSON.parse(data).todo;
             instanceDb = JSON.parse(data).instanceDb;
             const DBSOURCE = sqlRecebida;
-
             let userId = sqlRecebida.substring(
                 sqlRecebida.indexOf("") + 0,
                 sqlRecebida.lastIndexOf("_nxsinter")
@@ -33,8 +34,8 @@ exports.post = async (req, res, next) => {
             externoUtil.createFolder(`arquivos_${userId}/relatorios`);
             externoUtil.createFolder(`arquivos_${userId}/download`);
 
-            await selectInstanceForStart(instanceDb, userId, DBSOURCE).then(data => {
-                console.log('# * Connected server: ', data, ' * #');
+            await selectInstanceForStart(instanceDb === undefined ? 'sqlite' : instanceDb, userId, DBSOURCE).then(data => {
+                console.log('# * 🗃 Connected server: ', data, ' * #');
                 res.send({ sucesso: 'Base criada/conectada com suceso!' });
             }).catch(err => {
                 console.error(err.message)

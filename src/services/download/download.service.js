@@ -11,7 +11,7 @@ const unzip = require('node-unzip-2');
  */
 async function downloadFile(url, fileFolder) {
   return new Promise((resolve, reject) => {
-    console.log('# * INICIANDO DOWNLOAD - AGUARDE! * #')
+    console.log('# * 📥 INICIANDO DOWNLOAD - AGUARDE! * #')
     try {
       
       const file = fs.createWriteStream(fileFolder);
@@ -21,13 +21,13 @@ async function downloadFile(url, fileFolder) {
         // after download completed close filestream
         file.on("finish", async () => {
           file.close();
-          console.log("# * DOWNLOAD CONCLUIDO! * #");
+          console.log("# * 📦 DOWNLOAD CONCLUIDO! * #");
           resolve(true);
         });
       });
 
     } catch (error) {
-      console.log('# * OPS! ERRO AO FAZER DOWNLOAD * #')
+      console.log('# * ❌ OPS! ERRO AO FAZER DOWNLOAD * #')
       reject(false)
     }
 
@@ -40,13 +40,13 @@ async function downloadFile(url, fileFolder) {
  * @returns 
  */
 async function exctratFile(fileFolder) {
-  console.log('# * EXTRAINDO ARQUIVO! * #');
+  console.log('# * 🗜 EXTRAINDO ARQUIVO! * #');
   let arquivoExtraido = true;
   try {
     fs.createReadStream(fileFolder).pipe(unzip.Extract({ path: '.' }));
-    console.log('# * ARQUIVO EXTRAIDO COM SUCESSO! * #');
+    console.log('# * 🎉 ARQUIVO EXTRAIDO COM SUCESSO! * #');
   } catch (error) {
-    console.log("# * ERRO AO EXTRAIR ARQUIVO * #", error);
+    console.log("# * ❌ ERRO AO EXTRAIR ARQUIVO * #", error);
     arquivoExtraido = false;
   }
 
