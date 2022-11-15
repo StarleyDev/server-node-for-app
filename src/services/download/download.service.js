@@ -40,7 +40,7 @@ async function downloadFile(url, fileFolder) {
  * @returns 
  */
 async function exctratFile(fileFolder) {
-  console.log('# * 🗜 EXTRAINDO ARQUIVO! * #');
+  console.log('# * 🗜  EXTRAINDO ARQUIVO! * #');
   let arquivoExtraido = true;
   try {
     fs.createReadStream(fileFolder).pipe(unzip.Extract({ path: '.' }));

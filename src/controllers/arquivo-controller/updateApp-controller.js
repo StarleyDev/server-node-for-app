@@ -5,23 +5,41 @@
 'use sctict'
 
 const { downloadFile, exctratFile } = require('../../services/download/download.service');
-const { deleteFolder } = require('../../util/folders.util');
+const { deleteFolder, checkFile, getDir } = require('../../util/folders.util');
+const fs = require('fs');
+const { defaultConfigServer } = require('../../config/environment');
 
-const APP_CONFIG_DEFAULT = require('./../../config/app-config.js');
+/**
+ * Verifica se existe configuração, caso não ira buscar uma padrao de testes
+ * @returns 
+ */
+function getConfigServer() {
+    let existFileConfig = checkFile(getDir() + '/serverConfig.json');
+    if (existFileConfig) {
+        let rawdata = fs.readFileSync(getDir() + '/serverConfig.json');
+        let config = JSON.parse(rawdata);
+        return config;
+    } else {
+        return JSON.parse(defaultConfigServer);
+    }
+}
 
-exports.get = (req, res, next) => {
+exports.get = async (req, res, next) => {
     /** Caso for uma versão beta */
-    let updateBeta = req.query['updateBeta'] === undefined ? false : req.query['updateBeta'];
+    const updateBeta = await req.query['updateBeta'] === undefined ? 'no' : req.query['updateBeta'];
+
+    /** Pega dados da configuração mais atualizados! */
+    let configServer = getConfigServer();
 
     console.log('\n# * 🚀 🚀 🚀 INICIO DE ATUALIZAÇÃO 🚀 🚀 🚀 * #');
-    downloadFile(updateBeta ? APP_CONFIG_DEFAULT.urlDownloadAngularProjectBeta : APP_CONFIG_DEFAULT.urlDownloadAngularProject, APP_CONFIG_DEFAULT.txtDownloadAngularProject).then(async (data) => {
+    downloadFile(updateBeta === 'yes' ? configServer.urlDownloadAngularProjectBeta : configServer.urlDownloadAngularProject, configServer.txtDownloadAngularProject).then(async (data) => {
         if (data) {
             await deleteFolder('www');
-            await exctratFile(APP_CONFIG_DEFAULT.txtDownloadAngularProject).finally(() => {
+            await exctratFile(configServer.txtDownloadAngularProject).finally(() => {
                 console.log('# * 🎉 ARQUIVO EXTRAIDO! * #');
                 console.log('# * 🎊 🎊 🎊 FIM DE ATUALIZAÇÃO 🎊 🎊 🎊 * #');
                 console.log('\n# * ✅ APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
-                res.send({ statusAtualizacao: 'Atualizado!' });
+                res.send({ statusAtualizacao: `Atualizado! Versão ${updateBeta === 'yes' ? 'BETA!' : 'PRODUÇÃO!'}` });
             }).catch(() => {
                 res.status(400).send('Não foi possível extrair o arquivo!')
             });

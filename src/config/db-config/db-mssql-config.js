@@ -1,7 +1,7 @@
 const sql = require('mssql');
 const fs = require('fs');
 const { checkFile, getDir } = require('./../../util/folders.util');
-const { configDefaultDatabase } = require('../../config/environment');
+const { defaultConfigServer } = require('../../config/environment');
 
 /**
  * Verifica se existe configuração, caso não ira buscar uma padrao de testes
@@ -14,7 +14,7 @@ function getConfigServer() {
     let config = JSON.parse(rawdata);
     return config.configDatabase;
   } else {
-    return configDefaultDatabase;
+    return JSON.parse(defaultConfigServer).configDatabase;
   }
 }
 
@@ -41,10 +41,10 @@ function startMySqlServer() {
 }
 
 const poolPromise = new sql.ConnectionPool(getConfigServer()).connect().then(pool => {
-  console.log('\n ### Conectado ao SqlServer ###');
+  console.log('\n ### 📡 Conectado ao SqlServer ###');
   return pool;
 }).catch(() => {
-  console.log("\n###  Não há servidor SQL Server disponível! ### ");
+  console.log("\n### 🪧  Não há servidor SQL Server disponível! ### ");
 });
 
 

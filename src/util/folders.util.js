@@ -16,12 +16,12 @@ function createFolder(nomePasta) {
 }
 
 async function deleteFolder(path) {
-  console.log(`# * 🗑 PASTA - ${path} - DELETADA * #`);
+  console.log(`# * 🗑  PASTA - ${path} - DELETADA * #`);
   fs.rmSync(path, { recursive: true });
 }
 
 async function deleteFile(filePath) {
-  console.log(`# * 🗑 ARQUIVO - ${filePath} - DELETADO * #`);
+  console.log(`# * 🗑  ARQUIVO - ${filePath} - DELETADO * #`);
   fs.unlinkSync(filePath, { recursive: true });
 }
 
