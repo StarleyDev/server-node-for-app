@@ -9,19 +9,16 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const fs = require('fs');
-const util = require('util');
 const debug = require('debug')('balta:server');
 const { checkFile, getDir } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 const { environment } = require('../config/environment');
 const getConfigServer = require('./../config/config-server');
-
-/** Local datetime */
-let dataHoje = new Date();
-let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const startLogService = require('./../config/log-service');
 
 getConfigServer(false).then(res => {
+    startLogService();
     /** Check portas da aplicação */
     const port = nomalizePort(res.serverPortDefaultHttp); // porta http
     const portHttps = nomalizePort(res.serverPortDefaultHttps); // porta https
@@ -47,16 +44,6 @@ getConfigServer(false).then(res => {
         serverHttps.on('listening', onListeningHttps);
     }
 
-    /** Logs */
-    let logFile = fs.createWriteStream(getDir() + `/logServer.txt`, { flags: 'a' });
-    let logStdout = process.stdout;
-    console.log = function () {
-        logFile.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
-        logStdout.write(util.format.apply(null, arguments) + ' ' + dataHoraLocal + '\n');
-    }
-    console.error = console.log;
-    /** Fim Log */
-
     console.clear();
     console.log(`\n
  # ******************************************************* #
@@ -75,6 +62,7 @@ getConfigServer(false).then(res => {
  # ******************************************************* #
  `);
 
+
     /** Projeto em angular  */
     let env = process.argv[2] || 'prod';
     switch (env) {
@@ -87,7 +75,7 @@ getConfigServer(false).then(res => {
             // Setup production config
             let existeProjeto = checkFile(process.cwd() + '/www/index.html');
             if (!existeProjeto) {
-                if(res.urlDownloadAngularProject === null) return console.log('\n# * 🚧 SERVIDOR PRONTO PARA USO! 🚧 * #\n');
+                if (res.urlDownloadAngularProject === null) return console.log('\n# * 🚧 SERVIDOR PRONTO PARA USO! 🚧 * #\n');
 
                 downloadFile(res.urlDownloadAngularProject, res.txtDownloadAngularProject).finally(() => {
                     exctratFile(res.txtDownloadAngularProject).then(result => {

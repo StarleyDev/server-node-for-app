@@ -9,6 +9,7 @@ const { downloadFile } = require('./../../services/download/download.service');
 const { restartDb } = require('../../config/db-config/db-sqlite-config');
 let path = require('path');
 const fs = require('fs');
+const startLogService = require('./../../config/log-service');
 
 exports.post = async (req, res, next) => {
     let nomePasta, nomeArquivo, arquivo, vendedorLogado, tipoOperacao;
@@ -179,22 +180,22 @@ exports.updateFolder = async (req, res, next) => {
 
 /** Metodo para apagar arquivo */
 exports.deleteFile = async (req, res, next) => {
-    let filePath;
-    let chunks = [];
 
-    await req.on('data', async function (data) {
-        chunks.push(data);
-    }).on('end', async function () {
+    let filePath = String(req.query['filePath']);
+    let arquivoEncontrado = checkFile(filePath);
 
-        let data = Buffer.concat(chunks);
-        filePath = JSON.parse(data).filePath;
-
+    if (arquivoEncontrado) {
         try {
             deleteFile(filePath);
-            res.send({ status: 'Arquivo apagado!' });
+
+            if (filePath.match('logServer.txt') !== null) startLogService();
+
+            res.send({ status: `Arquivo ${filePath} apagado com sucesso!` });
         } catch (error) {
-            res.status(400).send('Não excluir o arquivo! --> ', filePath);
+            res.status(400).send('Não foi possível excluir o arquivo! --> ', filePath);
         }
-    });
+    } else {
+        res.status(403).send('Não foi possível localizar o arquivo!');
+    }
 
 };
