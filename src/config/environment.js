@@ -5,12 +5,13 @@ const environment = {
 };
 
 const defaultConfigServer = `{
-  "urlDownloadAngularProject": "https://www.starley.dev/download.zip",
-  "urlDownloadAngularProjectBeta": "https://www.starley.dev/downloadBeta.zip",
-  "txtDownloadAngularProject": "www.zip",
-  "serverConfig": "https://starley.dev",
-  "serverPortDefaultHttp": 1255,
+    "urlDownloadAngularProject": null,
+    "urlDownloadAngularProjectBeta": null,
+    "txtDownloadAngularProject": "www.zip",
+    "serverConfig": null,
+    "serverPortDefaultHttp": 1255,
     "serverPortDefaultHttps": 1256,
+    "licenceKey": "LIC3NC3-TR14L",
     "configDatabase": {
       "user": "yourUser",
       "password": "yousrPass",

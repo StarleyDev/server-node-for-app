@@ -31,6 +31,7 @@ exports.get = async (req, res, next) => {
     /** Pega dados da configuração mais atualizados! */
     let configServer = getConfigServer();
 
+    if (configServer.urlDownloadAngularProject === null) return res.status(400).send('Url de donwload inexistente!');
     console.log('\n# * 🚀 🚀 🚀 INICIO DE ATUALIZAÇÃO 🚀 🚀 🚀 * #');
     downloadFile(updateBeta === 'yes' ? configServer.urlDownloadAngularProjectBeta : configServer.urlDownloadAngularProject, configServer.txtDownloadAngularProject).then(async (data) => {
         if (data) {

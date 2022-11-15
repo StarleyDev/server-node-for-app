@@ -23,8 +23,8 @@ let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLoca
 
 getConfigServer(false).then(res => {
     /** Check portas da aplicação */
-    const port = nomalizePort(res.serverPortDefaultHttp === undefined ? 1255 : res.serverPortDefaultHttp); // porta http
-    const portHttps = nomalizePort(res.serverPortDefaultHttps === undefined ? 1256 : res.serverPortDefaultHttps); // porta https
+    const port = nomalizePort(res.serverPortDefaultHttp); // porta http
+    const portHttps = nomalizePort(res.serverPortDefaultHttps); // porta https
     let serverHttps, serverHttp;
 
     /** Conexões HTTP */
@@ -57,7 +57,7 @@ getConfigServer(false).then(res => {
     console.error = console.log;
     /** Fim Log */
 
-    // console.clear();
+    console.clear();
     console.log(`\n
  # ******************************************************* #
  # *                                                     * #
@@ -81,21 +81,23 @@ getConfigServer(false).then(res => {
         case 'dev':
             // Setup development config
             console.log('\n# * 🤖 DEVELOPER MODE 🤖 * #\n');
-            console.log('\n# * ✅ APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
+            console.log('\n# * ✅ SERVIDOR PRONTO PARA USO! ✅ * #\n');
             break;
         case 'prod':
             // Setup production config
             let existeProjeto = checkFile(process.cwd() + '/www/index.html');
             if (!existeProjeto) {
+                if(res.urlDownloadAngularProject === null) return console.log('\n# * 🚧 SERVIDOR PRONTO PARA USO! 🚧 * #\n');
+
                 downloadFile(res.urlDownloadAngularProject, res.txtDownloadAngularProject).finally(() => {
                     exctratFile(res.txtDownloadAngularProject).then(result => {
                         if (result) {
-                            console.log('\n# * APLICAÇÃO PRONTA PARA USO! * #\n');
+                            console.log('\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
                         }
                     });
                 });
             } else {
-                console.log('\n# * ✅ APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
+                console.log('\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
             }
             break;
     }
