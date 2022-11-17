@@ -10,7 +10,7 @@ const defaultConfigServer = `{
   "serverPortDefaultHttp": 1255,
   "serverPortDefaultHttps": 1256,
   "usaHttps": false,
-  "pwsSecuritySsl": "Ssl.$t.@2"
+  "pwsSecuritySsl": "Ssl.$t.@2",
   "licenceKey": "ASWRW73-TECW6CZ-GQG4SAY",
   "configDatabase": {
       "user": "yourUser",
