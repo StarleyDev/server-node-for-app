@@ -1,7 +1,5 @@
 const environment = {
   "SECRET": "rit4lin4+dev-distr5c40",
-  "usaHttps": true,
-  "pwsSecuritySsl": "Ssl.$t.@2"
 };
 
 const defaultConfigServer = `{
@@ -10,9 +8,11 @@ const defaultConfigServer = `{
   "txtDownloadAngularProject": "www.zip",
   "serverConfig": "https://firebasestorage.googleapis.com/v0/b/art-vendas-mobile.appspot.com/o/checarArquivoJson%2Fbr.com.afv.artvendas.json?alt=media&token=85e0f034-8423-42cb-a96b-5aa6fda7da10",
   "serverPortDefaultHttp": 1255,
-    "serverPortDefaultHttps": 1256,
-    "licenceKey": "ASWRW73-TECW6CZ-GQG4SAY",
-    "configDatabase": {
+  "serverPortDefaultHttps": 1256,
+  "usaHttps": false,
+  "pwsSecuritySsl": "Ssl.$t.@2"
+  "licenceKey": "ASWRW73-TECW6CZ-GQG4SAY",
+  "configDatabase": {
       "user": "yourUser",
       "password": "yousrPass",
       "server": "yourIp",

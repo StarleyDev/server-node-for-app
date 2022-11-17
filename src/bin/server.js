@@ -31,7 +31,7 @@ getConfigServer(false).then(res => {
     serverHttp.on('listening', onListening);
 
     /** Conexões HTTPs */
-    if (environment.usaHttps) {
+    if (res.usaHttps) {
         const options = {
             key: fs.readFileSync(__dirname + '/CertificadoSSL/server.enc.key'),
             cert: fs.readFileSync(__dirname + '/CertificadoSSL/server.csr'),
@@ -60,13 +60,13 @@ getConfigServer(false).then(res => {
  # * CNPJ: 47.338.567/0001-36            TEL: (62) 98161-5600
  # * http://servernode.mestrejedi.dev
  # * 
- # *************************************************************************************
+ # ****************************************************************************************
  # * API Rodando na porta: 🔓 http: ${port}
  # * API Rodando na porta: 🔐 https: ${portHttps}
- # *************************************************************************************
+ # ****************************************************************************************
  # * LICENSE KEY: ${res.licenceKey}
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease}
- # *************************************************************************************
+ # ****************************************************************************************
  \n
  `);
 
