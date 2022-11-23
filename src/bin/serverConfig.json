@@ -5,7 +5,9 @@
     "serverConfig": "https://firebasestorage.googleapis.com/v0/b/art-vendas-mobile.appspot.com/o/checarArquivoJson%2Fbr.com.afv.artvendas.json?alt=media&token=85e0f034-8423-42cb-a96b-5aa6fda7da10",
     "serverPortDefaultHttp": 1255,
     "serverPortDefaultHttps": 1256,
-    "licenceKey": "ASWRW73-TECW6CZ-GQG4SAY",
+    "licenseKey": "ASWRW73-TECW6CZ-GQG4SAY",
+    "razaoSocial": "ARTNEW TECNOLOGIA EM INFORMATICA LTDA",
+    "cnpj": "08.630.018/0001-89",
     "configDatabase": {
       "user": "yourUser",
       "password": "yousrPass",

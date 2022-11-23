@@ -11,7 +11,9 @@ const defaultConfigServer = `{
   "serverPortDefaultHttps": 1256,
   "usaHttps": false,
   "pwsSecuritySsl": "Ssl.$t.@2",
-  "licenceKey": "ASWRW73-TECW6CZ-GQG4SAY",
+  "licenseKey": "ASWRW73-TECW6CZ-GQG4SAY",
+  "razaoSocial": "ARTNEW TECNOLOGIA EM INFORMATICA LTDA",
+  "cnpj": "08.630.018/0001-89",
   "configDatabase": {
       "user": "yourUser",
       "password": "yousrPass",
