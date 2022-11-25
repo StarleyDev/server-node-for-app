@@ -44,7 +44,7 @@ getConfigServer(false).then(res => {
         serverHttps.on('listening', onListeningHttps);
     }
 
-    console.clear();
+    // console.clear();
     console.log(`\n 
  #
  #  ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ███╗   ██╗ ██████╗ ██████╗ ███████╗
@@ -56,9 +56,11 @@ getConfigServer(false).then(res => {
  #                                                                                              
  # **************************************************************************************** 
  # * 
- # * ${res.razaoSocial}
- # * CNPJ: ${res.cnpj} 
- # * CHAVE DO PRODUTO: ${res.licenseKey}
+ # * RAZÃO SOCIAL: ${res.cliente ? res.cliente.Item.razaoSocial : 'CLIENTE NÃO ENCONTRADO'}
+ # * CNPJ: ${res.cliente ? res.cliente.Item.id.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : '00.000.000/0000-00'}
+ # * E-MAIL: ${res.cliente ? res.cliente.Item.email[0].address : ''}
+ # * 
+ # * CHAVE DO PRODUTO: ${res.cliente ? res.cliente.Item.secret : 'VERSÃO DE TESTE'}
  # * 
  # * API Rodando na porta: 🔓 http: ${port}
  # * API Rodando na porta: 🔐 https: ${portHttps}
@@ -73,7 +75,6 @@ getConfigServer(false).then(res => {
  # ****************************************************************************************
  \n
  `);
-
 
     /** Projeto em angular  */
     let env = process.argv[2] || 'prod';
