@@ -14,6 +14,7 @@ function getConfigServer() {
     let config = JSON.parse(rawdata);
     return config.configDatabase;
   } else {
+    console.log('Retorno -> ', JSON.parse(defaultConfigServer).configDatabase)
     return JSON.parse(defaultConfigServer).configDatabase;
   }
 }
