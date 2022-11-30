@@ -66,7 +66,7 @@ getConfigServer(false).then(res => {
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease}
  # * 
- # *************************** Starley Cazorla - www.starley.dev ***************************
+ # ************************** Starley Cazorla - snode.starley.dev **************************
  \n
  `);
 
