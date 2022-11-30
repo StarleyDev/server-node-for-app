@@ -56,23 +56,17 @@ getConfigServer(false).then(res => {
  #                                                                                              
  # **************************************************************************************** 
  # * 
- # * RAZÃO SOCIAL: ${res.cliente ? res.cliente.Item.razaoSocial : 'CLIENTE NÃO ENCONTRADO'}
+ # * RAZÃO SOCIAL: ${res.cliente ? res.cliente.Item.razaoSocial : 'NÃO ENCONTRADO'}
  # * CNPJ: ${res.cliente ? res.cliente.Item.id.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : '00.000.000/0000-00'}
- # * E-MAIL: ${res.cliente ? res.cliente.Item.email[0].address : ''}
  # * 
  # * CHAVE DO PRODUTO: ${res.cliente ? res.cliente.Item.secret : 'VERSÃO DE TESTE'}
  # * 
  # * API Rodando na porta: 🔓 http: ${port}
  # * API Rodando na porta: 🔐 https: ${portHttps}
  # * 
- # *********************************** DESENVOLVIDO POR *********************************** 
- # * 
- # * MESTRE JEDI CONSULTORIA EM TECNOLOGIA DA INFORMACAO LTDA
- # * CNPJ: 47.338.567/0001-36            TEL: (62) 98161-5600
- # * http://servernode.mestrejedi.dev
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease}
  # * 
- # ****************************************************************************************
+ # ************************** Starley Cazorla - snode.starley.dev **************************
  \n
  `);
 
