@@ -17,4 +17,6 @@ www.zip
 *.pem
 serverConfig.json
 hashKey.json
+server.csr
+server.enc.key
 
