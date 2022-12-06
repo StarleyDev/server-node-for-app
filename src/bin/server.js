@@ -44,8 +44,8 @@ getConfigServer(false).then(res => {
         serverHttps.on('listening', onListeningHttps);
     }
 
-    // console.clear();
-    console.log(`\n 
+    console.clear();
+    console.log(`\n\n 
  #
  #  ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ███╗   ██╗ ██████╗ ██████╗ ███████╗
  #  ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗    ████╗  ██║██╔═══██╗██╔══██╗██╔════╝
@@ -66,33 +66,31 @@ getConfigServer(false).then(res => {
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease}
  # * 
- # ************************** Starley Cazorla - snode.starley.dev **************************
- \n
- `);
+ # ************************** Starley Cazorla - snode.starley.dev **************************`);
 
     /** Projeto em angular  */
     let env = process.argv[2] || 'prod';
     switch (env) {
         case 'dev':
             // Setup development config
-            console.log('\n# * 🤖 DEVELOPER MODE 🤖 * #\n');
-            console.log('\n# * ✅ SERVIDOR PRONTO PARA USO! ✅ * #\n');
+            console.log('\n\n# * 🤖 DEVELOPER MODE 🤖 * #');
+            console.log('\n\n# * ✅ SERVIDOR PRONTO PARA USO! ✅ * #');
             break;
         case 'prod':
             // Setup production config
             let existeProjeto = checkFile(process.cwd() + '/www/index.html');
             if (!existeProjeto) {
-                if (res.urlDownloadAngularProject === null) return console.log('\n# * 🚧 SERVIDOR PRONTO PARA USO! 🚧 * #\n');
+                if (res.urlDownloadAngularProject === null) return console.log('\n\n# * 🚧 SERVIDOR PRONTO PARA USO! 🚧 * #');
 
                 downloadFile(res.urlDownloadAngularProject, res.txtDownloadAngularProject).finally(() => {
                     exctratFile(res.txtDownloadAngularProject).then(result => {
                         if (result) {
-                            console.log('\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
+                            console.log('\n\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #');
                         }
                     });
                 });
             } else {
-                console.log('\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #\n');
+                console.log('\n\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #');
             }
             break;
     }

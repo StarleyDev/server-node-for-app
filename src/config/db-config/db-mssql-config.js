@@ -44,7 +44,7 @@ const poolPromise = new sql.ConnectionPool(getConfigServer()).connect().then(poo
   console.log('\n ### 📡 Conectado ao SqlServer ###');
   return pool;
 }).catch(() => {
-  console.log("\n### 🪧  Não há servidor SQL Server disponível! ### ");
+  // console.log("\n### 🪧  Não há servidor SQL Server disponível! ### ");
 });
 
 

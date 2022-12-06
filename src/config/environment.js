@@ -3,15 +3,14 @@ const environment = {
 };
 
 const defaultConfigServer = `{
-  "urlDownloadAngularProject": "https://firebasestorage.googleapis.com/v0/b/art-vendas-mobile.appspot.com/o/arquivoArtvendas%2FupdateApp%2Fwww.zip?alt=media&token=c9c64e54-dc52-4739-a8b8-c9fce32e168a",
-  "urlDownloadAngularProjectBeta": "https://firebasestorage.googleapis.com/v0/b/art-vendas-mobile.appspot.com/o/arquivoArtvendas%2FupdateApp%2Fwww.zip?alt=media&token=c9c64e54-dc52-4739-a8b8-c9fce32e168a",
+  "urlDownloadAngularProject": null,
+  "urlDownloadAngularProjectBeta": null,
   "txtDownloadAngularProject": "www.zip",
-  "serverConfig": "https://firebasestorage.googleapis.com/v0/b/art-vendas-mobile.appspot.com/o/checarArquivoJson%2Fbr.com.afv.artvendas.json?alt=media&token=85e0f034-8423-42cb-a96b-5aa6fda7da10",
+  "serverConfig": null,
   "serverPortDefaultHttp": 1255,
   "serverPortDefaultHttps": 1256,
   "usaHttps": false,
   "pwsSecuritySsl": "Ssl.$t.@2",
-  "cnpj": "08630018000189",
   "configDatabase": {
       "user": "yourUser",
       "password": "yousrPass",

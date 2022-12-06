@@ -12,7 +12,9 @@
 /www
 /src/bin/www/*
 /arquivos*
-Artvendas2.0.zip
+www.zip
 *logServer.txt
 *.pem
+serverConfig.json
+hashKey.json
 
