@@ -54,9 +54,21 @@ async function getClientData() {
       output: process.stdout
     });
 
+    console.log(`
+  #
+  #  ███████╗      ███╗   ██╗ ██████╗ ██████╗ ███████╗    ███╗   ███╗     ██╗
+  #  ██╔════╝      ████╗  ██║██╔═══██╗██╔══██╗██╔════╝    ████╗ ████║     ██║
+  #  ███████╗█████╗██╔██╗ ██║██║   ██║██║  ██║█████╗      ██╔████╔██║     ██║
+  #  ╚════██║╚════╝██║╚██╗██║██║   ██║██║  ██║██╔══╝      ██║╚██╔╝██║██   ██║
+  #  ███████║      ██║ ╚████║╚██████╔╝██████╔╝███████╗    ██║ ╚═╝ ██║╚█████╔╝
+  #  ╚══════╝      ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝    ╚═╝     ╚═╝ ╚════╝ 
+  #
+  # **************************************************************************
+  # Caso deseje usar a versão de teste digite 123!`);
 
-    rl.question(' \n >>> DIGITE O CNPJ PARA ATIVAR O SERVIDOR? ', async function (cnpj) {
+    rl.question(' \n >>> DIGITE O CNPJ PARA ATIVAR O SERVIDOR! ', async function (cnpj) {
       if (cnpj === '123') {
+        await closeServerTimeout(3600000);
         resolve(false);
         console.log('# * CONTINUAR SEM ATIVAR * #');
         rl.close();
@@ -82,6 +94,12 @@ async function getClientData() {
   });
 }
 
+async function closeServerTimeout(timeForClose) {
+  setTimeout(() => {
+    process.exit();
+  }, timeForClose)
+}
+
 /**
  * Cria ou recuprear dados da configuração do servidor
  * @returns 
@@ -91,6 +109,9 @@ async function getConfigClient() {
     let existFileConfig = checkFile(getDir() + '/hashKey.json');
     if (!existFileConfig) {
       let retornoCliente = await getClientData();
+      if (retornoCliente === false) {
+        closeServerTimeout(3600000);
+      }
       let encryptData = await encrypt(JSON.stringify(retornoCliente));
       let that = {
         hashKey: encryptData
@@ -101,6 +122,10 @@ async function getConfigClient() {
     } else {
       let rawdata = fs.readFileSync(getDir() + '/hashKey.json');
       let decryptData = await decrypt(JSON.parse(rawdata).hashKey);
+      console.log("🚀 ~ file: config-server.js:111 ~ returnnewPromise ~ decryptData", decryptData)
+      if (decryptData === false) {
+        closeServerTimeout(3600000);
+      }
       resolve(decryptData);
     }
   });
