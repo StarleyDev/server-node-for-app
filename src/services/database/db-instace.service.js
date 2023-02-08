@@ -15,11 +15,11 @@ const { insertMultiplos, insertUnico } = require("../../services/database/db-sql
  * Verifica e inializa o banco de dados
  * @author Starley Cazorla
  * @param {*} instanceDb 
- * @param {*} userId 
+ * @param {*} userIdentify 
  * @param {*} DBSOURCE 
  * @returns 
  */
-async function selectInstanceForStart(instanceDb, userId, DBSOURCE) {
+async function selectInstanceForStart(instanceDb, userIdentify, DBSOURCE) {
   return new Promise(async (resolve, reject) => {
     switch (instanceDb) {
       case 'sqlServer':
@@ -30,7 +30,7 @@ async function selectInstanceForStart(instanceDb, userId, DBSOURCE) {
         });
         break
       case 'sqlite':
-        new sqlite3.Database(`arquivos_${userId}/database/${DBSOURCE}`, (err) => {
+        new sqlite3.Database(`arquivos_${userIdentify}/database/${DBSOURCE}`, (err) => {
           if (err) {
             reject(err);
             throw err

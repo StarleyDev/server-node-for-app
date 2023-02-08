@@ -7,17 +7,17 @@
 const fs = require('fs');
 const path = require('path');
 
-function createFolder(nomePasta) {
-  if (!fs.existsSync(nomePasta)) {
-    console.log(`# * 🗂 PASTA - ${nomePasta} - CRIADA * #`);
+function createFolder(folderName) {
+  if (!fs.existsSync(folderName)) {
+    console.log(`# * 🗂 PASTA - ${folderName} - CRIADA * #`);
     //Efetua a criação do diretório
-    fs.mkdirSync(nomePasta, { recursive: true });
+    fs.mkdirSync(folderName, { recursive: true });
   }
 }
 
-async function deleteFolder(path) {
-  console.log(`# * 🗑  PASTA - ${path} - DELETADA * #`);
-  fs.rmSync(path, { recursive: true });
+async function deleteFolder(filePath) {
+  console.log(`# * 🗑  PASTA - ${filePath} - DELETADA * #`);
+  fs.rmSync(filePath, { recursive: true });
 }
 
 async function deleteFile(filePath) {
@@ -37,32 +37,32 @@ function getDir() {
 /**
  * Salva a imagem em pasta local
  * @param {*} dir 
- * @param {*} nomeArquivo 
+ * @param {*} fileName 
  * @param {*} data 
  * @param {*} isPrincipal 
  * @returns 
  */
-function salvaImagens(dir, nomeArquivo, data, isPrincipal) {
+function salvaImagens(dir, fileName, data, isPrincipal) {
   return new Promise((resolve, reject) => {
 
     try {
-      let nomeOriginal = nomeArquivo;
+      let nomeOriginal = fileName;
       let arquivoEncontrado = true;
       let count = 2
 
       while (arquivoEncontrado) {
         if (isPrincipal && count === 2) {
-          nomeArquivo = nomeOriginal + '-1';
+          fileName = nomeOriginal + '-1';
         } else {
-          nomeArquivo = nomeOriginal + '-' + count;
+          fileName = nomeOriginal + '-' + count;
         }
-        arquivoEncontrado = checkFile(dir + nomeArquivo + '.png')
+        arquivoEncontrado = checkFile(dir + fileName + '.png')
         if (arquivoEncontrado) {
           count += 1;
         }
       }
 
-      let caminho = dir + nomeArquivo;
+      let caminho = dir + fileName;
       // Caso não exista ira converter e salvar a imagem
       if (!arquivoEncontrado) {
         fs.writeFile(caminho + '.png', data, 'base64', function (err, result) {
@@ -90,13 +90,13 @@ function salvaImagens(dir, nomeArquivo, data, isPrincipal) {
  * Salva arquivos localmente
  * @param {*} caminho 
  * @param {*} buffer 
- * @param {*} tipoOperacao 
+ * @param {*} operationType 
  * @returns 
  */
-function saveFile(caminho, buffer, tipoOperacao) {
+function saveFile(caminho, buffer, operationType) {
   return new Promise((resolve, reject) => {
     try {
-      fs.writeFile(caminho, buffer, tipoOperacao, function (err, result) {
+      fs.writeFile(caminho, buffer, operationType, function (err, result) {
         if (err) {
           console.log('error', err);
           reject(err);
@@ -113,8 +113,8 @@ function saveFile(caminho, buffer, tipoOperacao) {
 }
 
 
-function convertImageToBase64(caminho, tipoOperacao) {
-  if (tipoOperacao) {
+function convertImageToBase64(caminho, operationType) {
+  if (operationType) {
     caminho += __dirname + '/assets/10224.jpg';
   }
   if (fs.existsSync(caminho)) {

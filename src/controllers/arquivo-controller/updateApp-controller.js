@@ -24,6 +24,13 @@ function getConfigServer() {
     }
 }
 
+/**
+ * Update file www with url in serverConfig.json
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.get = async (req, res, next) => {
     /** Caso for uma versão beta */
     const updateBeta = await req.query['updateBeta'] === undefined ? 'no' : req.query['updateBeta'];

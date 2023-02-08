@@ -22,19 +22,19 @@ exports.post = async (req, res, next) => {
             sqlRecebida = JSON.parse(data).todo;
             instanceDb = JSON.parse(data).instanceDb;
             const DBSOURCE = sqlRecebida;
-            let userId = sqlRecebida.substring(
+            let userIdentify = sqlRecebida.substring(
                 sqlRecebida.indexOf("") + 0,
-                sqlRecebida.lastIndexOf("_nxsinter")
+                sqlRecebida.lastIndexOf("_sqlite")
             );
 
             /** Criando pastas locais */
-            externoUtil.createFolder(`arquivos_${userId}/imgAws`);
-            externoUtil.createFolder(`arquivos_${userId}/database`);
-            externoUtil.createFolder(`arquivos_${userId}/backup`);
-            externoUtil.createFolder(`arquivos_${userId}/relatorios`);
-            externoUtil.createFolder(`arquivos_${userId}/download`);
+            externoUtil.createFolder(`arquivos_${userIdentify}/imgAws`);
+            externoUtil.createFolder(`arquivos_${userIdentify}/database`);
+            externoUtil.createFolder(`arquivos_${userIdentify}/backup`);
+            externoUtil.createFolder(`arquivos_${userIdentify}/relatorios`);
+            externoUtil.createFolder(`arquivos_${userIdentify}/download`);
 
-            await selectInstanceForStart(instanceDb === undefined ? 'sqlite' : instanceDb, userId, DBSOURCE).then(data => {
+            await selectInstanceForStart(instanceDb === undefined ? 'sqlite' : instanceDb, userIdentify, DBSOURCE).then(data => {
                 console.log('# * 🗃 Connected server: ', data, ' * #');
                 res.send({ sucesso: 'Base criada/conectada com suceso!' });
             }).catch(err => {

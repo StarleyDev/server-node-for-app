@@ -5,10 +5,10 @@
 'use sctict'
 
 const { salvaImagens, checkFile, getDir } = require('../../util/folders.util');
-var path = require('path');
+let path = require('path');
 
 exports.post = async (req, res, next) => {
-    let nomePasta, nomeArquivo, arquivo, vendedorLogado, isPrincipal;
+    let folderName, fileName, selectedFile, userIdentify, isPrincipal;
     let chunks = [];
 
     await req.on('data', async function (data) {
@@ -16,13 +16,13 @@ exports.post = async (req, res, next) => {
     }).on('end', async function () {
 
         let data = Buffer.concat(chunks);
-        nomePasta = JSON.parse(data).nomePasta;
-        nomeArquivo = JSON.parse(data).nomeArquivo;
-        arquivo = JSON.parse(data).arquivo;
+        folderName = JSON.parse(data).folderName;
+        fileName = JSON.parse(data).fileName;
+        selectedFile = JSON.parse(data).selectedFile;
         isPrincipal = JSON.parse(data).isPrincipal
-        vendedorLogado = JSON.parse(data).vendedorLogado
-        // console.log('Aquivo Recebido ---> ', nomeArquivo)
-        await salvaImagens(`arquivos_${vendedorLogado}/${nomePasta}/`, nomeArquivo, arquivo, isPrincipal).then(() => {
+        userIdentify = JSON.parse(data).userIdentify
+        // console.log('Aquivo Recebido ---> ', fileName)
+        await salvaImagens(`arquivos_${userIdentify}/${folderName}/`, fileName, selectedFile, isPrincipal).then(() => {
             res.send();
         }).catch(error => {
             res.status(400).send('Não foi possível realizar o download do arquivo!')

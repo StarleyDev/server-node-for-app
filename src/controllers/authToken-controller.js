@@ -1,5 +1,5 @@
-// UpdateApp
 /**
+ * Retorna TOKEN JWT para conexoes
  * @author Starley Cazorla
  */
 'use sctict'
@@ -7,22 +7,28 @@
 const { getToken } = require('../services/jwt-service.js');
 const { environment } = require('./../config/environment.js');
 
+/**
+ * Send token to connect to server
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 exports.post = async (req, res, next) => {
-    let vendedorLogado;
+    let userIdentify;
     let chunks = [];
-    let chaveSecreta;
+    let safeKey;
 
     await req.on('data', async function (data) {
         chunks.push(data);
     }).on('end', async function () {
 
         let data = Buffer.concat(chunks);
-        vendedorLogado = JSON.parse(data).vendedorLogado;
-        chaveSecreta = JSON.parse(data).chaveSecreta;
+        userIdentify = JSON.parse(data).userIdentify;
+        safeKey = JSON.parse(data).safeKey;
 
         /** Se não tiver a chave secreta corespondente não ira retornar o token */
-        if (chaveSecreta === environment.SECRET) {
-            getToken(vendedorLogado).then(retorno => {
+        if (safeKey === environment.SECRET) {
+            getToken(userIdentify).then(retorno => {
                 res.send([{ token: retorno }]);
             }).catch(error => {
                 res.send({ message: `Não pegar o token! ${error}`, retorno: false });

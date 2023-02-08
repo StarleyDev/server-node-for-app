@@ -13,12 +13,12 @@ function checkDbInUse(nomeDb) {
 
   if (lastDbInUse != nomeDb) {
 
-    let userId = nomeDb.substring(
+    let userIdentify = nomeDb.substring(
       nomeDb.indexOf("") + 0,
-      nomeDb.lastIndexOf("_nxsinter")
+      nomeDb.lastIndexOf("_sqlite")
     );
 
-    return dbInUse = new sqlite3.Database(`arquivos_${userId}/database/${nomeDb}`, (err) => {
+    return dbInUse = new sqlite3.Database(`arquivos_${userIdentify}/database/${nomeDb}`, (err) => {
       if (err) {
         // Cannot open database
         console.error(err.message)

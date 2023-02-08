@@ -14,13 +14,13 @@ function verifyJWT(req, res, next) {
       return res.status(401).json({ auth: false, message: 'Falha na autenticação do token!' });
 
     // se tudo estiver ok, salva no request para uso posterior
-    req.userId = decoded.id;
+    req.userIdentify = decoded.id;
     next();
   });
 }
 
-async function getToken(vendedorId) {
-  let token = jwt.sign({ vendedorId }, environment.SECRET, {
+async function getToken(userIdentify) {
+  let token = jwt.sign({ userIdentify }, environment.SECRET, {
     expiresIn: 30000 // expires in 50min
   });
   return token;

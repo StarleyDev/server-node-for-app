@@ -12,7 +12,7 @@ const fs = require('fs');
 const startLogService = require('./../../config/log-service');
 
 exports.post = async (req, res, next) => {
-    let nomePasta, nomeArquivo, arquivo, vendedorLogado, tipoOperacao;
+    let folderName, fileName, selectedFile, userIdentify, operationType;
     let chunks = [];
 
     await req.on('data', async function (data) {
@@ -22,16 +22,16 @@ exports.post = async (req, res, next) => {
         try {
 
             let data = Buffer.concat(chunks);
-            nomePasta = JSON.parse(data).nomePasta;
-            nomeArquivo = JSON.parse(data).nomeArquivo;
-            arquivo = JSON.parse(data).arquivo;
-            tipoOperacao = JSON.parse(data).tipoOperacao
-            vendedorLogado = JSON.parse(data).vendedorLogado
+            folderName = JSON.parse(data).folderName;
+            fileName = JSON.parse(data).fileName;
+            selectedFile = JSON.parse(data).selectedFile;
+            operationType = JSON.parse(data).operationType
+            userIdentify = JSON.parse(data).userIdentify
 
-            /** Convertendo arquivo em buffer */
-            let buf = Buffer.from(arquivo, 'utf8');
+            /** Convertendo selectedFile em buffer */
+            let buf = Buffer.from(selectedFile, 'utf8');
             console.log('# * SALVANDO ARQUIVO - AGUARDE! * #')
-            await saveFile(`arquivos_${vendedorLogado}/${nomePasta}/${nomeArquivo}`, buf, tipoOperacao).finally(() => {
+            await saveFile(`arquivos_${userIdentify}/${folderName}/${fileName}`, buf, operationType).finally(() => {
                 console.log("# * ARQUIVO SALVO COM SUCESSO! * #");
                 res.status(201).send('Download arquivo!')
             }).catch(error => {
@@ -39,7 +39,7 @@ exports.post = async (req, res, next) => {
             });
 
         } catch (error) {
-            console.log("🚀 ~ file: arquivoGeral-controller.js ~ line 41 ~ error", error)
+            console.log("🚀 ~ selectedFile: arquivoGeral-controller.js ~ line 41 ~ error", error)
             res.status(400).send('Não foi possível realizar o download do arquivo!')
         }
 
@@ -49,7 +49,7 @@ exports.post = async (req, res, next) => {
 
 exports.saveByUrl = async (req, res, next) => {
 
-    let urlArquivo, nomeArquivo;
+    let fileUrl, fileName;
     let chunks = [];
 
     await req.on('data', async function (data) {
@@ -57,17 +57,17 @@ exports.saveByUrl = async (req, res, next) => {
     }).on('end', async function () {
 
         let data = Buffer.concat(chunks);
-        urlArquivo = JSON.parse(data).urlArquivo;
-        nomeArquivo = JSON.parse(data).nomeArquivo;
+        fileUrl = JSON.parse(data).fileUrl;
+        fileName = JSON.parse(data).fileName;
 
-        downloadFile(urlArquivo, `arquivos_${nomeArquivo}`).finally(() => {
+        downloadFile(fileUrl, `arquivos_${fileName}`).finally(() => {
 
             /** Ao restaruar um banco de dados ele ira reniciar a conexao */
-            if (nomeArquivo.match('database')) {
-                let userId = nomeArquivo.substring(
-                    nomeArquivo.lastIndexOf("/" + 1)
+            if (fileName.match('database')) {
+                let userIdentify = fileName.substring(
+                    fileName.lastIndexOf("/" + 1)
                 );
-                restartDb(userId.replace('/', ''));
+                restartDb(userIdentify.replace('/', ''));
             }
 
             res.send({ statusAtualizacao: 'Atualizado!' });
@@ -79,17 +79,17 @@ exports.saveByUrl = async (req, res, next) => {
 
 /** Retorna arquivo encontrado */
 exports.get = (req, res, next) => {
-    let arquivoEncontrado = checkFile(req.query['path']);
+    let arquivoEncontrado = checkFile(req.query['filePath']);
 
-    let userId = req.query['path'].substring(
-        req.query['path'].lastIndexOf("/" + 1)
+    let userIdentify = req.query['filePath'].substring(
+        req.query['filePath'].lastIndexOf("/" + 1)
     );
 
     if (arquivoEncontrado) {
         res.set({
-            "Content-Disposition": `attachment; filename=${userId}`
+            "Content-Disposition": `attachment; filename=${userIdentify}`
         });
-        res.sendFile(path.resolve(req.query['path']));
+        res.sendFile(path.resolve(req.query['filePath']));
     } else {
         res.status(400).send('Não foi possível localizar o arquivo!');
     }
@@ -98,7 +98,7 @@ exports.get = (req, res, next) => {
 /** Retorna a lista de diretorios e arquivos disponiveis no servidor */
 exports.getListDir = async (req, res, next) => {
 
-    let nomePasta, arquivos
+    let filePath, findFiles
     let chunks = [];
 
     await req.on('data', async function (data) {
@@ -106,16 +106,16 @@ exports.getListDir = async (req, res, next) => {
     }).on('end', async function () {
 
         let data = Buffer.concat(chunks);
-        nomePasta = JSON.parse(data).nomePasta;
+        filePath = JSON.parse(data).filePath;
 
         try {
-            arquivos = fs.readdirSync(`.${nomePasta}`, { withFileTypes: true })
+            findFiles = fs.readdirSync(`.${filePath}`, { withFileTypes: true })
                 .filter(item => item)
                 .map(item => item.name)
 
-            res.send({ arquivos: arquivos, lastPath: nomePasta });
+            res.send({ findFiles: findFiles, lastPath: filePath });
         } catch (error) {
-            let caminho = nomePasta.substring(1);
+            let caminho = filePath.substring(1);
             let arquivoEncontrado = checkFile(caminho);
             if (arquivoEncontrado) {
                 res.send({ downloadFile: caminho });
@@ -129,7 +129,7 @@ exports.getListDir = async (req, res, next) => {
 
 /** Retonar verificando se o arquivo existe */
 exports.checkFileInFolder = async (req, res, next) => {
-    let nomeArquivo;
+    let fileName;
     let chunks = [];
 
     await req.on('data', async function (data) {
@@ -137,9 +137,9 @@ exports.checkFileInFolder = async (req, res, next) => {
     }).on('end', async function () {
 
         let data = Buffer.concat(chunks);
-        nomeArquivo = JSON.parse(data).nomeArquivo;
+        fileName = JSON.parse(data).fileName;
 
-        let arquivoEncontrado = checkFile(`arquivos_${nomeArquivo}`);
+        let arquivoEncontrado = checkFile(`arquivos_${fileName}`);
         if (arquivoEncontrado) {
             res.send(true);
         } else {
@@ -150,7 +150,7 @@ exports.checkFileInFolder = async (req, res, next) => {
 
 /** Cria ou apaga pastas */
 exports.updateFolder = async (req, res, next) => {
-    let caminhoPasta, tipoOperacao;
+    let filePath, operationType;
     let chunks = [];
 
     await req.on('data', async function (data) {
@@ -158,16 +158,16 @@ exports.updateFolder = async (req, res, next) => {
     }).on('end', async function () {
 
         let data = Buffer.concat(chunks);
-        caminhoPasta = JSON.parse(data).caminhoPasta;
-        tipoOperacao = JSON.parse(data).tipoOperacao;
+        filePath = JSON.parse(data).filePath;
+        operationType = JSON.parse(data).operationType;
 
         try {
-            if (tipoOperacao === 'criarPasta') {
-                createFolder(`arquivos_${caminhoPasta}`);
+            if (operationType === 'criarPasta') {
+                createFolder(`arquivos_${filePath}`);
                 res.send({ status: 'Pasta criada!' });
             }
-            if (tipoOperacao === 'deletarPasta') {
-                deleteFolder(`arquivos_${caminhoPasta}`);
+            if (operationType === 'deletarPasta') {
+                deleteFolder(`arquivos_${filePath}`);
                 res.send({ status: 'Pasta apagada!' });
             }
 
