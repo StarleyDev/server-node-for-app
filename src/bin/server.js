@@ -33,8 +33,8 @@ getConfigServer(false).then(res => {
     /** Conexões HTTPs */
     if (res.usaHttps) {
         const options = {
-            key: fs.readFileSync(__dirname + '/CertificadoSSL/server.enc.key'),
-            cert: fs.readFileSync(__dirname + '/CertificadoSSL/server.csr'),
+            key: fs.readFileSync(__dirname + '/CertificadoSSL/certKey.key'),
+            cert: fs.readFileSync(__dirname + '/CertificadoSSL/certificado.pem'),
             passphrase: environment.pwsSecuritySsl
         };
 
@@ -70,7 +70,7 @@ getConfigServer(false).then(res => {
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease}
  # *
- # * Desenvolvido por: MESTRE JEDI - snode.mestrejedi.dev
+ # * Desenvolvido por: Starley Cazorla - snode.mestrejedi.dev
  # **************************************************************************
  #`);
 

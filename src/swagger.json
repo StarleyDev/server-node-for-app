@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.1",
-    "description": "Informações sobre acesso a api de consulta SQLite!",
-    "title": "SWAGGER API NODE JS ",
+    "version": "2.0.2",
+    "description": "Informações sobre acesso a api!",
+    "title": "SWAGGER API S-NODE MJ",
     "contact": {
       "name": "Starley Cazorla",
       "email": "contato@starlley.dev",

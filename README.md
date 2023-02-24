@@ -1,4 +1,4 @@
-# Server NodeJs for Angular with SQLite e SqlServer database
+# Server NodeJs for Angular with SQLite e SqlServer database ( PWA )
 
 This backend makes queries via using method API POST.
 
@@ -63,4 +63,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
--- Not Licensed --
+MIT

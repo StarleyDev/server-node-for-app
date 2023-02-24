@@ -12,6 +12,7 @@
 /www
 /src/bin/www/*
 /arquivos*
+/src/bin/CertificadoSSL/*
 www.zip
 *logServer.txt
 *.pem

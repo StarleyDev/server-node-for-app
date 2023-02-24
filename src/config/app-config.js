@@ -1,14 +1,8 @@
 /**
- * Configuração de links e versões
+ * Enviroment configuration
  * @autor Starley Cazorla
  */
 
-/** Aqui você ira definir o link e nome do arquivo zipado da pasta www gerada pelo projeto
- * Ex: apos o build ira criar uma pasta www, você ira compactar em formato zip - meuprojeto.zip
- * Faça o upload em alguma plataforma que desejar
- * Coloque o link no campo URL
- * e nome do arquivo no  TXT deve ser exatamente igual para que o servidor possa descompactar o arquivo
- */
 const { environment } = require('./environment')
 
 let configServer = {
@@ -19,7 +13,7 @@ let configServer = {
 
 let APP_CONFIG_DEFAULT = configServer;
 
-APP_CONFIG_DEFAULT['versionServer'] = '3.1.1';
-APP_CONFIG_DEFAULT['dataRelease'] = '16/12/2022';
+APP_CONFIG_DEFAULT['versionServer'] = '4.0.0';
+APP_CONFIG_DEFAULT['dataRelease'] = '24/02/2023';
 
 module.exports = APP_CONFIG_DEFAULT;
