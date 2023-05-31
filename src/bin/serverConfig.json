@@ -5,7 +5,8 @@
   "serverConfig": null,
   "serverPortDefaultHttp": 1255,
   "serverPortDefaultHttps": 1256,
-  "usaHttps": false,
+  "urlServer": "https://localhost",
+  "usaHttps": true,
   "pwsSecuritySsl": "Ssl.$t.@2",
   "configDatabase": {
       "user": "yourUser",

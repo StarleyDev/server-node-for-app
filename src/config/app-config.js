@@ -13,7 +13,7 @@ let configServer = {
 
 let APP_CONFIG_DEFAULT = configServer;
 
-APP_CONFIG_DEFAULT['versionServer'] = '4.0.0';
-APP_CONFIG_DEFAULT['dataRelease'] = '24/02/2023';
+APP_CONFIG_DEFAULT['versionServer'] = '5.1.0';
+APP_CONFIG_DEFAULT['dataRelease'] = '31/05/2023';
 
 module.exports = APP_CONFIG_DEFAULT;

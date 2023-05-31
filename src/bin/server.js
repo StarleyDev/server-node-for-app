@@ -10,18 +10,24 @@ const https = require('https');
 const express = require('express');
 const fs = require('fs');
 const debug = require('debug')('balta:server');
-const { checkFile, getDir } = require('./../util/folders.util');
+const { checkFile, getDir, getListOfApplication, createFolder } = require('./../util/folders.util');
 const { downloadFile, exctratFile } = require('./../services/download/download.service');
 const APP_CONFIG_DEFAULT = require('../config/app-config.js');
 const { environment } = require('../config/environment');
 const getConfigServer = require('./../config/config-server');
 const startLogService = require('./../config/log-service');
+const path = require('path');
 
-getConfigServer(false).then(res => {
+const certificadoOption = {};
+
+getConfigServer(false).then(async res => {
     startLogService();
+    createFolder('Aplicacoes');
+    createFolder('CertificadoSSL');
+
     /** Check portas da aplicação */
-    const port = nomalizePort(res.serverPortDefaultHttp); // porta http
-    const portHttps = nomalizePort(res.serverPortDefaultHttps); // porta https
+    let port = nomalizePort(res.serverPortDefaultHttp); // porta http
+    let portHttps = nomalizePort(res.serverPortDefaultHttps); // porta https
     let serverHttps, serverHttp;
 
     /** Conexões HTTP */
@@ -31,14 +37,14 @@ getConfigServer(false).then(res => {
     serverHttp.on('listening', onListening);
 
     /** Conexões HTTPs */
-    if (res.usaHttps) {
-        const options = {
+    if (res.usaHttps && checkFile(__dirname + '/CertificadoSSL/certKey.key')) {
+        certificadoOption = {
             key: fs.readFileSync(__dirname + '/CertificadoSSL/certKey.key'),
             cert: fs.readFileSync(__dirname + '/CertificadoSSL/certificado.pem'),
             passphrase: environment.pwsSecuritySsl
         };
 
-        serverHttps = https.createServer(options, app);
+        serverHttps = https.createServer(certificadoOption, app);
         serverHttps.listen(portHttps);
         serverHttps.on('error', onErrorHttps);
         serverHttps.on('listening', onListeningHttps);
@@ -49,7 +55,7 @@ getConfigServer(false).then(res => {
     let dataHoraLocal = `${dataHoje.getHours() + 1}:${dataHoje.getMinutes()}`;
 
     console.clear();
-    console.log(`\n\n 
+    console.log(`
  #
  #  ███████╗      ███╗   ██╗ ██████╗ ██████╗ ███████╗    ███╗   ███╗     ██╗
  #  ██╔════╝      ████╗  ██║██╔═══██╗██╔══██╗██╔════╝    ████╗ ████║     ██║
@@ -60,27 +66,51 @@ getConfigServer(false).then(res => {
  #
  # **************************************************************************
  # * 
- # * RAZÃO SOCIAL: ${res.cliente ? res.cliente.Item.razaoSocial : 'NÃO ENCONTRADO'}
- # * CNPJ: ${res.cliente ? res.cliente.Item.id.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : '00.000.000/0000-00'}
- # * 
- # * CHAVE DO PRODUTO: ${res.cliente ? res.cliente.Item.secret : 'VERSÃO DE TESTE ACABA AS ' + dataHoraLocal + ' H'}
- # * 
  # * API Rodando na porta: 🔓 http: ${port}
- # * API Rodando na porta: 🔐 https: ${portHttps}
+ # * API Rodando na porta: 🔐 https: ${checkFile(__dirname + '/CertificadoSSL/certKey.key') ? portHttps : 'Certificado SSL não encontrado'}
  # * 
- # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease}
+ # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
- # * Desenvolvido por: Starley Cazorla - snode.mestrejedi.dev
+ # * Desenvolvido por: <a href="https://github.com/StarleyDev" target=”_blank”>Starley Cazorla</a> - starlleycom@gmail.com
+ # * <a href="https://github.com/StarleyDev/server-node-for-app.git" target=”_blank”>Projeto - Link GitHub</a>
+ # * 
  # **************************************************************************
- #`);
+ `);
+
+    getListOfApplication(getDir() + '/Aplicacoes').then(folderApplication => {
+        if (folderApplication) {
+
+            console.log('\n\n # * 🚀 🚀 🚀 Aplicações disponiveis  🚀 🚀 🚀\n');
+
+            for (const subFolder of folderApplication) {
+                portHttps += 1;
+
+                const appNext = express();
+                appNext.use(express.static(path.join(getDir() + '/applications', subFolder)));
+
+                serverHttps = https.createServer(certificadoOption, appNext);
+                serverHttps.listen(portHttps);
+                serverHttps.on('error', onErrorHttps);
+                serverHttps.on('listening', onListeningHttps);
+
+                console.group();
+                console.log(' # * 📡 <a href="' + res.urlServer + ':' + portHttps + '/" target=”_blank” >' + subFolder + '</a>');
+                console.log(' # * 🚪 PORTA:' + portHttps + '\n');
+                console.groupEnd();
+            }
+        } else {
+            console.log('\n\n # * 🙈 🙉 🙊 Sem aplicações disponiveis 🙊 🙉 🙈 \n');
+        }
+        startLogHtml();
+    });
 
     /** Projeto em angular  */
     let env = process.argv[2] || 'prod';
     switch (env) {
         case 'dev':
             // Setup development config
-            console.log('\n\n# * 🤖 DEVELOPER MODE 🤖 * #');
-            console.log('\n\n# * ✅ SERVIDOR PRONTO PARA USO! ✅ * #');
+            console.log('\n # * 🤖 DEVELOPER MODE 🤖 * #');
+            console.log('\n # * ✅ SERVIDOR PRONTO PARA USO! ✅ * #');
             break;
         case 'prod':
             // Setup production config
@@ -91,20 +121,16 @@ getConfigServer(false).then(res => {
                 downloadFile(res.urlDownloadAngularProject, res.txtDownloadAngularProject).finally(() => {
                     exctratFile(res.txtDownloadAngularProject).then(result => {
                         if (result) {
-                            console.log('\n\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #');
+                            console.log('\n # * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #');
                         }
                     });
                 });
             } else {
-                console.log('\n\n# * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #');
+                console.log('\n # * ✅ SERVIDOR COM APLICAÇÃO PRONTA PARA USO! ✅ * #');
             }
             break;
-    }
 
-    app.use('/', express.static(getDir() + '/www'));
-    app.get('/', function (req, res) {
-        res.sendFile(getDir() + '/www/index.html');
-    });
+    }
 
     /**
      * Normaliando porta de conexão
@@ -201,5 +227,31 @@ getConfigServer(false).then(res => {
 
     }
 });
+
+function startLogHtml() {
+    const filePath = getDir() + '/logServer.txt';
+    app.get('/', (req, res) => {
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading the file:', err);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+
+            const fileContent = data;
+            res.send(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>S-NODE MJ</title>
+          </head>
+          <body>
+            <pre>${fileContent}</pre>
+          </body>
+          </html>
+        `);
+        });
+    });
+}
 
 

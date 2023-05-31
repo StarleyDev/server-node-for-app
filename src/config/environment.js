@@ -9,6 +9,7 @@ const defaultConfigServer = `{
   "serverConfig": null,
   "serverPortDefaultHttp": 1255,
   "serverPortDefaultHttps": 1256,
+  "urlServer": "https://localhost",
   "usaHttps": false,
   "pwsSecuritySsl": "Ssl.$t.@2",
   "configDatabase": {

@@ -21,8 +21,11 @@ async function deleteFolder(filePath) {
 }
 
 async function deleteFile(filePath) {
-  console.log(`# * 🗑  ARQUIVO - ${filePath} - DELETADO * #`);
-  fs.unlinkSync(filePath, { recursive: true });
+  try {
+    fs.unlinkSync(filePath, { recursive: true });
+  } catch (error) {
+    // console.log(`# * 🗑  ARQUIVO - ${filePath} - DELETADO * #`);
+  }
 }
 
 // Using a function to set default app path
@@ -135,5 +138,22 @@ function checkFile(path) {
   return retorno;
 }
 
+async function getListOfApplication(pathApplication) {
+  return new Promise((resolve) => {
+    fs.readdir(pathApplication, { withFileTypes: true }, (err, files) => {
+      if (err) {
+        resolve(false);
+        return;
+      }
 
-module.exports = { createFolder, deleteFolder, deleteFile, salvaImagens, checkFile, getDir, saveFile }
+      const subpastas = files
+        .filter(file => file.isDirectory())
+        .map(file => file.name);
+
+      resolve(subpastas);
+    });
+  });
+}
+
+
+module.exports = { createFolder, deleteFolder, deleteFile, salvaImagens, checkFile, getDir, saveFile, getListOfApplication }
