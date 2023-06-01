@@ -96,7 +96,7 @@ getConfigServer(false).then(async res => {
                 } else {
                     /** Conexões HTTP */
                     serverHttp = http.createServer(appNext);
-                    serverHttp.listen(port);
+                    serverHttp.listen(portHttps);
                     serverHttp.on('error', onError);
                     serverHttp.on('listening', onListening);
                 }
