@@ -18,7 +18,7 @@ const getConfigServer = require('./config/config-server');
 const startLogService = require('./config/log-service');
 const path = require('path');
 
-let certificadoOption = {};
+let certificadoOption = null;
 
 getConfigServer(false).then(async res => {
     startLogService();
@@ -26,29 +26,21 @@ getConfigServer(false).then(async res => {
     createFolder('CertificadoSSL');
 
     /** Check portas da aplicação */
-    let port = nomalizePort(res.serverPortDefaultHttp); // porta http
     let portHttps = nomalizePort(res.serverPortDefaultHttps); // porta https
     let serverHttps, serverHttp;
 
-    /** Conexões HTTP */
-    serverHttp = http.createServer(app);
-    serverHttp.listen(port);
-    serverHttp.on('error', onError);
-    serverHttp.on('listening', onListening);
-
-    /** Conexões HTTPs */
-    if (res.usaHttps && checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
+    /** Conexões HTTPS ou HTTP */
+    if (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
         certificadoOption = {
             key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certKey.key')),
             cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certificado.pem')),
             passphrase: environment.pwsSecuritySsl
         };
-
-        serverHttps = https.createServer(certificadoOption, app);
-        serverHttps.listen(portHttps);
-        serverHttps.on('error', onErrorHttps);
-        serverHttps.on('listening', onListeningHttps);
     }
+    serverHttps = certificadoOption != null ? https.createServer(certificadoOption, app) : http.createServer(app);
+    serverHttps.listen(portHttps);
+    serverHttps.on('error', onErrorHttps);
+    serverHttps.on('listening', onListeningHttps);
 
     /** Define a hora limite de execução na versão de testes */
     let dataHoje = new Date();
@@ -66,8 +58,7 @@ getConfigServer(false).then(async res => {
  #
  # **************************************************************************
  # * 
- # * API Rodando na porta: 🔓 http: ${port}
- # * API Rodando na porta: 🔐 https: ${checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? portHttps : 'Certificado SSL não encontrado'}
+ # * API Rodando na porta: ${checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? '🔐 https: ' + portHttps : '🔓 http: ' + portHttps + ' -- Certificado SSL não encontrado'}
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
@@ -87,23 +78,16 @@ getConfigServer(false).then(async res => {
 
                 const appNext = express();
                 appNext.use(express.static(path.join(getDir(), '/Aplicacoes', subFolder)));
-                if (res.usaHttps && checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
-                    /** Conexões HTTPS */
-                    serverHttps = https.createServer(certificadoOption, appNext);
-                    serverHttps.listen(portHttps);
-                    serverHttps.on('error', onErrorHttps);
-                    serverHttps.on('listening', onListeningHttps);
-                } else {
-                    /** Conexões HTTP */
-                    serverHttp = http.createServer(appNext);
-                    serverHttp.listen(portHttps);
-                    serverHttp.on('error', onError);
-                    serverHttp.on('listening', onListening);
-                }
+
+                /** Conexões HTTPS ou HTTP */
+                serverHttps = certificadoOption != null ? https.createServer(certificadoOption, appNext) : http.createServer(appNext);
+                serverHttps.listen(portHttps);
+                serverHttps.on('error', onErrorHttps);
+                serverHttps.on('listening', onListeningHttps);
 
                 console.group();
-                console.log(' # * 📡 <a href="' + res.urlServer + ':' + portHttps + '/" target=”_blank” >' + subFolder + '</a>');
-                console.log(' # * 🚪 PORTA:' + portHttps + '\n');
+                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? 'https://' : 'http://') + res.urlServer + ':' + portHttps + '/" target=”_blank” >' + subFolder + '</a>');
+                console.log(' # * 🚪 PORTA:' + portHttps + ' -- 🛡 ' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) + ' \n');
                 console.groupEnd();
             }
         } else {
@@ -146,15 +130,12 @@ getConfigServer(false).then(async res => {
      */
     function nomalizePort(val) {
         const port = parseInt(val, 10);
-
         if (isNaN(port)) {
             return val;
         }
-
         if (port >= 0) {
             return port;
         }
-
         return false;
     }
 
@@ -172,13 +153,11 @@ getConfigServer(false).then(async res => {
                 console.error(bind + ' requer privilegios elevados!');
                 process.exit(1);
                 break;
-
             case 'EADDRINUSE':
                 console.error(bind + ' já está em uso!');
                 process.env.PORT = process.env.PORT + 2
                 process.exit(1);
                 break;
-
             default:
                 throw error;
         }
@@ -196,7 +175,6 @@ getConfigServer(false).then(async res => {
         debug('Listening on ', + bind);
     }
 
-
     /**
      * Erro de conexao
      * @param {*} error 
@@ -211,13 +189,11 @@ getConfigServer(false).then(async res => {
                 console.error(bind + ' requer privilegios elevados!');
                 process.exit(1);
                 break;
-
             case 'EADDRINUSE':
                 console.error(bind + ' já está em uso!');
                 process.env.PORT = process.env.PORT + 2
                 process.exit(1);
                 break;
-
             default:
                 throw error;
         }
