@@ -37,10 +37,10 @@ getConfigServer(false).then(async res => {
     serverHttp.on('listening', onListening);
 
     /** Conexões HTTPs */
-    if (res.usaHttps && checkFile(path.join(__dirname, '../CertificadoSSL/certKey.key'))) {
+    if (res.usaHttps && checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
         certificadoOption = {
-            key: fs.readFileSync(path.join(__dirname, '../CertificadoSSL/certKey.key')),
-            cert: fs.readFileSync(path.join(__dirname, '../CertificadoSSL/certificado.pem')),
+            key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certKey.key')),
+            cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certificado.pem')),
             passphrase: environment.pwsSecuritySsl
         };
 
@@ -67,7 +67,7 @@ getConfigServer(false).then(async res => {
  # **************************************************************************
  # * 
  # * API Rodando na porta: 🔓 http: ${port}
- # * API Rodando na porta: 🔐 https: ${checkFile(path.join(__dirname, '../CertificadoSSL/certKey.key')) ? portHttps : 'Certificado SSL não encontrado'}
+ # * API Rodando na porta: 🔐 https: ${checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? portHttps : 'Certificado SSL não encontrado'}
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
@@ -77,7 +77,7 @@ getConfigServer(false).then(async res => {
  # **************************************************************************
  `);
 
-    getListOfApplication(path.join(__dirname, '../Aplicacoes')).then(folderApplication => {
+    getListOfApplication(path.join(getDir(), '/Aplicacoes')).then(folderApplication => {
         if (folderApplication) {
 
             console.log('\n\n # * 🚀 🚀 🚀 Aplicações disponiveis  🚀 🚀 🚀\n');
@@ -86,12 +86,20 @@ getConfigServer(false).then(async res => {
                 portHttps += 1;
 
                 const appNext = express();
-                appNext.use(express.static(path.join(__dirname, '../Aplicacoes', subFolder)));
-
-                serverHttps = https.createServer(certificadoOption, appNext);
-                serverHttps.listen(portHttps);
-                serverHttps.on('error', onErrorHttps);
-                serverHttps.on('listening', onListeningHttps);
+                appNext.use(express.static(path.join(getDir(), '/Aplicacoes', subFolder)));
+                if (res.usaHttps && checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
+                    /** Conexões HTTPS */
+                    serverHttps = https.createServer(certificadoOption, appNext);
+                    serverHttps.listen(portHttps);
+                    serverHttps.on('error', onErrorHttps);
+                    serverHttps.on('listening', onListeningHttps);
+                } else {
+                    /** Conexões HTTP */
+                    serverHttp = http.createServer(appNext);
+                    serverHttp.listen(port);
+                    serverHttp.on('error', onError);
+                    serverHttp.on('listening', onListening);
+                }
 
                 console.group();
                 console.log(' # * 📡 <a href="' + res.urlServer + ':' + portHttps + '/" target=”_blank” >' + subFolder + '</a>');
