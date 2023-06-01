@@ -4,21 +4,21 @@
  */
 'use sctict'
 
-const app = require('../app');
+const app = require('./app');
 const http = require('http');
 const https = require('https');
 const express = require('express');
 const fs = require('fs');
 const debug = require('debug')('balta:server');
-const { checkFile, getDir, getListOfApplication, createFolder } = require('./../util/folders.util');
-const { downloadFile, exctratFile } = require('./../services/download/download.service');
-const APP_CONFIG_DEFAULT = require('../config/app-config.js');
-const { environment } = require('../config/environment');
-const getConfigServer = require('./../config/config-server');
-const startLogService = require('./../config/log-service');
+const { checkFile, getDir, getListOfApplication, createFolder } = require('./util/folders.util');
+const { downloadFile, exctratFile } = require('./services/download/download.service');
+const APP_CONFIG_DEFAULT = require('./config/app-config.js');
+const { environment } = require('./config/environment');
+const getConfigServer = require('./config/config-server');
+const startLogService = require('./config/log-service');
 const path = require('path');
 
-const certificadoOption = {};
+let certificadoOption = {};
 
 getConfigServer(false).then(async res => {
     startLogService();
@@ -37,10 +37,10 @@ getConfigServer(false).then(async res => {
     serverHttp.on('listening', onListening);
 
     /** Conexões HTTPs */
-    if (res.usaHttps && checkFile(__dirname + '/CertificadoSSL/certKey.key')) {
+    if (res.usaHttps && checkFile(path.join(__dirname, '../CertificadoSSL/certKey.key'))) {
         certificadoOption = {
-            key: fs.readFileSync(__dirname + '/CertificadoSSL/certKey.key'),
-            cert: fs.readFileSync(__dirname + '/CertificadoSSL/certificado.pem'),
+            key: fs.readFileSync(path.join(__dirname, '../CertificadoSSL/certKey.key')),
+            cert: fs.readFileSync(path.join(__dirname, '../CertificadoSSL/certificado.pem')),
             passphrase: environment.pwsSecuritySsl
         };
 
@@ -67,7 +67,7 @@ getConfigServer(false).then(async res => {
  # **************************************************************************
  # * 
  # * API Rodando na porta: 🔓 http: ${port}
- # * API Rodando na porta: 🔐 https: ${checkFile(__dirname + '/CertificadoSSL/certKey.key') ? portHttps : 'Certificado SSL não encontrado'}
+ # * API Rodando na porta: 🔐 https: ${checkFile(path.join(__dirname, '../CertificadoSSL/certKey.key')) ? portHttps : 'Certificado SSL não encontrado'}
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
@@ -77,7 +77,7 @@ getConfigServer(false).then(async res => {
  # **************************************************************************
  `);
 
-    getListOfApplication(getDir() + '/Aplicacoes').then(folderApplication => {
+    getListOfApplication(path.join(__dirname, '../Aplicacoes')).then(folderApplication => {
         if (folderApplication) {
 
             console.log('\n\n # * 🚀 🚀 🚀 Aplicações disponiveis  🚀 🚀 🚀\n');
@@ -86,7 +86,7 @@ getConfigServer(false).then(async res => {
                 portHttps += 1;
 
                 const appNext = express();
-                appNext.use(express.static(path.join(getDir() + '/applications', subFolder)));
+                appNext.use(express.static(path.join(__dirname, '../Aplicacoes', subFolder)));
 
                 serverHttps = https.createServer(certificadoOption, appNext);
                 serverHttps.listen(portHttps);
