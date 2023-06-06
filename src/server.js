@@ -62,8 +62,8 @@ getConfigServer(false).then(async res => {
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
- # * Desenvolvido por: <a href="https://github.com/StarleyDev" target=”_blank”>Starley Cazorla</a> - starlleycom@gmail.com
- # * <a href="https://github.com/StarleyDev/server-node-for-app.git" target=”_blank”>Projeto - Link GitHub</a>
+ # * Desenvolvido por: <a href="https://github.com/StarleyDev" target=”_blank” style="color: white;">Starley Cazorla</a> - starlleycom@gmail.com
+ # * <a href="https://github.com/StarleyDev/server-node-for-app.git" target=”_blank” style="color: white;">Projeto - Link GitHub</a>
  # * 
  # **************************************************************************
  `);
@@ -86,7 +86,7 @@ getConfigServer(false).then(async res => {
                 serverHttps.on('listening', onListeningHttps);
 
                 console.group();
-                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? 'https://' : 'http://') + res.urlServer + ':' + portHttps + '/" target=”_blank” >' + subFolder + '</a>');
+                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? 'https://' : 'http://') + res.urlServer + ':' + portHttps + '/" target=”_blank” style="color: greenyellow; text-transform: uppercase; ">' + subFolder + '</a>');
                 console.log(' # * 🚪 PORTA:' + portHttps + ' -- 🛡 ' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) + ' \n');
                 console.groupEnd();
             }
@@ -225,7 +225,8 @@ function startLogHtml() {
             const fileContent = data;
             res.send(`
           <!DOCTYPE html>
-          <html>
+          <html style="background-color: black;
+    color: cyan;">
           <head>
             <title>S-NODE MJ</title>
           </head>
