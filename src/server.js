@@ -17,6 +17,7 @@ const { environment } = require('./config/environment');
 const getConfigServer = require('./config/config-server');
 const startLogService = require('./config/log-service');
 const path = require('path');
+const os = require('os');
 
 let certificadoOption = null;
 
@@ -27,7 +28,7 @@ getConfigServer(false).then(async res => {
 
     /** Check portas da aplicação */
     let portHttps = nomalizePort(res.serverPortDefaultHttps); // porta https
-    let serverHttps, serverHttp;
+    let serverHttps;
 
     /** Conexões HTTPS ou HTTP */
     if (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
@@ -47,6 +48,13 @@ getConfigServer(false).then(async res => {
     let dataHoraLocal = `${dataHoje.getHours() + 1}:${dataHoje.getMinutes()}`;
 
     console.clear();
+    
+    // Exemplo de uso
+    const localIP = getLocalIPAddress();
+    const externalIp = await getServerIPAddress();
+    console.log("🚀 IP LOCAL DO SERVIDOR ", localIP);
+    console.log("🚀 IP EXTERNO DO SERVIDOR ", externalIp)
+
     console.log(`
  #
  #  ███████╗      ███╗   ██╗ ██████╗ ██████╗ ███████╗    ███╗   ███╗     ██╗
@@ -68,7 +76,7 @@ getConfigServer(false).then(async res => {
  # **************************************************************************
  `);
 
-    getListOfApplication(path.join(getDir(), '/Aplicacoes')).then(folderApplication => {
+    getListOfApplication(path.join(getDir(), '/Aplicacoes')).then(async folderApplication => {
         if (folderApplication) {
 
             console.log('\n\n # * 🚀 🚀 🚀 Aplicações disponiveis  🚀 🚀 🚀\n');
@@ -86,7 +94,7 @@ getConfigServer(false).then(async res => {
                 serverHttps.on('listening', onListeningHttps);
 
                 console.group();
-                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? 'https://' : 'http://') + res.urlServer + ':' + portHttps + '/" target=”_blank” style="color: greenyellow; text-transform: uppercase; ">' + subFolder + '</a>');
+                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? 'https://' : 'http://') + await getDefaultIp(res.urlServer) + ':' + portHttps + '/" target=”_blank” style="color: greenyellow; text-transform: uppercase; ">' + subFolder + '</a>');
                 console.log(' # * 🚪 PORTA:' + portHttps + ' -- 🛡 ' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) + ' \n');
                 console.groupEnd();
             }
@@ -143,43 +151,8 @@ getConfigServer(false).then(async res => {
      * Erro de conexao
      * @param {*} error 
      */
-    function onError(error) {
-        const bind = typeof port === 'string' ?
-            'Pipe ' + port :
-            'Port ' + port;
-
-        switch (error.code) {
-            case 'EACCES':
-                console.error(bind + ' requer privilegios elevados!');
-                process.exit(1);
-                break;
-            case 'EADDRINUSE':
-                console.error(bind + ' já está em uso!');
-                process.env.PORT = process.env.PORT + 2
-                process.exit(1);
-                break;
-            default:
-                throw error;
-        }
-    }
-
-    /**
-     * Função para ficar escutando a porta http
-     */
-    function onListening() {
-        /** Http */
-        const addr = serverHttp.address();
-        const bind = typeof addr === 'string'
-            ? 'pipe ' + addr
-            : 'port ' + addr.port;
-        debug('Listening on ', + bind);
-    }
-
-    /**
-     * Erro de conexao
-     * @param {*} error 
-     */
     function onErrorHttps(error) {
+        console.log("🚀 ~ file: server.js:152 ~ onErrorHttps ~ error:", error)
         const bind = typeof port === 'string' ?
             'Pipe ' + port :
             'Port ' + port;
@@ -239,4 +212,51 @@ function startLogHtml() {
     });
 }
 
+/**
+ * Retorna o endereço IP local
+ * @returns 
+ */
+function getLocalIPAddress() {
+    const interfaces = os.networkInterfaces();
 
+    for (const iface of Object.values(interfaces)) {
+        for (const entry of iface) {
+            if (entry.family === 'IPv4' && !entry.internal) {
+                return entry.address;
+            }
+        }
+    }
+
+    return 'Endereço IP local não encontrado';
+}
+
+/**
+ * Retorna o endereço IP do servidor
+ * @returns 
+ */
+async function getServerIPAddress() {
+    return new Promise((resolve, reject) => {
+        http.get('http://api.ipify.org', (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                resolve(data);
+            });
+        }).on('error', (error) => {
+            reject(error);
+        });
+    });
+}
+
+/**
+ * Pega o endereço IP padrão do servidor a ser utilizado e retorna
+ * @param {*} ipServer 
+ * @returns 
+ */
+async function getDefaultIp(ipServer) {
+    return ipServer !== 'localhost' ? ipServer : await getServerIPAddress();
+}

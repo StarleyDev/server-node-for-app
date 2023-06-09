@@ -7,9 +7,8 @@ const defaultConfigServer = `{
   "urlDownloadAngularProjectBeta": null,
   "txtDownloadAngularProject": "www.zip",
   "serverConfig": null,
-  "serverPortDefaultHttp": 1255,
   "serverPortDefaultHttps": 1256,
-  "urlServer": "https://localhost",
+  "urlServer": "localhost",
   "usaHttps": false,
   "pwsSecuritySsl": "Ssl.$t.@2",
   "configDatabase": {
