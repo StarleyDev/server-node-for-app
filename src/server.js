@@ -246,7 +246,8 @@ async function getServerIPAddress() {
                 resolve(data);
             });
         }).on('error', (error) => {
-            reject(error);
+            console.log("🚀 ~ file: server.js:249 ~ http.get ~ error:", error)
+            reject('localhost');
         });
     });
 }
