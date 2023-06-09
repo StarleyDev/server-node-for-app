@@ -17,7 +17,7 @@ const { environment } = require('./config/environment');
 const getConfigServer = require('./config/config-server');
 const startLogService = require('./config/log-service');
 const path = require('path');
-const os = require('os');
+const network = require('network');
 
 let certificadoOption = null;
 
@@ -47,8 +47,8 @@ getConfigServer(false).then(async res => {
     let dataHoje = new Date();
     let dataHoraLocal = `${dataHoje.getHours() + 1}:${dataHoje.getMinutes()}`;
 
-    console.clear();
-    
+    // console.clear();
+
     // Exemplo de uso
     const localIP = getLocalIPAddress();
     const externalIp = await getServerIPAddress();
@@ -217,17 +217,16 @@ function startLogHtml() {
  * @returns 
  */
 function getLocalIPAddress() {
-    const interfaces = os.networkInterfaces();
-
-    for (const iface of Object.values(interfaces)) {
-        for (const entry of iface) {
-            if (entry.family === 'IPv4' && !entry.internal) {
-                return entry.address;
-            }
-        }
-    }
-
-    return 'Endereço IP local não encontrado';
+    return new Promise((resolve, reject) => {
+        network.get_private_ip((error, ip) => {
+            if (error) {
+                reject(error);
+            } else {
+              console.log("🚀 ~ file: server.js:222 ~ network.get_private_ip ~ ip:", ip)
+            resolve(ip);
+          }
+        });
+      });
 }
 
 /**
