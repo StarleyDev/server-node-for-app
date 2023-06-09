@@ -17,7 +17,7 @@ const { environment } = require('./config/environment');
 const getConfigServer = require('./config/config-server');
 const startLogService = require('./config/log-service');
 const path = require('path');
-const network = require('network');
+// const network = require('network');
 
 let certificadoOption = null;
 
@@ -50,9 +50,9 @@ getConfigServer(false).then(async res => {
     // console.clear();
 
     // Exemplo de uso
-    const localIP = getLocalIPAddress();
+    // const localIP = getLocalIPAddress();
     const externalIp = await getServerIPAddress();
-    console.log("🚀 IP LOCAL DO SERVIDOR ", localIP);
+    // console.log("🚀 IP LOCAL DO SERVIDOR ", localIP);
     console.log("🚀 IP EXTERNO DO SERVIDOR ", externalIp)
 
     console.log(`
@@ -216,18 +216,18 @@ function startLogHtml() {
  * Retorna o endereço IP local
  * @returns 
  */
-function getLocalIPAddress() {
-    return new Promise((resolve, reject) => {
-        network.get_private_ip((error, ip) => {
-            if (error) {
-                reject(error);
-            } else {
-              console.log("🚀 ~ file: server.js:222 ~ network.get_private_ip ~ ip:", ip)
-            resolve(ip);
-          }
-        });
-      });
-}
+// function getLocalIPAddress() {
+//     return new Promise((resolve, reject) => {
+//         network.get_private_ip((error, ip) => {
+//             if (error) {
+//                 reject(error);
+//             } else {
+//               console.log("🚀 ~ file: server.js:222 ~ network.get_private_ip ~ ip:", ip)
+//             resolve(ip);
+//           }
+//         });
+//       });
+// }
 
 /**
  * Retorna o endereço IP do servidor
