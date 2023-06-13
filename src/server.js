@@ -27,7 +27,7 @@ getConfigServer(false).then(async res => {
     createFolder('CertificadoSSL');
 
     /** Check portas da aplicação */
-    let portHttps = nomalizePort(res.startPortHttps); // porta https
+    let portHttps = nomalizePort(res.portRunApplication); // porta https
     let serverHttps;
 
     /** Conexões HTTPS ou HTTP */
@@ -39,7 +39,7 @@ getConfigServer(false).then(async res => {
         };
     }
     serverHttps = certificadoOption != null ? https.createServer(certificadoOption, app) : http.createServer(app);
-    serverHttps.listen(res.defaultPort);
+    serverHttps.listen(res.serverPort);
     serverHttps.on('error', onErrorHttps);
     serverHttps.on('listening', onListeningHttps);
 
