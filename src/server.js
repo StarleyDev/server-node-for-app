@@ -31,11 +31,17 @@ getConfigServer(false).then(async res => {
     let serverHttps;
 
     /** Conexões HTTPS ou HTTP */
-    if (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) {
+    if (checkFile(path.join(getDir(), '/CertificadoSSL/privkey.key'))) {
         certificadoOption = {
-            key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certKey.key')),
-            cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certificado.pem')),
-            passphrase: environment.pwsSecuritySsl
+            // Modelo de certificado key
+            // key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certKey.key')),
+            // cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certificado.pem')),
+            // passphrase: environment.pwsSecuritySsl
+
+            // Modelo de certificado pem
+            key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/privkey.pem')),
+            cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/cert.pem')),
+            ca: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/chain.pem')),
         };
     }
     serverHttps = certificadoOption != null ? https.createServer(certificadoOption, app) : http.createServer(app);
@@ -66,7 +72,7 @@ getConfigServer(false).then(async res => {
  #
  # **************************************************************************
  # * 
- # * API Rodando na porta: ${checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? '🔐 https: ' + portHttps : '🔓 http: ' + portHttps + ' -- Certificado SSL não encontrado'}
+ # * API Rodando na porta: ${checkFile(path.join(getDir(), '/CertificadoSSL/privkey.key')) ? '🔐 https: ' + portHttps : '🔓 http: ' + portHttps + ' -- Certificado SSL não encontrado'}
  # * 
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
@@ -94,8 +100,8 @@ getConfigServer(false).then(async res => {
                 serverHttps.on('listening', onListeningHttps);
 
                 console.group();
-                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key')) ? 'https://' : 'http://') + await getDefaultIp(res.urlServer) + ':' + portHttps + '/" target=”_blank” style="color: greenyellow; text-transform: uppercase; ">' + subFolder + '</a>');
-                console.log(' # * 🚪 PORTA:' + portHttps + ' -- 🛡 ' + (checkFile(path.join(getDir(), '/CertificadoSSL/certKey.key'))) + ' \n');
+                console.log(' # * 📡 <a href="' + (checkFile(path.join(getDir(), '/CertificadoSSL/privkey.key')) ? 'https://' : 'http://') + await getDefaultIp(res.urlServer) + ':' + portHttps + '/" target=”_blank” style="color: greenyellow; text-transform: uppercase; ">' + subFolder + '</a>');
+                console.log(' # * 🚪 PORTA:' + portHttps + ' -- 🛡 ' + (checkFile(path.join(getDir(), '/CertificadoSSL/privkey.key'))) + ' \n');
                 console.groupEnd();
             }
         } else {
