@@ -14,10 +14,10 @@ const { insertMultiplos, insertUnico } = require("../../services/database/db-sql
 /**
  * Verifica e inializa o banco de dados
  * @author Starley Cazorla
- * @param {*} instanceDb 
- * @param {*} userIdentify 
- * @param {*} DBSOURCE 
- * @returns 
+ * @param {*} instanceDb
+ * @param {*} userIdentify
+ * @param {*} DBSOURCE
+ * @returns
  */
 async function selectInstanceForStart(instanceDb, userIdentify, DBSOURCE) {
   return new Promise(async (resolve, reject) => {
@@ -47,10 +47,10 @@ async function selectInstanceForStart(instanceDb, userIdentify, DBSOURCE) {
 /**
  * Execulta consultas via query
  * @author Starley Cazorla
- * @param {*} instanceDb 
- * @param {*} sqlRecebida 
- * @param {*} dbForUse 
- * @returns 
+ * @param {*} instanceDb
+ * @param {*} sqlRecebida
+ * @param {*} dbForUse
+ * @returns
  */
 async function executeInstanceService(instanceDb, sqlRecebida, dbForUse) {
   return new Promise(async (resolve, reject) => {
@@ -77,10 +77,10 @@ async function executeInstanceService(instanceDb, sqlRecebida, dbForUse) {
 /**
  * Executa o insert dos dados no banco de dados
  * @author Starley Cazorla
- * @param {*} instanceDb 
- * @param {*} sqlRecebida 
- * @param {*} dbForUse 
- * @returns 
+ * @param {*} instanceDb
+ * @param {*} sqlRecebida
+ * @param {*} dbForUse
+ * @returns
  */
 async function insertInstanceService(instanceDb, sqlRecebida, dbForUse) {
   return new Promise(async (resolve, reject) => {
@@ -107,7 +107,7 @@ async function insertInstanceService(instanceDb, sqlRecebida, dbForUse) {
           await insertUnico(sqlRecebida[0] && isArray ? sqlRecebida[0] : sqlRecebida, dbInUse).then(data => {
             resolve(data);
           }).catch(error => {
-            resolve({ message: `Não conseguimos inserir!!! ${error}`, retorno: false });
+            resolve({ message: `${error.message}`, retorno: false });
           });
         }
         break

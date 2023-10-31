@@ -19,12 +19,12 @@ exports.post = async (req, res, next) => {
         }).on('end', async function () {
 
             let data = Buffer.concat(chunks);
-            sqlRecebida = JSON.parse(data).todo;
+            sqlRecebida = JSON.parse(data).dbName;
             instanceDb = JSON.parse(data).instanceDb;
             const DBSOURCE = sqlRecebida;
             let userIdentify = sqlRecebida.substring(
                 sqlRecebida.indexOf("") + 0,
-                sqlRecebida.lastIndexOf("_sqlite")
+                sqlRecebida.lastIndexOf("")
             );
 
             /** Criando pastas locais */
@@ -59,4 +59,3 @@ exports.put = (req, res, next) => {
 exports.get = (req, res, next) => {
     console.log('Sql Criptograda ---> ', req)
 };
-

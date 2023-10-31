@@ -19,14 +19,14 @@ exports.post = async (req, res, next) => {
         }).on('end', async function () {
 
             let data = Buffer.concat(chunks);
-            sqlRecebida = JSON.parse(data).todo;
+            sqlRecebida = JSON.parse(data).stringSql;
             dbForUse = JSON.parse(data).dbForUse;
             instanceDb = JSON.parse(data).instanceDb;
 
             await executeInstanceService(instanceDb === undefined ? 'sqlite' : instanceDb, sqlRecebida, dbForUse).then(data => {
                 res.send(data);
             }).catch(error => {
-                res.status(400).send({ message: `${error}`, retorno: false });
+                res.status(400).send({ message: `${error.error}`, retorno: false });
             });
 
         });

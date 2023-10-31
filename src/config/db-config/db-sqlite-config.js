@@ -6,8 +6,8 @@ exports.dbInUse = dbInUse;
 
 /**
  * Verifica o banco de dados que esta sendo requisitado
- * @param {*} nomeDb 
- * @returns 
+ * @param {*} nomeDb
+ * @returns
  */
 function checkDbInUse(nomeDb) {
 
@@ -15,7 +15,7 @@ function checkDbInUse(nomeDb) {
 
     let userIdentify = nomeDb.substring(
       nomeDb.indexOf("") + 0,
-      nomeDb.lastIndexOf("_sqlite")
+      nomeDb.lastIndexOf("")
     );
 
     return dbInUse = new sqlite3.Database(`arquivos_${userIdentify}/database/${nomeDb}`, (err) => {

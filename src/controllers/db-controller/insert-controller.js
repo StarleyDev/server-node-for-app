@@ -18,13 +18,14 @@ exports.post = async (req, res) => {
         }).on('end', async function () {
 
             let data = Buffer.concat(chunks);
-            sqlRecebida = JSON.parse(data).todo;
+            sqlRecebida = JSON.parse(data).stringSql;
             dbForUse = JSON.parse(data).dbForUse;
             instanceDb = JSON.parse(data).instanceDb;
 
             await insertInstanceService(instanceDb === undefined ? 'sqlite' : instanceDb, sqlRecebida, dbForUse).then(data => {
                 res.send(data);
             }).catch(error => {
+                console.log("🚀 ~ file: insert-controller.js:28 ~ awaitinsertInstanceService ~ error:", error);
                 res.status(400).send({ message: `${error}`, retorno: false });
             });
 
