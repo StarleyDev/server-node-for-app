@@ -1,6 +1,14 @@
+/** Log Service
+ * @author Starley Cazorla
+ *
+ * Service of logger and start logs
+*/
+
 const fs = require('fs');
-const { getDir, deleteFile } = require('./../util/folders.util');
+const { getDir, deleteFile } = require('../util/folders.util');
 const util = require('util');
+const winston = require('winston');
+
 /** Local datetime */
 let dataHoje = new Date();
 let dataHoraLocal = dataHoje.toLocaleDateString('pt-BR') + ' ' + dataHoje.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -19,4 +27,22 @@ const startLogService = () => {
   /** Fim Log */
 }
 
-module.exports = startLogService 
+/**
+ * Create a logger with winston for errors on apps
+ * @param {*} logName
+ * @returns
+ */
+function createLogger(logName) {
+  const logger = winston.createLogger({
+    level: 'error',
+    format: winston.format.json(),
+    transports: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: logName }),
+    ],
+  });
+
+  return logger
+}
+
+module.exports = { startLogService, createLogger }

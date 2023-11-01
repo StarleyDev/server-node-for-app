@@ -9,7 +9,7 @@ const { downloadFile } = require('./../../services/download/download.service');
 const { restartDb } = require('../../config/db-config/db-sqlite-config');
 let path = require('path');
 const fs = require('fs');
-const startLogService = require('./../../config/log-service');
+const startLogService = require('../../services/log-service');
 
 exports.post = async (req, res, next) => {
     let folderName, fileName, selectedFile, userIdentify, operationType;

@@ -15,7 +15,7 @@ const { downloadFile, exctratFile } = require('./services/download/download.serv
 const APP_CONFIG_DEFAULT = require('./config/app-config.js');
 const { environment } = require('./config/environment');
 const getConfigServer = require('./config/config-server');
-const startLogService = require('./config/log-service');
+const { startLogService } = require('./services/log-service.js');
 const path = require('path');
 // const network = require('network');
 
@@ -68,17 +68,17 @@ getConfigServer(false).then(async res => {
  #  ███████╗█████╗██╔██╗ ██║██║   ██║██║  ██║█████╗      ██╔████╔██║     ██║
  #  ╚════██║╚════╝██║╚██╗██║██║   ██║██║  ██║██╔══╝      ██║╚██╔╝██║██   ██║
  #  ███████║      ██║ ╚████║╚██████╔╝██████╔╝███████╗    ██║ ╚═╝ ██║╚█████╔╝
- #  ╚══════╝      ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝    ╚═╝     ╚═╝ ╚════╝ 
+ #  ╚══════╝      ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝    ╚═╝     ╚═╝ ╚════╝
  #
  # **************************************************************************
- # * 
+ # *
  # * API Rodando na porta: ${checkFile(path.join(getDir(), '/CertificadoSSL/privkey.key')) ? '🔐 https: ' + portHttps : '🔓 http: ' + portHttps + ' -- Certificado SSL não encontrado'}
- # * 
+ # *
  # * VERSÃO: ${APP_CONFIG_DEFAULT.versionServer} - ${APP_CONFIG_DEFAULT.dataRelease} - MIT
  # *
  # * Desenvolvido por: <a href="https://github.com/StarleyDev" target=”_blank” style="color: white;">Starley Cazorla</a> - starlleycom@gmail.com
  # * <a href="https://github.com/StarleyDev/server-node-for-app.git" target=”_blank” style="color: white;">Projeto - Link GitHub</a>
- # * 
+ # *
  # **************************************************************************
  `);
 
@@ -140,7 +140,7 @@ getConfigServer(false).then(async res => {
 
     /**
      * Normaliando porta de conexão
-     * @param {*} val 
+     * @param {*} val
      */
     function nomalizePort(val) {
         const port = parseInt(val, 10);
@@ -155,7 +155,7 @@ getConfigServer(false).then(async res => {
 
     /**
      * Erro de conexao
-     * @param {*} error 
+     * @param {*} error
      */
     function onErrorHttps(error) {
         console.log("🚀 ~ file: server.js:152 ~ onErrorHttps ~ error:", error)
@@ -220,7 +220,7 @@ function startLogHtml() {
 
 /**
  * Retorna o endereço IP local
- * @returns 
+ * @returns
  */
 // function getLocalIPAddress() {
 //     return new Promise((resolve, reject) => {
@@ -237,7 +237,7 @@ function startLogHtml() {
 
 /**
  * Retorna o endereço IP do servidor
- * @returns 
+ * @returns
  */
 async function getServerIPAddress() {
     return new Promise((resolve, reject) => {
@@ -260,8 +260,8 @@ async function getServerIPAddress() {
 
 /**
  * Pega o endereço IP padrão do servidor a ser utilizado e retorna
- * @param {*} ipServer 
- * @returns 
+ * @param {*} ipServer
+ * @returns
  */
 async function getDefaultIp(ipServer) {
     return ipServer !== 'localhost' ? ipServer : await getServerIPAddress();

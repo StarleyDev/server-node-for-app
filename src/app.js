@@ -7,6 +7,7 @@
 
 let express = require('express');
 let app = express()
+const morgan = require('morgan');
 // Documentação do swagger
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -25,6 +26,17 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', "*");
   next();
 });
+
+
+morgan.token('remote-addr', function (req) {
+  return (req.headers['x-forwarded-for'] || '').split(',').pop().trim() ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    (req.connection.socket ? req.connection.socket.remoteAddress : null);
+});
+
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
+
 
 // * Rotas abertas
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

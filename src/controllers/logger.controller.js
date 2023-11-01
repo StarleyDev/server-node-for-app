@@ -6,21 +6,11 @@
 'use sctict'
 const { checkFile } = require('../util/folders.util');
 let path = require('path');
-const winston = require('winston');
-
-const logger = winston.createLogger({
-    level: 'error',
-    format: winston.format.json(),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: 'error.log' }),
-    ],
-});
+const { createLogger } = require('../services/log-service');
 
 /** Local datetime */
 let dateToday = new Date();
 let localDateTime = dateToday.toLocaleDateString('pt-BR') + ' ' + dateToday.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
 
 /**
  * Save log file
@@ -40,9 +30,18 @@ exports.post = async (req, res, next) => {
         const logData = JSON.parse(data);
 
         if (logData.logs) {
-            // Log the received log data
+            const appName = logData.logs.appName;
+
+            // Validation for appName
+            if (!appName || appName.trim() === '') {
+                res.status(400).send({ message: `appName and message is required`, retorno: false });
+                return;
+            }
+
+            let logger = createLogger(`logs/${appName}.log`);
             logger.error(logData.logs, { date: localDateTime });
-            res.send([{ status: `Log salvo com sucesso!` }]);
+
+            res.send({ message: `Log salvo com sucesso!` });
         } else {
             logger.error('Failed to save log');
             res.status(400).send({ message: `Não foi possível salvar o log`, retorno: false });
@@ -58,13 +57,13 @@ exports.post = async (req, res, next) => {
  * @param {*} next
  */
 exports.get = async (req, res, next) => {
-    const filePath = 'error.log';
-    let arquivoEncontrado = checkFile(filePath);
+    const { appName } = req.params;
+    let arquivoEncontrado = checkFile(`logs/${appName}.log`);
     if (arquivoEncontrado) {
         res.set({
-            "Content-Disposition": `attachment; filename=${filePath}`
+            "Content-Disposition": `attachment; filename=${appName}.log`
         });
-        res.sendFile(path.resolve(filePath));
+        res.sendFile(path.resolve(`logs/${appName}.log`));
     } else {
         res.status(400).send('Não foi possível localizar o arquivo!');
     }
