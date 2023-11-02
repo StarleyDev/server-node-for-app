@@ -34,14 +34,14 @@ getConfigServer(false).then(async res => {
     if (checkFile(path.join(getDir(), '/CertificadoSSL/privkey.key'))) {
         certificadoOption = {
             // Modelo de certificado key
-            // key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certKey.key')),
-            // cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certificado.pem')),
-            // passphrase: environment.pwsSecuritySsl
+            key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certKey.key')),
+            cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/certificado.pem')),
+            passphrase: environment.pwsSecuritySsl
 
             // Modelo de certificado pem
-            key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/privkey.pem')),
-            cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/cert.pem')),
-            ca: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/chain.pem')),
+            // key: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/privkey.pem')),
+            // cert: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/cert.pem')),
+            // ca: fs.readFileSync(path.join(getDir(), '/CertificadoSSL/chain.pem')),
         };
     }
     serverHttps = certificadoOption != null ? https.createServer(certificadoOption, app) : http.createServer(app);

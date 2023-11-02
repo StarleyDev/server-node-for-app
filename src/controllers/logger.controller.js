@@ -21,6 +21,8 @@ let localDateTime = dateToday.toLocaleDateString('pt-BR') + ' ' + dateToday.toLo
 exports.post = async (req, res, next) => {
     // Declare the chunks array
     const chunks = [];
+    const clientIP = req.ip; 
+    console.log(clientIP)
 
     await req.on('data', async function (data) {
         chunks.push(data);
@@ -39,7 +41,7 @@ exports.post = async (req, res, next) => {
             }
 
             let logger = createLogger(`logs/${appName}.log`);
-            logger.error(logData.logs, { date: localDateTime });
+            logger.error(logData.logs, { date: localDateTime, ip: req.socket.remoteAddress });
 
             res.send({ message: `Log salvo com sucesso!` });
         } else {
