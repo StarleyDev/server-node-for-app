@@ -18,7 +18,7 @@ const executeDb = require('./routes/executeDb-route') // Para uso de executar em
 const updateApp = require('./routes/updateApp-route') // Para uso de atualizao de aplicação
 const files = require('./routes/arquivos-route') // Para uso de gerenciamento de arquivos
 const authToken = require('./routes/authToken-route') // Para uso de gerenciamento de arquivos
-const logger = require('./routes/logger-route') // Para captura de logs do app
+const logs = require('./routes/logs-route') // Para captura de logs do app
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -61,6 +61,6 @@ app.use('/authToken', authToken);
 app.use('/api/executeDb', executeDb);
 app.use('/api/updateApp', updateApp);
 app.use('/api/files', files);
-app.use('/logger', logger);
+app.use('/logs', logs);
 
 module.exports = app;

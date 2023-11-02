@@ -9,9 +9,9 @@ const express = require('express');
 const router = express.Router();
 
 /** Arquivos de imagem */
-const loggerController = require('../controllers/logger.controller');
-router.post('/send-log', loggerController.post)
-router.get('/get-log/:appName', loggerController.get)
+const logsController = require('../controllers/logs.controller');
+router.post('/send-log', logsController.post)
+router.get('/get-log/:appName', logsController.get)
 
 
 module.exports = router;
