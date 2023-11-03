@@ -72,7 +72,7 @@ return status 400 with error message
 #### For send logs (POST)
 
 ```javascript
-http://localhost:1255/logger/send-log
+http://localhost:1255/logs/send-log
 body :
 {
     "logs": {
@@ -90,7 +90,7 @@ return status 400 with error message
 #### For get logs (GET)
 
 ```javascript
-http://localhost:1255/logger/get-log
+http://localhost:1255/logs/get-log
 
 return status 200 with json
 OR
